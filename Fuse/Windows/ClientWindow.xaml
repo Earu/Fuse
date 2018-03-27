@@ -1,0 +1,230 @@
+﻿<Window x:Class="Fuse.Windows.ClientWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Fuse.Windows"
+        mc:Ignorable="d"
+		WindowStartupLocation="CenterScreen"
+		WindowStyle="None" 
+		AllowsTransparency="True"
+		ResizeMode="CanResizeWithGrip"
+		BorderBrush="Black"
+        Title="Fuse" Height="450" Width="800"
+		MinHeight="300" MinWidth="600">
+	<Window.Background>
+		<SolidColorBrush Opacity="0" Color="#191919"/>
+	</Window.Background>
+	<Window.Resources>
+		<Style x:Key="FocusVisual">
+			<Setter Property="Control.Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<SolidColorBrush x:Key="Button.Static.Background" Color="#191919"/>
+		<SolidColorBrush x:Key="Button.Static.Border" Color="#191919"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Background" Color="#515151"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Border" Color="#515151"/>
+		<SolidColorBrush x:Key="Button.Pressed.Background" Color="#515151"/>
+		<SolidColorBrush x:Key="Button.Pressed.Border" Color="#515151"/>
+
+		<SolidColorBrush x:Key="Button.Static.Background2" Color="#191919"/>
+		<SolidColorBrush x:Key="Button.Static.Border2" Color="#191919"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Background2" Color="#f44141"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Border2" Color="#f44141"/>
+		<SolidColorBrush x:Key="Button.Pressed.Background2" Color="#f44141"/>
+		<SolidColorBrush x:Key="Button.Pressed.Border2" Color="#f44141"/>
+
+		<SolidColorBrush x:Key="Button.Static.Background3" Color="#396fcc"/>
+		<SolidColorBrush x:Key="Button.Static.Border3" Color="SteelBlue"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Background3" Color="#2f59a3"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Border3" Color="#345e82"/>
+		<SolidColorBrush x:Key="Button.Pressed.Background3" Color="#2f59a3"/>
+		<SolidColorBrush x:Key="Button.Pressed.Border3" Color="#345e82"/>
+
+		<Style x:Key="BTNClose" TargetType="{x:Type Button}">
+			<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+			<Setter Property="Background" Value="{StaticResource Button.Static.Background2}"/>
+			<Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border2}"/>
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="1"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+							<ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsDefaulted" Value="true">
+								<Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+							</Trigger>
+							<Trigger Property="IsMouseOver" Value="true">
+								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background2}"/>
+								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border2}"/>
+							</Trigger>
+							<Trigger Property="IsPressed" Value="true">
+								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background2}"/>
+								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border2}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="BTNMinMax" TargetType="{x:Type Button}">
+			<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+			<Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+			<Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="1"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+							<ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsDefaulted" Value="true">
+								<Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+							</Trigger>
+							<Trigger Property="IsMouseOver" Value="true">
+								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+							</Trigger>
+							<Trigger Property="IsPressed" Value="true">
+								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<Style x:Key="BTNMenu" TargetType="{x:Type Button}">
+			<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+			<Setter Property="Background" Value="{StaticResource Button.Static.Background3}"/>
+			<Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border3}"/>
+			<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+			<Setter Property="BorderThickness" Value="2"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="0,-1,0,0"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+							<ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsDefaulted" Value="true">
+								<Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+							</Trigger>
+							<Trigger Property="IsMouseOver" Value="true">
+								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background3}"/>
+								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border3}"/>
+							</Trigger>
+							<Trigger Property="IsPressed" Value="true">
+								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background3}"/>
+								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border3}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</Window.Resources>
+	<Grid Margin="5">
+		<Grid.Effect>
+			<DropShadowEffect BlurRadius="10" RenderingBias="Performance" ShadowDepth="0"/>
+		</Grid.Effect>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="20"></RowDefinition>
+			<RowDefinition Height="30"></RowDefinition>
+			<RowDefinition Height="2*"></RowDefinition>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="200"></ColumnDefinition>
+			<ColumnDefinition></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+
+		<Rectangle Fill="#191919" Stroke="#191919" Grid.Row="0" Grid.ColumnSpan="2" MouseDown="OnTitleBarDrag"/>
+		<Rectangle Fill="#396fcc" Stroke="SteelBlue" Grid.Row="1"/>
+		<Rectangle Fill="#396fcc" Stroke="SteelBlue" Grid.Row="1" Grid.Column="1"/>
+		<Rectangle Fill="#222222" Stroke="#222222" Grid.Row="2" Grid.Column="1"/>
+		<Rectangle Fill="#191919" Stroke="#191919" Grid.Row="2" Grid.Column="0"/>
+		<TextBlock FontWeight="Bold" FontSize="15" FontFamily="Agency FB" Text="Fuse" 
+				   Foreground="White" HorizontalAlignment="Left" Margin="10,1,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+		<Button Foreground="White" Padding="0,-2,0,0" FontSize="16" Width="30" Height="20" Content="X" 
+				HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnClose" Style="{DynamicResource BTNClose}" Grid.Row="0" Grid.Column="1"/>
+		<Button Foreground="White" Padding="0,-12,0,0" FontSize="25" FontWeight="Bold" Width="30" Height="20" Content="□" 
+				HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnMaximize" Style="{DynamicResource BTNMinMax}" Grid.Row="0" Grid.Column="1" Margin="0,0,30,0"/>
+		<Button Foreground="White" Padding="0,-19,0,0" FontSize="25" FontWeight="Bold" Width="30" Height="20" Content="_" 
+				HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="OnMinimize" Style="{DynamicResource BTNMinMax}" Grid.Row="0" Grid.Column="1" Margin="0,0,60,0"/>
+
+		<TextBlock Foreground="LightGray" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60" Grid.Column="1" Grid.Row="2" Width="186" Margin="0,-40,0,0" >
+			<TextBlock.Effect>
+				<DropShadowEffect ShadowDepth="0" Direction="330" Color="Black" Opacity="1" BlurRadius="15"/>
+			</TextBlock.Effect><Run Text="F	u	s	e"/>
+		</TextBlock>
+
+		<Rectangle Fill="#191919" Stroke="#191919" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" Height="40"/>
+		<TextBox Name="TBSearchFriends" TextOptions.TextRenderingMode="Grayscale" TextChanged="OnSearchFriendChanged" FontFamily="Agency FB" FontSize="18" HorizontalAlignment="Left" Height="21" Margin="4,4,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="191">
+			<TextBox.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</TextBox.Effect>
+		</TextBox>
+		<Button FontFamily="Agency FB" FontSize="18" Foreground="White" BorderBrush="Gray" Content="Send" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Bottom" Width="74" Height="30" Click="OnMessageSend" Margin="0,0,4,5" Style="{DynamicResource BTNMinMax}">
+			<Button.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</Button.Effect>
+		</Button>
+		<Button FontFamily="Agency FB" FontSize="18" Foreground="White" BorderBrush="Gray" Content=":D" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,83,5" Grid.Row="2" VerticalAlignment="Bottom" Width="26" Height="30" Style="{DynamicResource BTNMinMax}">
+			<Button.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</Button.Effect>
+		</Button>
+		<Button FontFamily="Agency FB" FontSize="17" Foreground="White" Content="Add Friend" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="75" Height="21" Style="{DynamicResource BTNMenu}" Margin="5,4,0,0">
+			<Button.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</Button.Effect>
+		</Button>
+		<Button FontFamily="Agency FB" FontSize="17" Foreground="White" Content="Profile" Grid.Column="1" HorizontalAlignment="Left" Margin="85,4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Height="21" Style="{DynamicResource BTNMenu}">
+			<Button.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</Button.Effect>
+		</Button>
+		<Button Name="BTNMore" FontFamily="Agency FB" FontSize="16" Content="..." Foreground="White" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Top" Width="40" Height="21" Style="{DynamicResource BTNMenu}" Margin="0,4,4,0" Click="OnClickMore">
+			<Button.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</Button.Effect>
+		</Button>
+		<Button FontFamily="Agency FB" FontSize="17" Foreground="White" Content="Call" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Top" Width="75" Height="21" Style="{DynamicResource BTNMenu}" Margin="0,4,49,0">
+			<Button.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</Button.Effect>
+		</Button>
+
+		<TextBlock IsHitTestVisible="False" TextOptions.TextRenderingMode="Grayscale" Focusable="False" Name="PLSearchFriends" Foreground="Gray" FontFamily="Agency FB" FontSize="18" HorizontalAlignment="Left" Margin="8,4,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Search friends" VerticalAlignment="Top"/>
+		<TextBox Name="TBMessage" TextOptions.TextRenderingMode="Grayscale" TextChanged="OnMessageTextChanged" KeyDown="OnMessageKeyDown" FontSize="17" Padding="0,4,0,0" FontFamily="Agency FB"  Grid.Column="1" Background="#333333" Foreground="White" BorderBrush="#333333" HorizontalAlignment="Stretch" Height="30" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,0,115,5" >
+			<TextBox.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</TextBox.Effect>
+		</TextBox>
+		<TextBlock Name="PLMessage" TextOptions.TextRenderingMode="Grayscale" IsHitTestVisible="False" FontSize="17" Padding="3,4,0,0" Foreground="Gray" FontFamily="Agency FB" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" TextWrapping="Wrap" Text="Type here" VerticalAlignment="Bottom" Height="30" Width="175" Margin="0,0,0,4"/>
+		<TextBlock Name="TBOnlineFriendCount" FontFamily="Agency FB" FontSize="16" Padding="10,1,0,0" Foreground="White" HorizontalAlignment="Left" Grid.Row="2" TextWrapping="Wrap" Text="Online - 0" VerticalAlignment="Top" Width="200" Height="20"/>
+		<TextBlock Name="TBCurrentFriendName" FontFamily="Agency FB" FontSize="17" Grid.Column="1" HorizontalAlignment="Left" Foreground="White" Margin="175,4,129,0" Grid.Row="1" TextWrapping="Wrap" Text="???" VerticalAlignment="Top" Height="21"/>
+		<ListBox Name="ListFriends" Background="#191919" HorizontalAlignment="Left" Margin="0,20,0,0" Grid.Row="2" VerticalAlignment="Top" Width="200"/>
+	</Grid>
+</Window>
