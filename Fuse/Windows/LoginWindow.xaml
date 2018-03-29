@@ -14,6 +14,22 @@
 		<SolidColorBrush x:Key="Button.MouseOver.Border" Color="#4183f4"/>
 		<SolidColorBrush x:Key="Button.Pressed.Background" Color="#4183f4"/>
 		<SolidColorBrush x:Key="Button.Pressed.Border" Color="#4183f4"/>
+
+		<SolidColorBrush x:Key="Button.Static.Background2" Color="#191919"/>
+		<SolidColorBrush x:Key="Button.Static.Border2" Color="#191919"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Background2" Color="#f44141"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Border2" Color="#f44141"/>
+		<SolidColorBrush x:Key="Button.Pressed.Background2" Color="#f44141"/>
+		<SolidColorBrush x:Key="Button.Pressed.Border2" Color="#f44141"/>
+
+		<SolidColorBrush x:Key="Button.Static.Background3" Color="#f49b42"/>
+		<SolidColorBrush x:Key="Button.Static.Border3" Color="#f49b42"/>
+		<SolidColorBrush x:Key="Button.Static.Foreground3" Color="WhiteSmoke"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Background3" Color="#db8a39"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Border3" Color="#db8a39"/>
+		<SolidColorBrush x:Key="Button.Pressed.Background3" Color="#db8a39"/>
+		<SolidColorBrush x:Key="Button.Pressed.Border3" Color="#db8a39"/>
+
 		<Style x:Key="BTNSignIn" TargetType="{x:Type Button}">
 			<Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
 			<Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
@@ -54,12 +70,6 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-		<SolidColorBrush x:Key="Button.Static.Background2" Color="#191919"/>
-		<SolidColorBrush x:Key="Button.Static.Border2" Color="#191919"/>
-		<SolidColorBrush x:Key="Button.MouseOver.Background2" Color="#f44141"/>
-		<SolidColorBrush x:Key="Button.MouseOver.Border2" Color="#f44141"/>
-		<SolidColorBrush x:Key="Button.Pressed.Background2" Color="#f44141"/>
-		<SolidColorBrush x:Key="Button.Pressed.Border2" Color="#f44141"/>
 		<Style x:Key="BTNClose" TargetType="{x:Type Button}">
 			<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
 			<Setter Property="Background" Value="{StaticResource Button.Static.Background2}"/>
@@ -90,43 +100,75 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
+		<Style x:Key="BTNSignUp" TargetType="{x:Type Button}">
+			<Setter Property="Background" Value="{StaticResource Button.Static.Background3}"/>
+			<Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border3}"/>
+			<Setter Property="Foreground" Value="{StaticResource Button.Static.Foreground3}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="Padding" Value="1"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+							<ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsDefaulted" Value="true">
+								<Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+							</Trigger>
+							<Trigger Property="IsMouseOver" Value="true">
+								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background3}"/>
+								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border3}"/>
+							</Trigger>
+							<Trigger Property="IsPressed" Value="true">
+								<Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background3}"/>
+								<Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border3}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
 	</Window.Resources>
 	<Grid Background="#222222" Margin="5">
 		<Grid.Effect>
 			<DropShadowEffect BlurRadius="10" RenderingBias="Performance" ShadowDepth="0"/>
 		</Grid.Effect>
-		<TextBox TextChanged="OnUsernameChanged" FontSize="18" FontFamily="Agency FB" Name="TBUserName" BorderBrush="#333333" Background="#333333" Foreground="#ffffff" HorizontalAlignment="Left" Height="25" Margin="10,67,0,0" 
+		<TextBox TextChanged="OnUsernameChanged" Padding="0,2,0,0" FontSize="16" FontFamily="Arial" Name="TBUserName" BorderBrush="#333333" Background="#333333" Foreground="#ffffff" HorizontalAlignment="Left" Height="25" Margin="10,67,0,0" 
 			TextWrapping="Wrap" VerticalAlignment="Top" Width="320" KeyDown="OnKeyDownHandler">
 			<TextBox.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</TextBox.Effect>
 		</TextBox>
-		<PasswordBox PasswordChanged="OnPasswordChanged" FontSize="18" Name="PBPassword" BorderBrush="#333333" Background="#333333" Foreground="#ffffff" HorizontalAlignment="Left" 
+		<PasswordBox PasswordChanged="OnPasswordChanged" Padding="0,2,0,0" FontSize="16" Name="PBPassword" BorderBrush="#333333" Background="#333333" Foreground="#ffffff" HorizontalAlignment="Left" 
 					 Margin="10,97,0,45" Height="25" Width="320" KeyDown="OnKeyDownHandler">
 			<PasswordBox.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</PasswordBox.Effect>
 		</PasswordBox>
 		<Button Name="BTNSignIn" HorizontalAlignment="Left" 
-				Margin="169,127,0,0" VerticalAlignment="Top" Width="161" Click="OnSignIn" 
-				Height="30" Style="{DynamicResource BTNSignIn}" FontFamily="Agency FB" FontSize="25">
-			<TextBlock Margin="0,-4,0,0" TextWrapping="Wrap" Text="Sign in"/>
+				Margin="171,127,0,0" VerticalAlignment="Top" Width="159" Click="OnSignIn" 
+				Height="30" Style="{DynamicResource BTNSignIn}" FontFamily="Arial" FontSize="20">
+			<TextBlock Margin="0,-1,0,0" TextWrapping="Wrap" Text="Sign in"/>
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>
 		</Button>
-		<TextBox TextChanged="On2FACChanged" TextAlignment="Center" FontSize="24" FontFamily="Agency FB" Name="TBCode" BorderBrush="#333333" 
-				 Background="#333333" Foreground="#ffffff" HorizontalAlignment="Left" Height="30" Margin="10,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="154" KeyDown="OnKeyDownHandler">
-			<TextBox.Effect>
-				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
-			</TextBox.Effect>
-		</TextBox>
-		<TextBlock Foreground="White" FontFamily="Agency FB" FontSize="30" TextAlignment="Center" HorizontalAlignment="Left" Margin="52,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" Height="39" Text="Login"/>
+		<TextBlock Foreground="White" FontFamily="Century Gothic" FontSize="30" TextAlignment="Center" HorizontalAlignment="Left" Margin="52,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" Height="39" Text="Login"/>
 		<Button Foreground="White" FontWeight="Bold" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Width="40" Height="20" Click="OnClose" Style="{DynamicResource BTNClose}"/>
 		<Rectangle MouseDown="OnMouseDown" Fill="#191919" HorizontalAlignment="Left" Height="20" Stroke="#191919" VerticalAlignment="Top" Width="300"/>
 		<TextBlock FontWeight="Bold" FontSize="15" FontFamily="Agency FB" Text="Fuse" Foreground="White" HorizontalAlignment="Left" Margin="10,1,0,0" TextWrapping="Wrap" VerticalAlignment="Top"></TextBlock>
-		<TextBlock IsHitTestVisible="False" FontSize="18" FontFamily="Agency FB" Name="PLUserName" Foreground="Gray" HorizontalAlignment="Left" Margin="13,69,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top"/>
-		<TextBlock IsHitTestVisible="False" FontSize="18" FontFamily="Agency FB" Name="PLPassword" Foreground="Gray" HorizontalAlignment="Left" Margin="13,99,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top"/>
-		<TextBlock IsHitTestVisible="False" FontSize="25" TextAlignment="Center" FontFamily="Agency FB" Name="PL2FAC" Foreground="Gray" HorizontalAlignment="Center" Margin="10,127,179,0" TextWrapping="Wrap" Text="2FAC" VerticalAlignment="Top" Width="151" Height="28"/>
+		<TextBlock Padding="0,2,0,0" IsHitTestVisible="False" FontSize="16" FontFamily="Arial" Name="PLUserName" Foreground="Gray" HorizontalAlignment="Left" Margin="13,69,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Height="23"/>
+		<TextBlock Padding="0,2,0,0" IsHitTestVisible="False" FontSize="16" FontFamily="Arial" Name="PLPassword" Foreground="Gray" HorizontalAlignment="Left" Margin="13,99,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Height="23"/>
+		<Button Name="BTNSignUp" Click="OnSignUp" HorizontalAlignment="Left" 
+	  Margin="10,127,0,0" VerticalAlignment="Top" Width="156" 
+	  Height="30" Style="{DynamicResource BTNSignUp}" FontFamily="Arial" FontSize="20">
+			<Button.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</Button.Effect>
+			<TextBlock Margin="0,-1,0,0" TextWrapping="Wrap" Text="Sign up"/>
+		</Button>
 	</Grid>
 </Window>

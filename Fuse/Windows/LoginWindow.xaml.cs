@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -37,7 +38,6 @@ namespace Fuse.Windows
         {
             string user = this.TBUserName.Text;
             string pass = this.PBPassword.Password;
-            string code = this.TBCode.Text == "" ? null : this.TBCode.Text; 
 
             if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(pass))
             {
@@ -50,13 +50,13 @@ namespace Fuse.Windows
             if (this.IsMain) this.Hide();
             else this.Close();
 
-            this._Client.Connect(user, pass, code);
+            this._Client.Connect(user, pass);
         }
          
         private void OnClose(object sender, RoutedEventArgs e)
         {
             this.Close();
-            this._Client.Stop();
+            this._Client.Stop(true);
         }
 
         private void OnMouseDown(object sender, MouseButtonEventArgs e)
@@ -88,27 +88,17 @@ namespace Fuse.Windows
             }
         }
 
-        private void On2FACChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            string code = this.TBCode.Text.ToUpper();
-            this.TBCode.Text = code;
-            this.TBCode.CaretIndex = code.Length;
-            if (string.IsNullOrWhiteSpace(code))
-            {
-                this.PL2FAC.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                this.PL2FAC.Visibility = Visibility.Hidden;
-            }
-        }
-
         private void OnKeyDownHandler(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Return)
             {
                 this.OnSignIn(sender,e);
             }
+        }
+
+        private void OnSignUp(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://store.steampowered.com/join/?");
         }
     }
 }

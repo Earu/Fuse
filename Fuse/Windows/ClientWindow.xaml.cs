@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Fuse.Controls;
+using Fuse.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -70,13 +72,31 @@ namespace Fuse.Windows
 
         private void OnSearchFriendChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(this.TBSearchFriends.Text))
+            string search = this.TBSearchFriends.Text;
+            List<Friend> onlinefriends = this._Client.User.GetOnlineFriends();
+            List<Friend> offlinefriends = this._Client.User.GetOfflineFriends();
+
+            onlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
+            offlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
+
+            this.ClearOnlineFriends();
+            this.ClearOfflineFriends();
+
+            if (string.IsNullOrWhiteSpace(search))
             {
                 this.PLSearchFriends.Visibility = Visibility.Visible;
+
+                onlinefriends.ForEach(x => this.AddOnlineFriend(x));
+                offlinefriends.ForEach(x => this.AddOfflineFriend(x));
             }
             else
             {
                 this.PLSearchFriends.Visibility = Visibility.Hidden;
+                onlinefriends = onlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
+                offlinefriends = offlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
+
+                onlinefriends.ForEach(x => this.AddOnlineFriend(x));
+                offlinefriends.ForEach(x => this.AddOfflineFriend(x));
             }
         }
 
@@ -104,47 +124,44 @@ namespace Fuse.Windows
             }
         }
 
-        public void SetOnlineFriendsCount(int count,int total)
+        internal void SetOnlineFriendsCount(int count,int total)
         {
             this.TBOnlineFriendCount.Text = $"Online - {count}/{total}";
         }
 
-        public void SetOfflineFriendsCount()
+        internal void SetOfflineFriendsCount(int count, int total)
         {
+            this.TBOfflineFriendCount.Text = $"Offline - {count}/{total}";
         }
 
-        public void ClearOnlineFriends()
+        internal void ClearOnlineFriends()
         {
-            this.ListFriends.Items.Clear();
+            this.LVOnlineFriends.Items.Clear();
         }
 
-        public void AddOnlineFriend(string name, string status)
+        internal void ClearOfflineFriends()
         {
-            BrushConverter converter = new BrushConverter();
-            Rectangle rec = new Rectangle
-            {
-                Height = 40,
-                Fill = (SolidColorBrush)converter.ConvertFrom("#191919"),
-                VerticalAlignment = VerticalAlignment.Top,
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Width = 190
-            };
+            this.LVOfflineFriends.Items.Clear();
+        }
 
-            FontFamily family = new FontFamily("Agency FB");
-            TextBlock txt = new TextBlock
+        internal void AddOnlineFriend(Friend friend)
+        {
+            FriendControl ctrl = new FriendControl
             {
-                Text = $"{name} - {status}",
-                Foreground = Brushes.White,
-                FontFamily = family,
-                FontSize = 18,
-                TextAlignment = TextAlignment.Center,
-                Width = 190,
-                Height = 20,
-                Margin = new Thickness(0,0,0,0)
+                IsHitTestVisible = false
             };
+            ctrl.Update(friend);
+            this.LVOnlineFriends.Items.Add(ctrl);
+        }
 
-            //this.ListFriends.Items.Add(rec);
-            this.ListFriends.Items.Add(txt);
+        internal void AddOfflineFriend(Friend friend)
+        {
+            FriendControl ctrl = new FriendControl
+            {
+                IsHitTestVisible = false
+            };
+            ctrl.Update(friend);
+            this.LVOfflineFriends.Items.Add(ctrl);
         }
     }
 }

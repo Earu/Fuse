@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="Fuse.Controls.FriendControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Fuse.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="180">
+	<Grid Background="#191919">
+		<Image Name="IMAvatar" HorizontalAlignment="Left" Height="34" Margin="3" VerticalAlignment="Top" Width="35">
+			<Image.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</Image.Effect>
+		</Image>
+		<TextBlock Name="TBName" FontWeight="Bold" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Margin="46,3,0,0" TextWrapping="NoWrap" Text="???" VerticalAlignment="Top" Width="114"/>
+		<TextBlock Name="TBState" FontSize="9" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Padding="1,0,0,0" Margin="46,22,0,0" TextWrapping="NoWrap"  Text="???" VerticalAlignment="Top" RenderTransformOrigin="0.599,0.548" Width="114"/>
+		<Border BorderBrush="#222222" BorderThickness="3" HorizontalAlignment="Left" Height="34" Margin="3,3,0,0" VerticalAlignment="Top" Width="35"/>
+		<Rectangle Name="RCState" Fill="IndianRed" HorizontalAlignment="Left" Height="9" Margin="31,30,0,0" Stroke="#222222" VerticalAlignment="Top" Width="9" RenderTransformOrigin="1,0.704"/>
+	</Grid>
+</UserControl>

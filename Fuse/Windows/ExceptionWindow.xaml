@@ -68,10 +68,10 @@
 			<DropShadowEffect BlurRadius="10" RenderingBias="Performance" ShadowDepth="0"/>
 		</Grid.Effect>
 		<Rectangle MouseDown="OnMouseDownDrag" Fill="#191919" VerticalAlignment="Top" Height="20"></Rectangle>
-		<TextBlock FontWeight="DemiBold" FontSize="18" FontFamily="Agency FB" HorizontalAlignment="Center" Foreground="IndianRed" TextWrapping="Wrap" Text="FUSE MACHINE BORK" VerticalAlignment="Top" Margin="0,25,0,0"/>
+		<TextBlock FontWeight="DemiBold" FontSize="18" FontFamily="Arial" HorizontalAlignment="Center" Foreground="IndianRed" TextWrapping="Wrap" Text="FUSE MACHINE BORK" VerticalAlignment="Top" Margin="0,25,0,0"/>
 		<TextBlock FontWeight="Bold" FontSize="15" FontFamily="Agency FB" Text="Fuse" Foreground="White" HorizontalAlignment="Left" Margin="10,1,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 		<Button Foreground="White" FontWeight="Bold" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Width="40" Height="20" Click="OnClose" Style="{DynamicResource BTNClose}"/>
-		<TextBlock Name="TBException" Foreground="IndianRed" FontSize="17" FontFamily="Agency FB" TextAlignment="Center" HorizontalAlignment="Left" Margin="5,51,0,50" TextWrapping="Wrap" Text="???" VerticalAlignment="Top" Height="39" Width="280"/>
+		<TextBlock Name="TBException" Foreground="IndianRed" FontSize="17" FontFamily="Arial" TextAlignment="Center" HorizontalAlignment="Left" Margin="5,51,0,50" TextWrapping="Wrap" Text="???" VerticalAlignment="Top" Height="39" Width="280"/>
 		<Button Foreground="White" BorderBrush="Gray" FontWeight="Bold" Content="Ok" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="100" Height="25" Click="OnClose" Style="{DynamicResource BTNClose}" Margin="90,0,90,10">
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
