@@ -5,8 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Fuse.Controls"
              mc:Ignorable="d">
-    <Grid Background="#222222">
-		<Image HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Width="20"/>
+	<Grid Background="#222222">
+		<Image Name="IMAvatar" HorizontalAlignment="Left" Height="45" Margin="3" VerticalAlignment="Top" Width="45">
+			<Image.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</Image.Effect>
+		</Image>
+		<Border BorderBrush="#333333" BorderThickness="3" HorizontalAlignment="Left" Height="45" Margin="3,3,0,0" VerticalAlignment="Top" Width="45"/>
+		<TextBlock Name="TBName" FontWeight="Bold" FontSize="18" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Margin="53,3,0,0" TextWrapping="NoWrap" Text="???" VerticalAlignment="Top" Width="114"/>
+		<TextBlock Name="TBContent" FontSize="15" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Padding="2,0,0,0" Margin="53,27,0,0" TextWrapping="WrapWithOverflow"  Text="???" VerticalAlignment="Top" RenderTransformOrigin="0.599,0.548"/>
+		<TextBlock Name="TBTimeStamp" FontWeight="Thin" FontSize="10" Padding="0,5,10,0" FontStyle="Italic" FontFamily="Arial" Foreground="Gray" TextAlignment="Right" HorizontalAlignment="Right" Margin="172,3,0,0" TextWrapping="NoWrap" Text="00:00 00/00/0000" VerticalAlignment="Top" Width="118" Height="21"/>
 
 	</Grid>
 </UserControl>

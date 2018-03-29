@@ -36,23 +36,10 @@ namespace Fuse.Controls
         {
             string name = friend.Name;
             EPersonaState state = friend.State;
-            string game = friend.GetGame();
-            string path = friend.AvatarLink;
+            string game = friend.Game;
+            BitmapImage source = friend.Avatar;
 
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.DecodePixelHeight = 200;
-            bitmap.DecodePixelWidth = 200;
-            bitmap.UriSource = new Uri(path, UriKind.RelativeOrAbsolute);
-            bitmap.EndInit();
-            bitmap.DecodeFailed += (sender,e) =>
-            {
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri("Ressources/default_avatar.png", UriKind.Absolute);
-                bitmap.EndInit();
-            };
-
-            this.IMAvatar.Source = bitmap;
+            this.IMAvatar.Source = source;
 
             name = name.Length >= 15 ? name.Substring(0, 15) + "..." : name;
             this.TBName.Text = name;
