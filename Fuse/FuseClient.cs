@@ -31,7 +31,10 @@ namespace Fuse
 
         internal FuseClient()
         {
-            this._Details = new SteamUser.LogOnDetails();
+            this._Details = new SteamUser.LogOnDetails
+            {
+                ShouldRememberPassword = true
+            };
             this._Config = SteamConfiguration.Create(builder =>
             {
                 builder.WithConnectionTimeout(TimeSpan.FromSeconds(5));
@@ -51,15 +54,16 @@ namespace Fuse
             this._Manager.Subscribe<SteamClient.ConnectedCallback>(this.OnConnected);
             this._Manager.Subscribe<SteamClient.DisconnectedCallback>(this.OnDisconnected);
             this._Manager.Subscribe<SteamUser.LoggedOnCallback>(this.OnLoggedOn);
+            this._Manager.Subscribe<SteamUser.LoginKeyCallback>(this.OnLoginKey);
             this._Manager.Subscribe<SteamUser.AccountInfoCallback>(this.OnAccountInfo);
-            this._Manager.Subscribe<SteamFriends.FriendsListCallback>(this.OnFriendlistUpdated);
-            this._Manager.Subscribe<SteamFriends.FriendAddedCallback>(this.OnFriendlistUpdated);
             this._Manager.Subscribe<SteamFriends.PersonaStateCallback>(this.OnFriendPersonaStateChange);
             this._Manager.Subscribe<SteamFriends.FriendMsgCallback>(this.OnFriendMessage);
+            
         }
 
         internal void Connect(string user,string pass,string code=null)
         {
+            this._Details.LoginKey = null;
             this._Details.Username = user;
             this._Details.Password = pass;
             if (code != null) this._Details.TwoFactorCode = code;
@@ -68,17 +72,16 @@ namespace Fuse
 
         internal void Connect(FuseCredentials creds)
         {
-            this._Details.LoginID  = creds.LoginID;
             this._Details.LoginKey = creds.LoginKey;
             this._Details.Username = creds.Username;
-            this._Details.Password = creds.Password;
             this._ClientHandler.Connect();
         }
 
         private void RunOnSTA(Action cb)
         {
-            Application.Current.Dispatcher
-                .Invoke(DispatcherPriority.Normal, new ThreadStart(cb));
+            Application app = Application.Current;
+            if(app != null)
+                app.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(cb));
         }
 
         private void OnConnected(SteamClient.ConnectedCallback cb)
@@ -115,7 +118,6 @@ namespace Fuse
         private void OnLoggedOn(SteamUser.LoggedOnCallback cb)
         {
             this._IgnoreNextDisconnect = false;
-            this.SaveCredentials();
             this.RunOnSTA(() =>
             {
                 if (cb.Result == EResult.OK)
@@ -140,26 +142,26 @@ namespace Fuse
             });
         }
 
+        private void OnLoginKey(SteamUser.LoginKeyCallback cb)
+        {
+            this._Details.LoginKey = cb.LoginKey;
+            FuseCredentials creds = new FuseCredentials(this._Details);
+            creds.Save();
+            this._UserHandler.AcceptNewLoginKey(cb);
+        }
+
         private void OnAccountInfo(SteamUser.AccountInfoCallback cb)
         {
             this._FriendsHandler.SetPersonaState(EPersonaState.Online);
-        }
-
-        private void OnFriendlistUpdated(object cb)
-        {
-            this.RunOnSTA(() =>
-            {
-                //this._User.UpdateFriends();
-            });
         }
 
         private void OnFriendPersonaStateChange(SteamFriends.PersonaStateCallback cb)
         {
             this.RunOnSTA(() =>
             {
-                this._User.UpdateFriend(cb.FriendID);
                 ClientWindow win = this._UI.ClientWindow;
                 if (win.IsSearchingFriends) return;
+                this._User.UpdateFriend(cb.FriendID);
 
                 win.ClearOnlineFriends();
                 win.ClearOfflineFriends();
@@ -187,12 +189,6 @@ namespace Fuse
         {
             while (this._IsRunning)
                 this._Manager.RunWaitCallbacks(TimeSpan.FromMilliseconds(100));
-        }
-
-        private void SaveCredentials()
-        {
-            FuseCredentials creds = new FuseCredentials(this._Details);
-            creds.Save();
         }
 
         internal void Start()

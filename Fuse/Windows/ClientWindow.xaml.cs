@@ -87,7 +87,7 @@ namespace Fuse.Windows
 
             if (string.IsNullOrWhiteSpace(search))
             {
-                this._IsSearchingFriends = true;
+                this._IsSearchingFriends = false;
                 this.PLSearchFriends.Visibility = Visibility.Visible;
 
                 onlinefriends.ForEach(x => this.AddOnlineFriend(x));
@@ -95,7 +95,7 @@ namespace Fuse.Windows
             }
             else
             {
-                this._IsSearchingFriends = false;
+                this._IsSearchingFriends = true;
                 this.PLSearchFriends.Visibility = Visibility.Hidden;
                 onlinefriends = onlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
                 offlinefriends = offlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
