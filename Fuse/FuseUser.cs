@@ -20,7 +20,6 @@ namespace Fuse
             this._OfflineFriends = new List<Friend>();
             this._Discussions = new List<Discussion>();
             this._FriendHandler = handler;
-            this.UpdateFriends();
         }
     
         internal List<Friend> Friends        { get => this._Friends;        }
@@ -63,49 +62,35 @@ namespace Fuse
             }
             else
             {
-                Friend friend    = this.Friends[findex];
-                friend.Name      = name;
-                friend.SteamID   = steamid;
-                friend.SteamID64 = id64;
-                friend.SetAvatarHash(bhash);
+                Friend old = this.Friends[findex];
+                Friend friend = new Friend(name, steamid, id64,state,bhash,old.Messages);
+                this.Friends[findex] = friend;
 
-                if (friend.State != state)
+                if (old.State == EPersonaState.Offline)
                 {
-                    if (friend.State == EPersonaState.Offline)
-                    {
-                        int i = this.OfflineFriends.IndexOf(friend);
-                        this._OfflineFriends.RemoveAt(i);
-                    }
-                    else
-                    {
-                        int i = this.OnlineFriends.IndexOf(friend);
-                        this._OnlineFriends.RemoveAt(i);
-                    }
-
-                    if (state != EPersonaState.Offline)
-                    {
-                        this._OnlineFriends.Add(friend);
-                    }
-                    else
-                    {
-                        this._OnlineFriends.Add(friend);
-                    }
+                    int i = this.OfflineFriends.FindIndex(x => x.SteamID64 == old.SteamID64);
+                    if(i != -1) this._OfflineFriends.RemoveAt(i);
+                }
+                else
+                {
+                    int i = this.OnlineFriends.FindIndex(x => x.SteamID64 == old.SteamID64);
+                    if (i != -1) this._OnlineFriends.RemoveAt(i);
                 }
 
-                friend.State = state;
-                this.Friends[findex] = friend;
+                if (state != EPersonaState.Offline)
+                {
+                    this._OnlineFriends.Add(friend);
+                }
+                else
+                {
+                    this._OnlineFriends.Add(friend);
+                }
             }
         }
 
         internal int GetFriendIndex(ulong id64)
         {
-            for (int i = 0; i < this._Friends.Count; i++)
-            {
-                Friend f = this._Friends[i];
-                if (f.SteamID64 == id64) return i;
-            }
-
-            return -1;
+            return this._Friends.FindIndex(x => x.SteamID64 == id64);
         }
     }
 }

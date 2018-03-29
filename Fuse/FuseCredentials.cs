@@ -16,30 +16,50 @@ namespace Fuse
         [DataMember]
         private string _Username;
         [DataMember]
-        private string _Password;
-        [DataMember]
         private string _LoginKey;
-        [DataMember]
-        private uint? _LoginID;
 
         internal FuseCredentials(SteamUser.LogOnDetails details)
         {
             this._Username = details.Username;
-            this._Password = details.Password;
             this._LoginKey = details.LoginKey;
-            this._LoginID = details.LoginID;
+        }
+
+        internal FuseCredentials()
+        {
+            this._Username = string.Empty;
+            this._LoginKey = string.Empty;
         }
 
         internal string Username { get => this._Username; }
-        internal string Password { get => this._Password; }
         internal string LoginKey { get => this._LoginKey; }
-        internal uint? LoginID   { get => this._LoginID;  }
+
+        private string ToBase64(string input)
+        {
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(input));
+        }
+
+        private string FromBase64(string input)
+        {
+            return Encoding.UTF8.GetString(Convert.FromBase64String(input));
+        }
+
+        private void EncodeFields()
+        {
+            this._Username = this._Username != null ? this.ToBase64(this._Username) : null;
+            this._LoginKey = this._LoginKey != null ? this.ToBase64(this._LoginKey) : null;
+        }
+
+        private void DecodeFields()
+        {
+            this._Username = this.FromBase64(this._Username);
+            this._LoginKey = this.FromBase64(this._LoginKey);
+        }
 
         internal void Save()
         {
+            this.EncodeFields();
             string tosave = JsonConvert.SerializeObject(this);
-            tosave = Convert.ToBase64String(Encoding.UTF8.GetBytes(tosave));
-            File.AppendAllText(".settings", tosave);
+            File.WriteAllText(".settings", tosave);
         }
 
         internal static bool TryLoad(out FuseCredentials creds)
@@ -47,8 +67,8 @@ namespace Fuse
             if (File.Exists(".settings"))
             {
                 string toload = File.ReadAllText(".settings");
-                toload = Encoding.UTF8.GetString(Convert.FromBase64String(toload));
                 creds = JsonConvert.DeserializeObject<FuseCredentials>(toload);
+                creds.DecodeFields();
 
                 return true;
             }

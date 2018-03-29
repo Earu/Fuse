@@ -18,10 +18,11 @@ namespace Fuse.Models
         private string _Game;
         private List<Message> _Messages;
 
-        internal Friend(string name, string steamid, ulong id64, EPersonaState state,byte[] bhash)
+        internal Friend(string name, string steamid, ulong id64, EPersonaState state,byte[] bhash,List<Message> msgs=null)
         {
             this._Game = null;
-            this._Messages = new List<Message>();
+            if (msgs == null) this._Messages = new List<Message>();
+            else this._Messages = msgs;
             this._Name = name ?? steamid;
             this._SteamID = steamid;
             this._SteamID64 = id64;
