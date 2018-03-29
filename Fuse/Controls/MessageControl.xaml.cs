@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Fuse.Models;
+using SteamKit2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +24,20 @@ namespace Fuse.Controls
     {
         public MessageControl()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+        }
+
+        internal void Update(Friend friend,Message msg)
+        {
+            string name = friend.Name;
+            BitmapImage source = friend.Avatar;
+            this.IMAvatar.Source = source;
+
+            name = name.Length >= 15 ? name.Substring(0, 15) + "..." : name;
+            this.TBName.Text = name;
+
+            this.TBContent.Text = msg.Content;
+            this.TBTimeStamp.Text = msg.TimeStamp.ToString();
         }
     }
 }

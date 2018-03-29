@@ -23,6 +23,7 @@ namespace Fuse.Windows
     {
         private FuseClient _Client;
         private FuseUI _UI;
+        private bool _IsSearchingFriends = false;
 
         internal ClientWindow(FuseClient client,FuseUI ui)
         {
@@ -30,6 +31,8 @@ namespace Fuse.Windows
             this._Client = client;
             this._UI = ui;
         }
+
+        internal bool IsSearchingFriends { get => this._IsSearchingFriends; }
 
         private void OnClose(object sender, RoutedEventArgs e)
         {
@@ -73,8 +76,8 @@ namespace Fuse.Windows
         private void OnSearchFriendChanged(object sender, TextChangedEventArgs e)
         {
             string search = this.TBSearchFriends.Text;
-            List<Friend> onlinefriends = this._Client.User.GetOnlineFriends();
-            List<Friend> offlinefriends = this._Client.User.GetOfflineFriends();
+            List<Friend> onlinefriends = this._Client.User.OnlineFriends;
+            List<Friend> offlinefriends = this._Client.User.OfflineFriends;
 
             onlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
             offlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
@@ -84,6 +87,7 @@ namespace Fuse.Windows
 
             if (string.IsNullOrWhiteSpace(search))
             {
+                this._IsSearchingFriends = true;
                 this.PLSearchFriends.Visibility = Visibility.Visible;
 
                 onlinefriends.ForEach(x => this.AddOnlineFriend(x));
@@ -91,6 +95,7 @@ namespace Fuse.Windows
             }
             else
             {
+                this._IsSearchingFriends = false;
                 this.PLSearchFriends.Visibility = Visibility.Hidden;
                 onlinefriends = onlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
                 offlinefriends = offlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using SteamKit2;
 
 namespace Fuse.Models
@@ -11,7 +12,7 @@ namespace Fuse.Models
     {
         private string _Name;
         private string _SteamID;
-        private string _AvatarLink;
+        private BitmapImage _Avatar;
         private ulong _SteamID64;
         private EPersonaState _State;
         private string _Game;
@@ -25,15 +26,22 @@ namespace Fuse.Models
             this._SteamID = steamid;
             this._SteamID64 = id64;
             this._State = state;
+
+            this._Avatar = new BitmapImage();
+            this._Avatar.BeginInit();
+            this._Avatar.DecodePixelHeight = 200;
+            this._Avatar.DecodePixelWidth = 200;
             if (bhash == null)
             {
-                this._AvatarLink = "Ressources/default_avatar.png";
+                this._Avatar.UriSource = new Uri("Resources/default_avatar.png", UriKind.Relative);
             }
             else
             {
                 string hash = this.BytesToHash(bhash);
-                this._AvatarLink = $"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/dd/{hash}_full.jpg";
+                string link = $"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/dd/{hash}_full.jpg";
+                this._Avatar.UriSource = new Uri(link, UriKind.Absolute);
             }
+            this._Avatar.EndInit();
         }
 
         private string BytesToHash(byte[] ba)
@@ -47,12 +55,8 @@ namespace Fuse.Models
         internal void SetAvatarHash(byte[] bhash)
         {
             string hash = this.BytesToHash(bhash);
-            this._AvatarLink = $"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/dd/{hash}_full.jpg";
-        }
-
-        internal string GetGame()
-        {
-            return this._Game;
+            string link = $"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/dd/{hash}_full.jpg";
+            this._Avatar.UriSource = new Uri(link, UriKind.Absolute);
         }
 
         internal string Name            { get => this._Name;      set => this._Name      = value; }
@@ -61,6 +65,6 @@ namespace Fuse.Models
         internal EPersonaState State    { get => this._State;     set => this._State     = value; }
         internal string Game            { get => this._Game;      set => this._Game      = value; }
         internal List<Message> Messages { get => this._Messages; }
-        internal string AvatarLink      { get => this._AvatarLink; }
+        internal BitmapImage Avatar     { get => this._Avatar; }
     }
 }
