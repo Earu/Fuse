@@ -72,7 +72,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\FriendControl.xaml.cs">
+      <DependentUpon>FriendControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MessageControl.xaml.cs">
+      <DependentUpon>MessageControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FuseUI.cs" />
+    <Compile Include="FuseUser.cs" />
+    <Compile Include="Models\Discussion.cs" />
+    <Compile Include="Models\Friend.cs" />
+    <Compile Include="Models\Message.cs" />
     <Compile Include="Windows\2FACWindow.xaml.cs">
       <DependentUpon>2FACWindow.xaml</DependentUpon>
     </Compile>
@@ -85,6 +95,14 @@
     <Compile Include="Windows\MoreWindow.xaml.cs">
       <DependentUpon>MoreWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\FriendControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MessageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\LoginWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -143,5 +161,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Ressources\default_avatar.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

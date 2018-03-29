@@ -110,14 +110,14 @@
         <Rectangle MouseDown="OnMouseDownDrag" Fill="#191919" VerticalAlignment="Top" Height="20"></Rectangle>
         <TextBlock FontWeight="Bold" FontSize="15" FontFamily="Agency FB" Text="Fuse" Foreground="White" HorizontalAlignment="Left" Margin="10,1,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <Button Foreground="White" FontWeight="Bold" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Width="40" Height="20" Click="OnClose" Style="{DynamicResource BTNClose}"/>
-        <TextBlock FontSize="30" FontFamily="Agency FB" Foreground="White" TextAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Text="2FAC" VerticalAlignment="Top" Margin="0,25,0,0" Height="33" Width="270"/>
-        <TextBlock FontSize="20" FontFamily="Agency FB" Foreground="White" TextAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Text="(two factor code)" VerticalAlignment="Top" Margin="0,63,0,0" Height="33" Width="270"/>
-        <TextBox Name="TBCode" TextChanged="OnCodeChanged" KeyDown="OnCodeKeyDown" TextAlignment="Center" Foreground="White" BorderBrush="#333333" Background="#333333" Padding="0,4,0,0" FontSize="25" FontFamily="Agency FB" HorizontalAlignment="Stretch" Height="40" Margin="50,100,50,0" TextWrapping="Wrap" VerticalAlignment="Top">
+        <TextBlock FontSize="30" FontFamily="Arial" Foreground="White" TextAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Text="2FAC" VerticalAlignment="Top" Margin="0,25,0,0" Height="33" Width="270"/>
+        <TextBlock FontSize="20" FontFamily="Arial" Foreground="White" TextAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Text="(two factor code)" VerticalAlignment="Top" Margin="0,63,0,0" Height="33" Width="270"/>
+        <TextBox Name="TBCode" TextChanged="OnCodeChanged" KeyDown="OnCodeKeyDown" TextAlignment="Center" Foreground="White" BorderBrush="#333333" Background="#333333" Padding="0,4,0,0" FontSize="25" FontFamily="Arial" HorizontalAlignment="Stretch" Height="40" Margin="50,100,50,0" TextWrapping="Wrap" VerticalAlignment="Top">
             <TextBox.Effect>
                 <DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
             </TextBox.Effect>
         </TextBox>
-        <TextBlock TextAlignment="Center" Padding="3,6,0,0" IsHitTestVisible="False" FontSize="20" FontFamily="Agency FB" Name="PLCode" Foreground="Gray" HorizontalAlignment="Left" Margin="50,101,0,0" TextWrapping="Wrap" Text="Your code" VerticalAlignment="Top" Height="39" Width="190"/>
+        <TextBlock TextAlignment="Center" Padding="3,6,0,0" IsHitTestVisible="False" FontSize="20" FontFamily="Arial" Name="PLCode" Foreground="Gray" HorizontalAlignment="Left" Margin="50,101,0,0" TextWrapping="Wrap" Text="Your code" VerticalAlignment="Top" Height="39" Width="190"/>
         <Button Foreground="White" BorderBrush="Gray" FontWeight="Bold" Content="Sign in" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="100" Height="25" Click="OnSignIn" Style="{DynamicResource BTNSignIn}" Margin="0,0,0,10">
             <Button.Effect>
                 <DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
