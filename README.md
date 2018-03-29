@@ -12,4 +12,5 @@ For the moment Fuse is not functional, it only features authentification and fri
 
 ## Contributing
 If you aim to contribute you can fork this repository and do pull requests with your changes.
-If you work under visual studio and the project has issues compiling make sure you have the binaries needed for it and that your packages correspond to those below: ![packages](https://i.imgur.com/AWrgEjO.png)
+If you work under visual studio and the project has issues compiling make sure you have the binaries needed for it and that your packages correspond to those below:
+![packages](https://i.imgur.com/AWrgEjO.png)
