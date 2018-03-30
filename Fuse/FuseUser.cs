@@ -47,15 +47,14 @@ namespace Fuse
             if (this._FriendsHandler.GetFriendRelationship(id) != EFriendRelationship.Friend) return;
 
             string name = this._FriendsHandler.GetFriendPersonaName(id);
-            string steamid = id.Render();
-            ulong id64 = id.ConvertToUInt64();
+            uint accountid = id.AccountID;
             EPersonaState state = this._FriendsHandler.GetFriendPersonaState(id);
             byte[] bhash = _FriendsHandler.GetFriendAvatar(id);
 
-            int findex = this.GetFriendIndex(id64);
+            int findex = this.GetFriendIndex(accountid);
             if (findex == -1)
             {
-                User _new = new User(name, steamid, id64, state, bhash);
+                User _new = new User(name, id, state, bhash);
                 this._Friends.Add(_new);
                 if (state != EPersonaState.Offline)
                 {
@@ -69,7 +68,7 @@ namespace Fuse
             else
             {
                 User old = this.Friends[findex];
-                User friend = new User(name, steamid, id64,state,bhash,old.Messages);
+                User friend = new User(name, id, state, bhash, old.Messages);
                 this.Friends[findex] = friend;
 
                 if (old.State == EPersonaState.Offline)
@@ -94,19 +93,18 @@ namespace Fuse
             }
         }
 
-        internal int GetFriendIndex(ulong id64)
+        internal int GetFriendIndex(uint accountid)
         {
-            return this._Friends.FindIndex(x => x.SteamID64 == id64);
+            return this._Friends.FindIndex(x => x.AccountID == accountid);
         }
 
         internal void UpdateLocalUser(SteamID id)
         {
             string name = this._FriendsHandler.GetFriendPersonaName(id);
-            string steamid = id.Render();
             ulong id64 = id.ConvertToUInt64();
             EPersonaState state = this._FriendsHandler.GetFriendPersonaState(id);
             byte[] bhash = this._FriendsHandler.GetFriendAvatar(id);
-            User localuser = new User(name, steamid, id64, state, bhash);
+            User localuser = new User(name, id, state, bhash);
             this._Localuser = localuser;
         }
     }

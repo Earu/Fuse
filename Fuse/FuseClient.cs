@@ -195,11 +195,21 @@ namespace Fuse
             RunOnSTA(() =>
             {
                 this._User.UpdateFriend(cb.Sender);
-                int index = this._User.GetFriendIndex(cb.Sender.ConvertToUInt64());
+                if (cb.EntryType != EChatEntryType.ChatMsg) return;
+
+                int index = this._User.GetFriendIndex(cb.Sender.AccountID);
                 if (index != -1)
                 {
                     User friend = this._User.Friends[index];
-                    this._User.Friends[index].Messages.Add(new Message(friend, cb.Message));
+                    Message msg = new Message(friend, cb.Message);
+                    this._User.Friends[index].Messages.Add(msg);
+
+                    Discussion cur = this._User.CurrentDiscussion;
+                    if (!cur.IsGroup && cur.Recipient.AccountID == cb.Sender.AccountID)
+                    {
+                        ClientWindow win = this._UI.ClientWindow;
+                        win.AddCurrentMessage(msg);
+                    }
                 }
             });
         }

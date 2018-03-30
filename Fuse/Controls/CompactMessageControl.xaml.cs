@@ -1,5 +1,4 @@
 ﻿using Fuse.Models;
-using SteamKit2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +17,13 @@ using System.Windows.Shapes;
 namespace Fuse.Controls
 {
     /// <summary>
-    /// Interaction logic for MessageControl.xaml
+    /// Interaction logic for CompactMessage.xaml
     /// </summary>
-    public partial class MessageControl : UserControl
+    public partial class CompactMessageControl : UserControl
     {
         private Message _Message;
 
-        internal MessageControl(Message msg)
+        internal CompactMessageControl(Message msg)
         {
             this._Message = msg;
             this.InitializeComponent();
@@ -32,21 +31,12 @@ namespace Fuse.Controls
 
         internal Message Message { get => this._Message; }
 
-        internal void Update(Message msg=null)
+        internal void Update(Message msg = null)
         {
             if (msg != null) this._Message = msg;
             msg = this._Message;
-            User friend = this._Message.Author;
-
-            string name = friend.Name;
-            BitmapImage source = friend.Avatar;
-            this.IMAvatar.Source = source;
-
-            name = name.Length >= 15 ? name.Substring(0, 15) + "..." : name;
-            this.TBName.Text = name;
 
             this.TBContent.Text = msg.Content;
-            this.TBTimeStamp.Text = msg.TimeStamp.ToString();
         }
     }
 }
