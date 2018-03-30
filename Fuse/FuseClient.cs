@@ -45,8 +45,8 @@ namespace Fuse
             this._Manager = new CallbackManager(this._ClientHandler);
             this._UserHandler = this._ClientHandler.GetHandler<SteamUser>();
             this._FriendsHandler = this._ClientHandler.GetHandler<SteamFriends>();
-            this._UI = new FuseUI(this);
             this._User = new FuseUser(this._FriendsHandler);
+            this._UI = new FuseUI(this);
 
             this._CallbackThread = new Thread(AwaitCallbackResults);
             this._CallbackThread.Start();
@@ -58,8 +58,15 @@ namespace Fuse
             this._Manager.Subscribe<SteamUser.AccountInfoCallback>(this.OnAccountInfo);
             this._Manager.Subscribe<SteamFriends.PersonaStateCallback>(this.OnFriendPersonaStateChange);
             this._Manager.Subscribe<SteamFriends.FriendMsgCallback>(this.OnFriendMessage);
-            
         }
+
+        internal SteamClient     ClientHandler    { get => this._ClientHandler;  }
+        internal SteamUser       UserHandler      { get => this._UserHandler;    }
+        internal SteamFriends    FriendsHandler   { get => this._FriendsHandler; }
+        internal CallbackManager Manager          { get => this._Manager;        }
+        internal bool            HasInitialized   { get => this._HasInitialized; }
+        internal FuseUI          UI               { get => this._UI; }
+        internal FuseUser        User             { get => this._User; }
 
         internal void Connect(string user,string pass,string code=null)
         {
@@ -120,6 +127,7 @@ namespace Fuse
             this._IgnoreNextDisconnect = false;
             this.RunOnSTA(() =>
             {
+                this._User.UpdateLocalUser(cb.ClientSteamID);
                 if (cb.Result == EResult.OK)
                 {
                     this._UI.ClientWindow.Show();
@@ -129,7 +137,7 @@ namespace Fuse
                     this._IgnoreNextDisconnect = true;
                     if (cb.Result == EResult.AccountLoginDeniedNeedTwoFactor)
                     {
-                        _2FACWindow win = new _2FACWindow(this,this._UI,this._Details.Username, this._Details.Password);
+                        _2FACWindow win = new _2FACWindow(this,this._Details.Username, this._Details.Password);
                         win.ShowDialog();
                     }
                     else
@@ -159,6 +167,9 @@ namespace Fuse
         {
             this.RunOnSTA(() =>
             {
+                if (cb.FriendID == this._ClientHandler.SteamID)
+                    this._User.UpdateLocalUser(cb.FriendID);
+
                 ClientWindow win = this._UI.ClientWindow;
                 if (win.IsSearchingFriends) return;
                 this._User.UpdateFriend(cb.FriendID);
@@ -166,8 +177,8 @@ namespace Fuse
                 win.ClearOnlineFriends();
                 win.ClearOfflineFriends();
 
-                List<Friend> onlinefriends = this._User.OnlineFriends;
-                List<Friend> offlinefriends = this._User.OfflineFriends;
+                List<User> onlinefriends = this._User.OnlineFriends;
+                List<User> offlinefriends = this._User.OfflineFriends;
 
                 onlinefriends.Sort((x,y) => x.Name.CompareTo(y.Name));
                 onlinefriends.ForEach(x => win.AddOnlineFriend(x));
@@ -181,8 +192,16 @@ namespace Fuse
 
         private void OnFriendMessage(SteamFriends.FriendMsgCallback cb)
         {
-            int index = this._User.GetFriendIndex(cb.Sender.ConvertToUInt64());
-            if(index != -1) this._User.Friends[index].Messages.Add(new Message(cb.Message));
+            RunOnSTA(() =>
+            {
+                this._User.UpdateFriend(cb.Sender);
+                int index = this._User.GetFriendIndex(cb.Sender.ConvertToUInt64());
+                if (index != -1)
+                {
+                    User friend = this._User.Friends[index];
+                    this._User.Friends[index].Messages.Add(new Message(friend, cb.Message));
+                }
+            });
         }
 
         private void AwaitCallbackResults()
@@ -219,11 +238,5 @@ namespace Fuse
                 this._ClientHandler.Disconnect();
             }
         }
-
-        internal SteamClient ClientHandler { get => this._ClientHandler;  set => this._ClientHandler  = value; }
-        internal SteamUser UserHandler     { get => this._UserHandler;    set => this._UserHandler    = value; }
-        internal CallbackManager Manager   { get => this._Manager;        set => this._Manager        = value; }
-        internal bool HasInitialized       { get => this._HasInitialized; set => this._HasInitialized = value; }
-        internal FuseUser User             { get => this._User; }
     }
 }

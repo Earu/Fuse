@@ -11,16 +11,14 @@ namespace Fuse.Windows
     public partial class _2FACWindow : Window
     {
         private FuseClient _Client;
-        private FuseUI _UI;
         private string _Password;
         private string _Username;
 
-        internal _2FACWindow(FuseClient client,FuseUI ui,string user,string pass)
+        internal _2FACWindow(FuseClient client,string user,string pass)
         {
             this.InitializeComponent();
             this.TBCode.Focus();
             this._Client = client;
-            this._UI = ui;
             this._Username = user;
             this._Password = pass;
         }
@@ -33,7 +31,7 @@ namespace Fuse.Windows
         private void OnClose(object sender, EventArgs e)
         {
             this.Close();
-            this._UI.ShowLogin(this._Username,this._Password);
+            this._Client.UI.ShowLogin(this._Username,this._Password);
         }
 
         private void OnCodeKeyDown(object sender, KeyEventArgs e)

@@ -85,7 +85,7 @@
     <Compile Include="FuseUI.cs" />
     <Compile Include="FuseUser.cs" />
     <Compile Include="Models\Discussion.cs" />
-    <Compile Include="Models\Friend.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Windows\2FACWindow.xaml.cs">
       <DependentUpon>2FACWindow.xaml</DependentUpon>

@@ -1,4 +1,5 @@
 ﻿using Fuse.Models;
+using Fuse.Windows;
 using SteamKit2;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Fuse.Controls
     /// </summary>
     public partial class FriendControl : UserControl
     {
-        private Dictionary<EPersonaState, SolidColorBrush> StateColors = new Dictionary<EPersonaState, SolidColorBrush>
+        private static Dictionary<EPersonaState, SolidColorBrush> _StateColors = new Dictionary<EPersonaState, SolidColorBrush>
         {
             [EPersonaState.Offline]        = Brushes.Gray,
             [EPersonaState.Online]         = Brushes.DodgerBlue,
@@ -27,13 +28,21 @@ namespace Fuse.Controls
             [EPersonaState.Snooze]         = Brushes.DarkOrange,
         };
 
-        internal FriendControl()
+        private User _Friend;
+        private FuseClient _Client;
+
+        internal FriendControl(FuseClient client, User friend)
         {
             this.InitializeComponent();
+            this._Friend = friend;
+            this._Client = client;
         }
 
-        internal void Update(Friend friend)
+        internal void Update(User friend=null)
         {
+            if(friend != null) this._Friend = friend;
+            friend = this._Friend;
+
             string name = friend.Name;
             EPersonaState state = friend.State;
             string game = friend.Game;
@@ -52,7 +61,24 @@ namespace Fuse.Controls
             else
             {
                 this.TBState.Text = state.ToString();
-                this.RCState.Fill = StateColors[state];
+                this.RCState.Fill = StateToColor(state);
+            }
+        }
+
+        internal static SolidColorBrush StateToColor(EPersonaState state)
+        {
+            return _StateColors[state];
+        }
+
+        private void OnLeftClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ClientWindow win = this._Client.UI.ClientWindow;
+            if (win.IsVisible)
+            {
+                win.ClearDiscussion();
+                Discussion disc = new Discussion(this._Client,this._Friend);
+                this._Client.User.CurrentDiscussion = disc;
+                win.LoadDiscussion(disc);
             }
         }
     }

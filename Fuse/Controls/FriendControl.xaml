@@ -7,14 +7,26 @@
              mc:Ignorable="d" 
              d:DesignHeight="40" d:DesignWidth="180">
 	<Grid Background="#191919">
-		<Image Name="IMAvatar" HorizontalAlignment="Left" Height="34" Margin="3" VerticalAlignment="Top" Width="35">
+		<Rectangle Stroke="#19191919" MouseLeftButtonDown="OnLeftClick">
+			<Rectangle.Style>
+				<Style TargetType="{x:Type Rectangle}">
+					<Setter Property="Fill" Value="Transparent" />
+					<Style.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter Property="Fill" Value="#333333" />
+						</Trigger>
+					</Style.Triggers>
+				</Style>
+			</Rectangle.Style>
+		</Rectangle>
+		<Image Name="IMAvatar" IsHitTestVisible="False" HorizontalAlignment="Left" Height="34" Margin="3" VerticalAlignment="Top" Width="35">
 			<Image.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Image.Effect>
 		</Image>
-		<TextBlock Name="TBName" FontWeight="Bold" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Margin="46,3,0,0" TextWrapping="NoWrap" Text="???" VerticalAlignment="Top" Width="114"/>
-		<TextBlock Name="TBState" FontSize="9" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Padding="1,0,0,0" Margin="46,22,0,0" TextWrapping="NoWrap"  Text="???" VerticalAlignment="Top" RenderTransformOrigin="0.599,0.548" Width="114"/>
-		<Border BorderBrush="#222222" BorderThickness="3" HorizontalAlignment="Left" Height="34" Margin="3,3,0,0" VerticalAlignment="Top" Width="35"/>
-		<Rectangle Name="RCState" Fill="IndianRed" HorizontalAlignment="Left" Height="9" Margin="31,30,0,0" Stroke="#222222" VerticalAlignment="Top" Width="9" RenderTransformOrigin="1,0.704"/>
+		<TextBlock Name="TBName" IsHitTestVisible="False" FontWeight="Bold" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Margin="46,3,0,0" TextWrapping="NoWrap" Text="???" VerticalAlignment="Top" Width="100"/>
+		<TextBlock Name="TBState" IsHitTestVisible="False" FontSize="9" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Padding="1,0,0,0" Margin="46,22,0,0" TextWrapping="NoWrap"  Text="???" VerticalAlignment="Top" Width="100"/>
+		<Border BorderBrush="#222222" Opacity="1" IsHitTestVisible="False" BorderThickness="3" HorizontalAlignment="Left" Height="34" Margin="3,3,0,0" VerticalAlignment="Top" Width="35"/>
+		<Rectangle Name="RCState" IsHitTestVisible="False" Fill="IndianRed" HorizontalAlignment="Left" Height="9" Margin="31,30,0,0" Stroke="#222222" VerticalAlignment="Top" Width="9"/>
 	</Grid>
 </UserControl>
