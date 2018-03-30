@@ -366,7 +366,7 @@
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>
 		</Button>
-		<Button FontFamily="Arial" FontSize="15" Foreground="White" Content="Add Friend" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="90" Height="21" Style="{DynamicResource BTNMenu}" Margin="5,4,0,0">
+		<Button FontFamily="Arial" FontSize="15" Foreground="White" Content="Add friend" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="90" Height="21" Style="{DynamicResource BTNMenu}" Margin="5,4,0,0">
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>

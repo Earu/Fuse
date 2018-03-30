@@ -68,12 +68,13 @@ namespace Fuse
         internal FuseUI          UI               { get => this._UI; }
         internal FuseUser        User             { get => this._User; }
 
-        internal void Connect(string user,string pass,string code=null)
+        internal void Connect(string user,string pass,string code=null,string authcode=null)
         {
             this._Details.LoginKey = null;
             this._Details.Username = user;
             this._Details.Password = pass;
             if (code != null) this._Details.TwoFactorCode = code;
+            if (authcode != null) this._Details.AuthCode = authcode;
             this._ClientHandler.Connect();
         }
 
@@ -135,9 +136,10 @@ namespace Fuse
                 else
                 {
                     this._IgnoreNextDisconnect = true;
-                    if (cb.Result == EResult.AccountLoginDeniedNeedTwoFactor)
+                    if (cb.Result == EResult.AccountLoginDeniedNeedTwoFactor || cb.Result == EResult.AccountLogonDeniedVerifiedEmailRequired)
                     {
-                        _2FACWindow win = new _2FACWindow(this,this._Details.Username, this._Details.Password);
+                        bool isphone = cb.Result == EResult.AccountLoginDeniedNeedTwoFactor;
+                        _2FACWindow win = new _2FACWindow(this, this._Details.Username, this._Details.Password, isphone);
                         win.ShowDialog();
                     }
                     else
