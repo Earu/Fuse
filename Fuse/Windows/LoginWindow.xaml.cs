@@ -13,14 +13,12 @@ namespace Fuse.Windows
         private static bool MainDefined = false;
 
         private FuseClient _Client;
-        private FuseUI _UI;
         private bool IsMain = false;
 
-        internal LoginWindow(FuseClient client,FuseUI ui)
+        internal LoginWindow(FuseClient client)
         {
             this.InitializeComponent();
             this._Client = client;
-            this._UI = ui;
             this.TBUserName.Focus();
 
             if (!MainDefined)

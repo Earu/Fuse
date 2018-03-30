@@ -22,13 +22,20 @@ namespace Fuse.Controls
     /// </summary>
     public partial class MessageControl : UserControl
     {
-        public MessageControl()
+        private Message _Message;
+
+        internal MessageControl(Message msg)
         {
+            this._Message = msg;
             this.InitializeComponent();
         }
 
-        internal void Update(Friend friend,Message msg)
+        internal void Update(Message msg=null)
         {
+            if (msg != null) this._Message = msg;
+            msg = this._Message;
+            User friend = this._Message.Author;
+
             string name = friend.Name;
             BitmapImage source = friend.Avatar;
             this.IMAvatar.Source = source;

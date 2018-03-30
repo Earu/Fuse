@@ -11,12 +11,12 @@ namespace Fuse
         internal FuseUI(FuseClient client)
         {
             this._Client = client;
-            this._Window = new ClientWindow(client,this);
+            this._Window = new ClientWindow(client);
         }
 
         internal void ShowLogin(string user=null,string pass=null)
         {
-            LoginWindow win = new LoginWindow(this._Client,this);
+            LoginWindow win = new LoginWindow(this._Client);
             win.TBUserName.Text = user;
             win.PBPassword.Password = pass;
             win.Show();

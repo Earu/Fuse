@@ -71,11 +71,13 @@
 		<TextBlock FontWeight="DemiBold" FontSize="18" FontFamily="Arial" HorizontalAlignment="Center" Foreground="IndianRed" TextWrapping="Wrap" Text="FUSE MACHINE BORK" VerticalAlignment="Top" Margin="0,25,0,0"/>
 		<TextBlock FontWeight="Bold" FontSize="15" FontFamily="Agency FB" Text="Fuse" Foreground="White" HorizontalAlignment="Left" Margin="10,1,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 		<Button Foreground="White" FontWeight="Bold" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Width="40" Height="20" Click="OnClose" Style="{DynamicResource BTNClose}"/>
-		<TextBlock Name="TBException" Foreground="IndianRed" FontSize="17" FontFamily="Arial" TextAlignment="Center" HorizontalAlignment="Left" Margin="5,51,0,50" TextWrapping="Wrap" Text="???" VerticalAlignment="Top" Height="39" Width="280"/>
-		<Button Foreground="White" BorderBrush="Gray" FontWeight="Bold" Content="Ok" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="100" Height="25" Click="OnClose" Style="{DynamicResource BTNClose}" Margin="90,0,90,10">
-			<Button.Effect>
-				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
-			</Button.Effect>
-		</Button>
+		<StackPanel>
+			<TextBlock Name="TBException" Foreground="IndianRed" FontSize="17" FontFamily="Arial" TextAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Text="???" VerticalAlignment="Top" Width="280" Margin="4,51,0,10"/>
+			<Button Foreground="White" Margin="0,0,0,10" BorderBrush="Gray" FontWeight="Bold" Content="Ok" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="25" Click="OnClose" Style="{DynamicResource BTNClose}">
+				<Button.Effect>
+					<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+				</Button.Effect>
+			</Button>
+		</StackPanel>
 	</Grid>
 </Window>
