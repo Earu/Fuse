@@ -75,6 +75,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\CompactMessageControl.xaml.cs">
+      <DependentUpon>CompactMessageControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\FriendControl.xaml.cs">
       <DependentUpon>FriendControl.xaml</DependentUpon>
     </Compile>
@@ -99,6 +102,10 @@
     <Compile Include="Windows\MoreWindow.xaml.cs">
       <DependentUpon>MoreWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\CompactMessageControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\FriendControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

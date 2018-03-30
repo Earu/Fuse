@@ -49,10 +49,13 @@ namespace Fuse.Windows
         private void OnMessageSend(object sender, RoutedEventArgs e)
         {
             string content = this.TBMessage.Text;
-            Message msg = new Message(this._Client.User.LocalUser, content);
-            this._Client.User.CurrentDiscussion.SendMessage(content);
-            this.AddCurrentMessage(msg);
-            this.TBMessage.Text = string.Empty;
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                Message msg = new Message(this._Client.User.LocalUser, content);
+                this._Client.User.CurrentDiscussion.SendMessage(msg);
+                this.AddCurrentMessage(msg);
+                this.TBMessage.Text = string.Empty;
+            }
             this.TBMessage.Focus();
         }
 
@@ -159,16 +162,31 @@ namespace Fuse.Windows
             this.ICOfflineFriends.Items.Add(ctrl);
         }
 
-        private void AddCurrentMessage(Message msg)
+        internal User _LastMessageAuthor = null;
+
+        internal void AddCurrentMessage(Message msg)
         {
-            MessageControl ctrl = new MessageControl(msg);
-            ctrl.Update();
-            this.ICCurrentMessages.Items.Add(ctrl);
+            User lastauthor = this._LastMessageAuthor;
+            if (lastauthor != null && lastauthor.AccountID == msg.Author.AccountID)
+            {
+                CompactMessageControl ctrl = new CompactMessageControl(msg);
+                ctrl.Update();
+                this.ICCurrentMessages.Items.Add(ctrl);
+            }
+            else
+            {
+                MessageControl ctrl = new MessageControl(msg);
+                ctrl.Update();
+                this.ICCurrentMessages.Items.Add(ctrl);
+            }
+            this._LastMessageAuthor = msg.Author;
+            this.SVCurrentMessages.ScrollToEnd();
         }
 
         internal void ClearDiscussion()
         {
             this.ICCurrentMessages.Items.Clear();
+            this._LastMessageAuthor = null;
         }
 
         internal void LoadDiscussion(Discussion disc)

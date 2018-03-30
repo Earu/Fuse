@@ -11,8 +11,8 @@ namespace Fuse.Models
     {
         private FuseClient    _Client;
         private bool          _IsGroup;
-        private User        _Recipient;
-        private List<User>  _Recipients;
+        private User          _Recipient;
+        private List<User>    _Recipients;
         private List<Message> _Messages;
         private int           _NewMessages;
         private DateTime      _LastOpened;
@@ -44,16 +44,23 @@ namespace Fuse.Models
             else return this._Recipient.Messages;
         }
 
-        internal void SendMessage(string content)
+        internal void SendMessage(Message msg)
         {
             SteamFriends handler = this._Client.FriendsHandler;
             if (!this._IsGroup)
             {
-                handler.SendChatMessage(new SteamID(this._Recipient.SteamID), EChatEntryType.ChatMsg, content);
+                this._Recipient.Messages.Add(msg);
+                handler.SendChatMessage(this._Recipient.SteamID, EChatEntryType.ChatMsg, msg.Content);
             }
         }
 
-        internal User   Recipient   { get => this._Recipient;   }
+        internal User GetLastAuthor()
+        {
+            Message msg = this._IsGroup ? this._Messages.Last() : this._Recipient.Messages.Last();
+            return msg.Author;
+        }
+
+        internal User     Recipient   { get => this._Recipient;   }
         internal int      NewMessages { get => this._NewMessages; }
         internal bool     IsGroup     { get => this._IsGroup;     }
         internal DateTime LastOpened  { get => this._LastOpened;  }

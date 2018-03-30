@@ -11,20 +11,24 @@ namespace Fuse.Models
     internal class User
     {
         private string _Name;
-        private string _SteamID;
+        private SteamID _SteamID;
         private BitmapImage _Avatar;
         private ulong _SteamID64;
+        private uint _AccountID;
         private EPersonaState _State;
         private string _Game;
         private List<Message> _Messages;
 
-        internal User(string name, string steamid, ulong id64, EPersonaState state,byte[] bhash,List<Message> msgs=null)
+        internal User(string name,SteamID id, EPersonaState state,byte[] bhash,List<Message> msgs=null)
         {
             this._Game = null;
             if (msgs == null) this._Messages = new List<Message>();
             else this._Messages = msgs;
+            string steamid = id.Render();
+            this._AccountID = id.AccountID;
+            ulong id64 = id.ConvertToUInt64();
             this._Name = name ?? steamid;
-            this._SteamID = steamid;
+            this._SteamID = id;
             this._SteamID64 = id64;
             this._State = state;
 
@@ -58,12 +62,13 @@ namespace Fuse.Models
             this._Avatar.UriSource = new Uri(link, UriKind.Absolute);
         }
 
-        internal string Name            { get => this._Name;      set => this._Name      = value; }
-        internal string SteamID         { get => this._SteamID;   set => this._Name      = value; }
-        internal ulong SteamID64        { get => this._SteamID64; set => this._SteamID64 = value; }
-        internal EPersonaState State    { get => this._State;     set => this._State     = value; }
-        internal string Game            { get => this._Game;      set => this._Game      = value; }
-        internal List<Message> Messages { get => this._Messages; }
-        internal BitmapImage Avatar     { get => this._Avatar; }
+        internal string        Name      { get => this._Name;      }
+        internal SteamID       SteamID   { get => this._SteamID;   }
+        internal uint          AccountID { get => this._AccountID; }
+        internal ulong         SteamID64 { get => this._SteamID64; }
+        internal EPersonaState State     { get => this._State;     }
+        internal string        Game      { get => this._Game;      }
+        internal List<Message> Messages  { get => this._Messages;  }
+        internal BitmapImage   Avatar    { get => this._Avatar;    }
     }
 }
