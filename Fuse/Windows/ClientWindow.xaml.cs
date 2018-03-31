@@ -15,6 +15,7 @@ namespace Fuse.Windows
     {
         private FuseClient _Client;
         private bool _IsSearchingFriends = false;
+        private User _LastMessageAuthor = null;
 
         internal ClientWindow(FuseClient client)
         {
@@ -32,7 +33,7 @@ namespace Fuse.Windows
 
         private void OnMaximize(object sender, RoutedEventArgs e)
         {
-            this.WindowState = this.WindowState == WindowState.Maximized ? 
+            this.WindowState = this.WindowState == WindowState.Maximized ?
                 WindowState.Normal : WindowState.Maximized;
         }
 
@@ -70,33 +71,17 @@ namespace Fuse.Windows
         private void OnSearchFriendChanged(object sender, TextChangedEventArgs e)
         {
             string search = this.TBSearchFriends.Text;
-            List<User> onlinefriends = this._Client.User.OnlineFriends;
-            List<User> offlinefriends = this._Client.User.OfflineFriends;
-
-            onlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
-            offlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
-
-            this.ClearOnlineFriends();
-            this.ClearOfflineFriends();
-
             if (string.IsNullOrWhiteSpace(search))
             {
                 this._IsSearchingFriends = false;
                 this.PLSearchFriends.Visibility = Visibility.Visible;
-
-                onlinefriends.ForEach(x => this.AddOnlineFriend(x));
-                offlinefriends.ForEach(x => this.AddOfflineFriend(x));
             }
             else
             {
                 this._IsSearchingFriends = true;
                 this.PLSearchFriends.Visibility = Visibility.Hidden;
-                onlinefriends = onlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
-                offlinefriends = offlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
-
-                onlinefriends.ForEach(x => this.AddOnlineFriend(x));
-                offlinefriends.ForEach(x => this.AddOfflineFriend(x));
             }
+            this.UpdateFriendList(search);
         }
 
         private void OnMessageKeyDown(object sender, KeyEventArgs e)
@@ -128,41 +113,75 @@ namespace Fuse.Windows
             }
         }
 
-        internal void SetOnlineFriendsCount(int count,int total)
+        internal void UpdateFriendList(string search=null)
+        {
+            if (search == null && this.IsSearchingFriends)
+                search = this.TBSearchFriends.Text;
+
+            FuseUser fuseuser = this._Client.User;
+            this.ClearOnlineFriends();
+            this.ClearOfflineFriends();
+
+            List<User> onlinefriends = fuseuser.OnlineFriends;
+            int oncount = onlinefriends.Count;
+            List<User> offlinefriends = fuseuser.OfflineFriends;
+            int offcount = offlinefriends.Count;
+
+            if (search == null)
+            {
+                onlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
+                onlinefriends.ForEach(x => this.AddOnlineFriend(x));
+                offlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
+                offlinefriends.ForEach(x => this.AddOfflineFriend(x));
+            }
+            else
+            {
+                onlinefriends = onlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
+                onlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
+                offlinefriends = offlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
+                offlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
+
+                onlinefriends.ForEach(x => this.AddOnlineFriend(x));
+                offlinefriends.ForEach(x => this.AddOfflineFriend(x));
+            }
+
+            this.SetOnlineFriendsCount(oncount, fuseuser.Friends.Count);
+            this.SetOfflineFriendsCount(offcount, fuseuser.Friends.Count);
+        }
+
+        private void SetOnlineFriendsCount(int count, int total)
         {
             this.TBOnlineFriendCount.Text = $"Online - {count}/{total}";
         }
 
-        internal void SetOfflineFriendsCount(int count, int total)
+        private void SetOfflineFriendsCount(int count, int total)
         {
             this.TBOfflineFriendCount.Text = $"Offline - {count}/{total}";
         }
 
-        internal void ClearOnlineFriends()
+        private void ClearOnlineFriends()
         {
             this.ICOnlineFriends.Items.Clear();
         }
 
-        internal void ClearOfflineFriends()
+        private void ClearOfflineFriends()
         {
             this.ICOfflineFriends.Items.Clear();
         }
 
-        internal void AddOnlineFriend(User friend)
+        private void AddOnlineFriend(User friend)
         {
             FriendControl ctrl = new FriendControl(this._Client, friend);
             ctrl.Update();
             int i = this.ICOnlineFriends.Items.Add(ctrl);
         }
 
-        internal void AddOfflineFriend(User friend)
+        private void AddOfflineFriend(User friend)
         {
             FriendControl ctrl = new FriendControl(this._Client, friend);
             ctrl.Update();
             this.ICOfflineFriends.Items.Add(ctrl);
         }
-
-        internal User _LastMessageAuthor = null;
 
         internal void AddCurrentMessage(Message msg)
         {

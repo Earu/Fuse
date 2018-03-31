@@ -68,17 +68,17 @@ namespace Fuse
             else
             {
                 User old = this.Friends[findex];
-                User friend = new User(name, id, state, bhash, old.Messages);
+                User friend = new User(name, id, state, bhash, old.Messages, old.NewMessages);
                 this.Friends[findex] = friend;
 
                 if (old.State == EPersonaState.Offline)
                 {
-                    int i = this.OfflineFriends.FindIndex(x => x.SteamID64 == old.SteamID64);
+                    int i = this.OfflineFriends.FindIndex(x => x.AccountID == old.AccountID);
                     if(i != -1) this._OfflineFriends.RemoveAt(i);
                 }
                 else
                 {
-                    int i = this.OnlineFriends.FindIndex(x => x.SteamID64 == old.SteamID64);
+                    int i = this.OnlineFriends.FindIndex(x => x.AccountID == old.AccountID);
                     if (i != -1) this._OnlineFriends.RemoveAt(i);
                 }
 
