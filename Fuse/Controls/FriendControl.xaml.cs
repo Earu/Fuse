@@ -38,6 +38,8 @@ namespace Fuse.Controls
             this._Client = client;
         }
 
+        internal User Friend { get => this._Friend; }
+
         internal void Update(User friend=null)
         {
             if(friend != null) this._Friend = friend;
@@ -63,6 +65,11 @@ namespace Fuse.Controls
                 this.TBState.Text = state.ToString();
                 this.RCState.Fill = StateToColor(state);
             }
+
+            if (friend.NewMessages > 0)
+            {
+                this.TBNewMessages.Text = friend.NewMessages.ToString();
+            }
         }
 
         internal static SolidColorBrush StateToColor(EPersonaState state)
@@ -76,6 +83,8 @@ namespace Fuse.Controls
             if (win.IsVisible)
             {
                 win.ClearDiscussion();
+                this._Friend.NewMessages = 0;
+                this.Update();
                 Discussion disc = new Discussion(this._Client,this._Friend);
                 this._Client.User.CurrentDiscussion = disc;
                 win.LoadDiscussion(disc);

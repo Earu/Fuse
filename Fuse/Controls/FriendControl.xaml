@@ -19,14 +19,16 @@
 				</Style>
 			</Rectangle.Style>
 		</Rectangle>
-		<Image Name="IMAvatar" IsHitTestVisible="False" HorizontalAlignment="Left" Height="34" Margin="3" VerticalAlignment="Top" Width="35">
-			<Image.Effect>
-				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
-			</Image.Effect>
-		</Image>
+
 		<TextBlock Name="TBName" IsHitTestVisible="False" FontWeight="Bold" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Margin="46,3,0,0" TextWrapping="NoWrap" Text="???" VerticalAlignment="Top" Width="100"/>
 		<TextBlock Name="TBState" IsHitTestVisible="False" FontSize="9" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Padding="1,0,0,0" Margin="46,22,0,0" TextWrapping="NoWrap"  Text="???" VerticalAlignment="Top" Width="100"/>
-		<Border BorderBrush="#222222" Opacity="1" IsHitTestVisible="False" BorderThickness="3" HorizontalAlignment="Left" Height="34" Margin="3,3,0,0" VerticalAlignment="Top" Width="35"/>
+		<Border BorderBrush="#222222" Opacity="1" Background="Black" IsHitTestVisible="False" BorderThickness="2" HorizontalAlignment="Left" Height="34" Margin="3,3,0,0" VerticalAlignment="Top" Width="35">
+			<Image Name="IMAvatar" IsHitTestVisible="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+			<Border.Effect>
+				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
+			</Border.Effect>
+		</Border>
 		<Rectangle Name="RCState" IsHitTestVisible="False" Fill="IndianRed" HorizontalAlignment="Left" Height="9" Margin="31,30,0,0" Stroke="#222222" VerticalAlignment="Top" Width="9"/>
+		<TextBlock Name="TBNewMessages" Padding="0,2,0,0" TextAlignment="Center" FontSize="12" HorizontalAlignment="Right" FontWeight="ExtraBold" FontFamily="Arial" Foreground="IndianRed" Margin="0,10,14,0" TextWrapping="NoWrap" VerticalAlignment="Top" Height="18" Width="30"/>
 	</Grid>
 </UserControl>

@@ -173,22 +173,8 @@ namespace Fuse
                     this._User.UpdateLocalUser(cb.FriendID);
 
                 ClientWindow win = this._UI.ClientWindow;
-                if (win.IsSearchingFriends) return;
                 this._User.UpdateFriend(cb.FriendID);
-
-                win.ClearOnlineFriends();
-                win.ClearOfflineFriends();
-
-                List<User> onlinefriends = this._User.OnlineFriends;
-                List<User> offlinefriends = this._User.OfflineFriends;
-
-                onlinefriends.Sort((x,y) => x.Name.CompareTo(y.Name));
-                onlinefriends.ForEach(x => win.AddOnlineFriend(x));
-                offlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
-                offlinefriends.ForEach(x => win.AddOfflineFriend(x));
-
-                win.SetOnlineFriendsCount(onlinefriends.Count, this._User.Friends.Count);
-                win.SetOfflineFriendsCount(offlinefriends.Count, this._User.Friends.Count);
+                win.UpdateFriendList();
             });
         }
 
@@ -207,10 +193,19 @@ namespace Fuse
                     this._User.Friends[index].Messages.Add(msg);
 
                     Discussion cur = this._User.CurrentDiscussion;
-                    if (!cur.IsGroup && cur.Recipient.AccountID == cb.Sender.AccountID)
+                    if (!cur.IsGroup)
                     {
-                        ClientWindow win = this._UI.ClientWindow;
-                        win.AddCurrentMessage(msg);
+                        if (cur.Recipient.AccountID == cb.Sender.AccountID)
+                        {
+                            ClientWindow win = this._UI.ClientWindow;
+                            win.AddCurrentMessage(msg);
+                        }
+                        else
+                        {
+                            ClientWindow win = this._UI.ClientWindow;
+                            friend.NewMessages++;
+                            win.UpdateFriendList();
+                        }
                     }
                 }
             });
