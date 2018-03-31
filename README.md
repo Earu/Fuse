@@ -7,10 +7,7 @@ Fuse aims to be easy to use graphically compared to the mess of tabs and windows
 ![main](https://i.imgur.com/7722aCS.png)
 
 ## Issues & WIP
-- The managment of your status and other settings is not done
-- Audio calls are not supported yet
-- Games are not shown in the friendlist
-- Authentification by mail (FA) is not supported
+Check the project part [here](https://github.com/Earu/Fuse/projects/1)
 
 ## Contributing
 If you aim to contribute you can fork this repository and do pull requests with your changes.
