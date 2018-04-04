@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
@@ -51,6 +49,7 @@ namespace Fuse
             this._CallbackThread = new Thread(AwaitCallbackResults);
             this._CallbackThread.Start();
             
+            
             this._Manager.Subscribe<SteamClient.ConnectedCallback>(this.OnConnected);
             this._Manager.Subscribe<SteamClient.DisconnectedCallback>(this.OnDisconnected);
             this._Manager.Subscribe<SteamUser.LoggedOnCallback>(this.OnLoggedOn);
@@ -58,6 +57,8 @@ namespace Fuse
             this._Manager.Subscribe<SteamUser.AccountInfoCallback>(this.OnAccountInfo);
             this._Manager.Subscribe<SteamFriends.PersonaStateCallback>(this.OnFriendPersonaStateChange);
             this._Manager.Subscribe<SteamFriends.FriendMsgCallback>(this.OnFriendMessage);
+            this._Manager.Subscribe<SteamFriends.FriendMsgEchoCallback>(this.OnFriendMessageEcho);
+            //SteamFriends.FriendMsgHistoryCallback a;
         }
 
         internal SteamClient     ClientHandler    { get => this._ClientHandler;  }
@@ -193,19 +194,43 @@ namespace Fuse
                     this._User.Friends[index].Messages.Add(msg);
 
                     Discussion cur = this._User.CurrentDiscussion;
-                    if (!cur.IsGroup)
+                    if (cur != null && !cur.IsGroup)
                     {
+                        ClientWindow win = this._UI.ClientWindow;
                         if (cur.Recipient.AccountID == cb.Sender.AccountID)
                         {
-                            ClientWindow win = this._UI.ClientWindow;
                             win.AddCurrentMessage(msg);
                         }
                         else
                         {
-                            ClientWindow win = this._UI.ClientWindow;
                             friend.NewMessages++;
                             win.UpdateFriendList();
                         }
+                    }
+                }
+            });
+        }
+
+        private void OnFriendMessageEcho(SteamFriends.FriendMsgEchoCallback cb)
+        {
+            RunOnSTA(() =>
+            {
+                this._User.UpdateFriend(cb.Recipient);
+                if (cb.EntryType != EChatEntryType.ChatMsg) return;
+
+                int index = this._User.GetFriendIndex(cb.Recipient.AccountID);
+                if (index != -1)
+                {
+                    User friend = this._User.Friends[index];
+                    Message msg = new Message(this._User.LocalUser, cb.Message);
+                    this._User.Friends[index].Messages.Add(msg);
+
+                    Discussion cur = this._User.CurrentDiscussion;
+                    if (cur != null && !cur.IsGroup)
+                    {
+                        ClientWindow win = this._UI.ClientWindow;
+                        if (cur.Recipient.AccountID == cb.Recipient.AccountID)
+                            win.AddCurrentMessage(msg);
                     }
                 }
             });

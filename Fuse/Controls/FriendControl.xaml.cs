@@ -1,10 +1,7 @@
 ﻿using Fuse.Models;
 using Fuse.Windows;
 using SteamKit2;
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -85,7 +82,10 @@ namespace Fuse.Controls
                 win.ClearDiscussion();
                 this._Friend.NewMessages = 0;
                 this.Update();
-                Discussion disc = new Discussion(this._Client,this._Friend);
+                Discussion disc = new Discussion(this._Client, this._Friend)
+                {
+                    IsRecent = true
+                };
                 this._Client.User.CurrentDiscussion = disc;
                 win.LoadDiscussion(disc);
             }

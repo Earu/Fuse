@@ -7,7 +7,7 @@ namespace Fuse
     /// </summary>
     public partial class App : Application
     {
-        public App()
+        internal App()
         {
             FuseClient client = new FuseClient();
             client.Start();
