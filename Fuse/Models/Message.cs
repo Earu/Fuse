@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fuse.Models
 {
@@ -19,11 +15,11 @@ namespace Fuse.Models
             this._TimeStamp = DateTime.Now;
         }
 
-        internal Message(User author,string content)
+        internal Message(User author,string content,DateTime? timestamp=null)
         {
             this._Author = author;
             this._Content = content;
-            this._TimeStamp = DateTime.Now;
+            this._TimeStamp = timestamp ?? DateTime.Now;
         }
 
         internal User   Author    { get => this._Author;    }

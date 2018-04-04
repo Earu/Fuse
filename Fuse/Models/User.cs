@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using SteamKit2;
 
@@ -10,15 +8,15 @@ namespace Fuse.Models
 {
     internal class User
     {
-        private string _Name;
-        private SteamID _SteamID;
-        private BitmapImage _Avatar;
-        private ulong _SteamID64;
-        private uint _AccountID;
+        private string        _Name;
+        private SteamID       _SteamID;
+        private BitmapImage   _Avatar;
+        private ulong         _SteamID64;
+        private uint          _AccountID;
         private EPersonaState _State;
-        private string _Game;
+        private string        _Game;
         private List<Message> _Messages;
-        private int _NewMessages;
+        private int           _NewMessages;
 
         internal User(string name,SteamID id, EPersonaState state,byte[] bhash,List<Message> msgs=null,int newmsg=0)
         {
@@ -34,7 +32,12 @@ namespace Fuse.Models
             this._SteamID64 = id64;
             this._State = state;
 
-            this._Avatar = new BitmapImage();
+            this._Avatar = new BitmapImage
+            {
+                CreateOptions = new BitmapCreateOptions(),
+                DecodePixelWidth = 30,
+                CacheOption = BitmapCacheOption.OnLoad,
+            };
             this._Avatar.DecodeFailed += this.OnAvatarFail;
             this._Avatar.DownloadFailed += this.OnAvatarFail;
             this._Avatar.BeginInit();
@@ -77,7 +80,7 @@ namespace Fuse.Models
         internal ulong         SteamID64   { get => this._SteamID64; }
         internal EPersonaState State       { get => this._State;     }
         internal string        Game        { get => this._Game;      }
-        internal List<Message> Messages    { get => this._Messages;  }
+        internal List<Message> Messages    { get => this._Messages; set => this._Messages = value; }
         internal BitmapImage   Avatar      { get => this._Avatar;    }
         internal int           NewMessages { get => this._NewMessages; set => this._NewMessages = value; }
     }

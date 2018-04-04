@@ -20,8 +20,8 @@
 			</Rectangle.Style>
 		</Rectangle>
 
-		<TextBlock Name="TBName" IsHitTestVisible="False" FontWeight="Bold" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Margin="46,3,0,0" TextWrapping="NoWrap" Text="???" VerticalAlignment="Top" Width="100"/>
-		<TextBlock Name="TBState" IsHitTestVisible="False" FontSize="9" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Padding="1,0,0,0" Margin="46,22,0,0" TextWrapping="NoWrap"  Text="???" VerticalAlignment="Top" Width="100"/>
+		<TextBlock Name="TBName" UseLayoutRounding="True" TextOptions.TextRenderingMode="ClearType" IsHitTestVisible="False" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Margin="46,3,0,0" TextWrapping="NoWrap" Text="???" VerticalAlignment="Top" Width="100"/>
+		<TextBlock Name="TBState" UseLayoutRounding="True" TextOptions.TextRenderingMode="ClearType" IsHitTestVisible="False" FontSize="9" FontFamily="Arial" Foreground="Gray" HorizontalAlignment="Left" Padding="1,0,0,0" Margin="46,22,0,0" TextWrapping="NoWrap"  Text="???" VerticalAlignment="Top" Width="100"/>
 		<Border BorderBrush="#222222" Opacity="1" Background="Black" IsHitTestVisible="False" BorderThickness="2" HorizontalAlignment="Left" Height="34" Margin="3,3,0,0" VerticalAlignment="Top" Width="35">
 			<Image Name="IMAvatar" IsHitTestVisible="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 			<Border.Effect>

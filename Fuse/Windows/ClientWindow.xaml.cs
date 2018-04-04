@@ -50,10 +50,11 @@ namespace Fuse.Windows
         private void OnMessageSend(object sender, RoutedEventArgs e)
         {
             string content = this.TBMessage.Text;
-            if (!string.IsNullOrWhiteSpace(content))
+            Discussion disc = this._Client.User.CurrentDiscussion;
+            if (!string.IsNullOrWhiteSpace(content) && disc != null)
             {
                 Message msg = new Message(this._Client.User.LocalUser, content);
-                this._Client.User.CurrentDiscussion.SendMessage(msg);
+                disc.SendMessage(msg);
                 this.AddCurrentMessage(msg);
                 this.TBMessage.Text = string.Empty;
             }
@@ -185,6 +186,9 @@ namespace Fuse.Windows
 
         internal void AddCurrentMessage(Message msg)
         {
+            if (this.PLMessageBackground.Visibility == Visibility.Visible)
+                this.PLMessageBackground.Visibility = Visibility.Hidden;
+
             User lastauthor = this._LastMessageAuthor;
             if (lastauthor != null && lastauthor.AccountID == msg.Author.AccountID)
             {
@@ -206,6 +210,40 @@ namespace Fuse.Windows
         {
             this.ICCurrentMessages.Items.Clear();
             this._LastMessageAuthor = null;
+        }
+
+        internal bool IsRecentChat(Discussion disc)
+        {
+            List<Discussion> discs = this._Client.User.Discussions;
+            if (!disc.IsGroup)
+            {
+                return discs.Any(x => !x.IsGroup && x.Recipient.AccountID == disc.Recipient.AccountID);
+            }
+            else
+            {
+                //Group implementation here
+                return false;
+            }
+        }
+
+        private void AddRecentDiscussion(Discussion disc)
+        {
+            if (!disc.IsRecent) return;
+            if (!disc.IsGroup)
+            {
+                FriendControl ctrl = new FriendControl(this._Client, disc.Recipient);
+                ctrl.Update();
+                this.LVRecentDiscussions.Items.Add(ctrl);
+            }
+            else
+            {
+                //Group implementation
+            }
+        }
+
+        internal void UpdateRecentChats()
+        {
+            this._Client.User.Discussions.ForEach(x => this.AddRecentDiscussion(x));
         }
 
         internal void LoadDiscussion(Discussion disc)

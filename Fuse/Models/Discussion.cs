@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fuse.Models
 {
@@ -16,6 +14,7 @@ namespace Fuse.Models
         private List<Message> _Messages;
         private int           _NewMessages;
         private DateTime      _LastOpened;
+        private bool          _IsRecent;
 
         internal Discussion(FuseClient client, User recipient)
         {
@@ -24,6 +23,7 @@ namespace Fuse.Models
             this._Recipient = recipient;
             this._NewMessages = 0;
             this._LastOpened = DateTime.Now;
+            this._IsRecent = true;
         }
 
         internal Discussion(FuseClient client, List<User> recipients)
@@ -34,6 +34,7 @@ namespace Fuse.Models
             this._Messages = new List<Message>();
             this._NewMessages = 0;
             this._LastOpened = DateTime.Now;
+            this._IsRecent = true;
         }
 
         internal List<Message> Open()
@@ -64,5 +65,6 @@ namespace Fuse.Models
         internal int      NewMessages { get => this._NewMessages; }
         internal bool     IsGroup     { get => this._IsGroup;     }
         internal DateTime LastOpened  { get => this._LastOpened;  }
+        internal bool     IsRecent    { get => this._IsRecent; set => this._IsRecent = value; }
     }
 }
