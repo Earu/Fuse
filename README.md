@@ -1,6 +1,8 @@
 # Fuse
 A Steam chat client with a discord based interface and features
 
+![logo](https://i.imgur.com/VRLuH6D.png)
+
 Fuse aims to be easy to use graphically compared to the mess of tabs and windows the default steam client creates to chat with your friends. It also aims to bring some features that should have been here since the start, like chat history, display of pictures from picture links directly into the chat, as well as videos and more.
 
 ![login](https://i.imgur.com/vzVaohL.png)
