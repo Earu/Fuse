@@ -1,7 +1,9 @@
 ﻿using Fuse.Controls;
 using Fuse.Models;
+using SteamKit2;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,11 +18,14 @@ namespace Fuse.Windows
         private FuseClient _Client;
         private bool _IsSearchingFriends = false;
         private User _LastMessageAuthor = null;
+        private Timer _TypingTimer = new Timer(30000);
 
         internal ClientWindow(FuseClient client)
         {
             this.InitializeComponent();
             this._Client = client;
+            this._TypingTimer.AutoReset = false;
+            this._TypingTimer.Elapsed += (s,e) => this.HideTyping();
         }
 
         internal bool IsSearchingFriends { get => this._IsSearchingFriends; }
@@ -55,7 +60,7 @@ namespace Fuse.Windows
             {
                 Message msg = new Message(this._Client.User.LocalUser, content);
                 disc.SendMessage(msg);
-                this.AddCurrentMessage(msg);
+                this.AppendChatMessage(msg);
                 this.TBMessage.Text = string.Empty;
             }
             this.TBMessage.Focus();
@@ -123,27 +128,31 @@ namespace Fuse.Windows
             this.ClearOnlineFriends();
             this.ClearOfflineFriends();
 
-            List<User> onlinefriends = fuseuser.OnlineFriends;
+            Dictionary<uint,User> onlinefriends = fuseuser.OnlineFriends;
             int oncount = onlinefriends.Count;
-            List<User> offlinefriends = fuseuser.OfflineFriends;
+            Dictionary<uint, User> offlinefriends = fuseuser.OfflineFriends;
             int offcount = offlinefriends.Count;
 
             if (search == null)
             {
-                onlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
-                onlinefriends.ForEach(x => this.AddOnlineFriend(x));
-                offlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
-                offlinefriends.ForEach(x => this.AddOfflineFriend(x));
+                foreach (KeyValuePair<uint, User> u in onlinefriends)
+                    this.AddOnlineFriend(u.Value);
+                foreach (KeyValuePair<uint, User> u in offlinefriends)
+                    this.AddOfflineFriend(u.Value);
             }
             else
             {
-                onlinefriends = onlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
-                onlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
-                offlinefriends = offlinefriends.Where(x => x.Name.ToLower().Contains(search.ToLower())).ToList();
-                offlinefriends.Sort((x, y) => x.Name.CompareTo(y.Name));
+                onlinefriends = onlinefriends
+                    .Where(x => x.Value.Name.ToLower().Contains(search.ToLower()))
+                    .ToDictionary(k => k.Key,v => v.Value);
+                offlinefriends = offlinefriends
+                    .Where(x => x.Value.Name.ToLower().Contains(search.ToLower()))
+                    .ToDictionary(k => k.Key,v => v.Value);
 
-                onlinefriends.ForEach(x => this.AddOnlineFriend(x));
-                offlinefriends.ForEach(x => this.AddOfflineFriend(x));
+                foreach (KeyValuePair<uint, User> u in onlinefriends)
+                    this.AddOnlineFriend(u.Value);
+                foreach (KeyValuePair<uint, User> u in offlinefriends)
+                    this.AddOfflineFriend(u.Value);
             }
 
             this.SetOnlineFriendsCount(oncount, fuseuser.Friends.Count);
@@ -184,7 +193,7 @@ namespace Fuse.Windows
             this.ICOfflineFriends.Items.Add(ctrl);
         }
 
-        internal void AddCurrentMessage(Message msg)
+        internal void AppendChatMessage(Message msg)
         {
             if (this.PLMessageBackground.Visibility == Visibility.Visible)
                 this.PLMessageBackground.Visibility = Visibility.Hidden;
@@ -204,6 +213,17 @@ namespace Fuse.Windows
             }
             this._LastMessageAuthor = msg.Author;
             this.SVCurrentMessages.ScrollToEnd();
+        }
+
+        internal void AppendChatNotification(Message msg)
+        {
+            if (this.PLMessageBackground.Visibility == Visibility.Visible)
+                this.PLMessageBackground.Visibility = Visibility.Hidden;
+            NotificationMessageControl ctrl = new NotificationMessageControl(msg);
+            ctrl.Update();
+            this.ICCurrentMessages.Items.Add(ctrl);
+            this.SVCurrentMessages.ScrollToEnd();
+            this._LastMessageAuthor = null;
         }
 
         internal void ClearDiscussion()
@@ -252,11 +272,51 @@ namespace Fuse.Windows
             {
                 this.TBCurrentDiscussionName.Text = $"@{disc.Recipient.Name}";
             }
+            else
+            {
+                string title = string.Empty;
+                disc.Recipients.ForEach(x => title = $"{title},{x.Name}");
+                title = title.Length >= 50 ? title.Substring(0, 50) : title;
+                this.TBCurrentDiscussionName.Text = title;
+            }
+
             List<Message> msgs = disc.Open();
             foreach (Message msg in msgs)
             {
-                this.AddCurrentMessage(msg);
+                if (msg.IsNotification)
+                    this.AppendChatNotification(msg);
+                else
+                    this.AppendChatMessage(msg);
             }
+        }
+
+        internal void ShowTyping(User user)
+        {
+            this.RCTyping.Visibility = Visibility.Visible;
+            this.TBTyping.Visibility = Visibility.Visible;
+            this.TBTyping.Text = $"{user.Name} is typing...";
+            this.SVCurrentMessages.Margin = new Thickness(0,0,0,60);
+            this._TypingTimer.Start();
+        }
+
+        internal void ShowTyping(List<User> users)
+        {
+            this.RCTyping.Visibility = Visibility.Visible;
+            this.TBTyping.Visibility = Visibility.Visible;
+            string display = string.Empty;
+            users.ForEach(x => display = $"{display},{x.Name}");
+            display = $"{display} are typing...";
+            this.TBTyping.Text = display;
+            this.SVCurrentMessages.Margin = new Thickness(0, 0, 0, 60);
+            this._TypingTimer.Start();
+        }
+
+        internal void HideTyping()
+        {
+            this.RCTyping.Visibility = Visibility.Hidden;
+            this.TBTyping.Visibility = Visibility.Hidden;
+            this.SVCurrentMessages.Margin = new Thickness(0, 0, 0, 40);
+            this._TypingTimer.Stop();
         }
     }
 }

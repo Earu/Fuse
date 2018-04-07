@@ -86,6 +86,7 @@ namespace Fuse.Controls
                 {
                     IsRecent = true
                 };
+                this._Client.User.Discussions.Add(disc);
                 this._Client.User.CurrentDiscussion = disc;
                 win.LoadDiscussion(disc);
             }

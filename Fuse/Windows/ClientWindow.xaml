@@ -210,12 +210,12 @@
 		<SolidColorBrush x:Key="Button.Pressed.Background2" Color="#f44141"/>
 		<SolidColorBrush x:Key="Button.Pressed.Border2" Color="#f44141"/>
 
-		<SolidColorBrush x:Key="Button.Static.Background3" Color="#396fcc"/>
-		<SolidColorBrush x:Key="Button.Static.Border3" Color="SteelBlue"/>
-		<SolidColorBrush x:Key="Button.MouseOver.Background3" Color="#2f59a3"/>
-		<SolidColorBrush x:Key="Button.MouseOver.Border3" Color="#345e82"/>
-		<SolidColorBrush x:Key="Button.Pressed.Background3" Color="#2f59a3"/>
-		<SolidColorBrush x:Key="Button.Pressed.Border3" Color="#345e82"/>
+		<SolidColorBrush x:Key="Button.Static.Background3" Color="#6483ba"/>
+		<SolidColorBrush x:Key="Button.Static.Border3" Color="#6689a5"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Background3" Color="#4e6793"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Border3" Color="#445a6b"/>
+		<SolidColorBrush x:Key="Button.Pressed.Background3" Color="#4e6793"/>
+		<SolidColorBrush x:Key="Button.Pressed.Border3" Color="#445a6b"/>
 
 		<Style x:Key="BTNClose" TargetType="{x:Type Button}">
 			<Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
@@ -331,8 +331,8 @@
 		</Grid.ColumnDefinitions>
 
 		<Rectangle Fill="#191919" Stroke="#191919" Grid.Row="0" Grid.ColumnSpan="2" MouseDown="OnTitleBarDrag"/>
-		<Rectangle Fill="#396fcc" Stroke="SteelBlue" Grid.Row="1"/>
-		<Rectangle Fill="#396fcc" Stroke="SteelBlue" Grid.Row="1" Grid.Column="1"/>
+		<Rectangle Fill="#6483ba" Stroke="#6689a5" Grid.Row="1"/>
+		<Rectangle Fill="#6483ba" Stroke="#6689a5" Grid.Row="1" Grid.Column="1"/>
 		<Rectangle Fill="#222222" Stroke="#222222" Grid.Row="2" Grid.Column="1"/>
 		<Rectangle Fill="#191919" Stroke="#191919" Grid.Row="2" Grid.Column="0"/>
 		<TextBlock FontWeight="Bold" FontSize="15" FontFamily="Agency FB" Text="Fuse" 
@@ -347,7 +347,7 @@
 		<TextBlock Name="PLMessageBackground" Foreground="LightGray" TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="60" Grid.Column="1" Grid.Row="2" Width="186" Margin="0,-40,0,0" >
 			<TextBlock.Effect>
 				<DropShadowEffect ShadowDepth="0" Direction="330" Color="Black" Opacity="1" BlurRadius="15"/>
-			</TextBlock.Effect><Run Text="F	u	s	e"/>
+			</TextBlock.Effect><Run Text="F	u s	e"/>
 		</TextBlock>
 
 		<Rectangle Fill="#191919" Stroke="#191919" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" Height="40"/>
@@ -356,57 +356,59 @@
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</TextBox.Effect>
 		</TextBox>
-		<Button FontFamily="Arial" FontSize="15" Foreground="White" BorderBrush="Gray" Content="Send" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Bottom" Width="74" Height="30" Click="OnMessageSend" Margin="0,0,4,5" Style="{DynamicResource BTNMinMax}">
+		<Button FontFamily="Arial" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="15" Foreground="White" BorderBrush="Gray" Content="Send" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Bottom" Width="74" Height="30" Click="OnMessageSend" Margin="0,0,4,5" Style="{DynamicResource BTNMinMax}">
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>
 		</Button>
-		<Button FontFamily="Arial" FontSize="15" Foreground="White" BorderBrush="Gray" Content=":D" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,83,5" Grid.Row="2" VerticalAlignment="Bottom" Width="26" Height="30" Style="{DynamicResource BTNMinMax}">
+		<Button FontFamily="Arial" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="15" Foreground="White" BorderBrush="Gray" Content=":D" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,83,5" Grid.Row="2" VerticalAlignment="Bottom" Width="26" Height="30" Style="{DynamicResource BTNMinMax}">
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>
 		</Button>
-		<Button FontFamily="Arial" FontSize="15" Foreground="White" Content="Add friend" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="90" Height="21" Style="{DynamicResource BTNMenu}" Margin="5,4,0,0">
+		<TextBlock Name="TBCurrentDiscussionName" FontWeight="Light" TextAlignment="Center" Padding="0,2,0,0" FontFamily="Arial" FontSize="15" Grid.Column="1" HorizontalAlignment="Stretch" Foreground="White" Margin="0,4,0,0" Grid.Row="1" TextWrapping="NoWrap" VerticalAlignment="Top" Height="21"/>
+		<Button FontFamily="Arial" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="15" Foreground="White" Content="Add friend" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="90" Height="21" Style="{DynamicResource BTNMenu}" Margin="5,4,0,0">
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>
 		</Button>
-		<Button FontFamily="Arial" FontSize="15" Foreground="White" Content="Profile" Grid.Column="1" HorizontalAlignment="Left" Margin="100,4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Height="21" Style="{DynamicResource BTNMenu}">
+		<Button FontFamily="Arial" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="15" Foreground="White" Content="Profile" Grid.Column="1" HorizontalAlignment="Left" Margin="100,4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Height="21" Style="{DynamicResource BTNMenu}">
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>
 		</Button>
-		<Button Name="BTNMore" FontFamily="Arial" FontSize="15" Content="..." Foreground="White" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Top" Width="40" Height="21" Style="{DynamicResource BTNMenu}" Margin="0,4,4,0" Click="OnClickMore">
+		<Button Name="BTNMore" FontFamily="Arial" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="15" Content="..." Foreground="White" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Top" Width="40" Height="21" Style="{DynamicResource BTNMenu}" Margin="0,4,4,0" Click="OnClickMore">
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>
 		</Button>
-		<Button FontFamily="Arial" FontSize="15" Foreground="White" Content="Call" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Top" Width="75" Height="21" Style="{DynamicResource BTNMenu}" Margin="0,4,49,0">
+		<Button FontFamily="Arial" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="15" Foreground="White" Content="Call" Grid.Column="1" HorizontalAlignment="Right" Grid.Row="1" VerticalAlignment="Top" Width="75" Height="21" Style="{DynamicResource BTNMenu}" Margin="0,4,49,0">
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>
 		</Button>
 
-		<TextBlock Padding="0,2,0,0" IsHitTestVisible="False" TextOptions.TextRenderingMode="Grayscale" Focusable="False" Name="PLSearchFriends" Foreground="Gray" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" Margin="8,4,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Search friends" VerticalAlignment="Top" Height="21"/>
-		<TextBox Name="TBMessage" BorderThickness="0" UseLayoutRounding="True" TextChanged="OnMessageTextChanged" KeyDown="OnMessageKeyDown" FontSize="15" Padding="3,6,0,0" FontFamily="Arial"  Grid.Column="1" Background="#333333" Foreground="White" BorderBrush="#333333" HorizontalAlignment="Stretch" Height="30" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="5,0,115,5" >
+		<TextBlock Padding="0,2,0,0" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" Focusable="False" Name="PLSearchFriends" Foreground="Gray" FontFamily="Arial" FontSize="15" HorizontalAlignment="Left" Margin="8,4,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Search friends" VerticalAlignment="Top" Height="21"/>
+		<TextBox Name="TBMessage" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" BorderThickness="0" TextChanged="OnMessageTextChanged" KeyDown="OnMessageKeyDown" FontSize="15" Padding="3,6,0,0" FontFamily="Arial"  Grid.Column="1" Background="#333333" Foreground="White" BorderBrush="#333333" HorizontalAlignment="Stretch" Height="30" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="5,0,115,5" >
 			<TextBox.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</TextBox.Effect>
 		</TextBox>
-		<TextBlock Name="PLMessage" UseLayoutRounding="True" IsHitTestVisible="False" FontSize="15" Padding="3,6,0,0" Foreground="Gray" FontFamily="Arial" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" TextWrapping="Wrap" Text="Type here" VerticalAlignment="Bottom" Height="30" Width="175" Margin="5,0,0,4"/>
-		<TextBlock Name="TBCurrentDiscussionName" FontWeight="Light" TextAlignment="Center" Padding="0,2,0,0" FontFamily="Arial" FontSize="15" Grid.Column="1" HorizontalAlignment="Stretch" Foreground="White" Margin="180,4,130,0" Grid.Row="1" TextWrapping="NoWrap" VerticalAlignment="Top" Height="21"/>
+		<TextBlock Name="PLMessage" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="15" Padding="3,6,0,0" Foreground="Gray" FontFamily="Arial" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" TextWrapping="Wrap" Text="Type here" VerticalAlignment="Bottom" Height="30" Width="175" Margin="5,0,0,4"/>
 		<ScrollViewer FlowDirection="RightToLeft" Grid.Row="2" Style="{DynamicResource FavsScrollViewer}">
 			<StackPanel FlowDirection="LeftToRight" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="182">
-				<TextBlock Name="TBRecentDiscussions" FontFamily="Arial" FontSize="13" Padding="10,2.5,0,0" Background="#333333" Foreground="White" HorizontalAlignment="Left" Grid.Row="2" Text="Recent chats" VerticalAlignment="Top" Width="200" Height="20"/>
+				<TextBlock Name="TBRecentDiscussions" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontFamily="Arial" FontSize="13" Padding="10,2.5,0,0" Background="#333333" Foreground="White" HorizontalAlignment="Left" Grid.Row="2" Text="Recent chats" VerticalAlignment="Top" Width="200" Height="20"/>
 				<ItemsControl Name="LVRecentDiscussions" VirtualizingPanel.IsVirtualizing="True" Padding="5,0,0,0" BorderBrush="#191919" Background="#191919" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="200"/>
-				<TextBlock Name="TBOnlineFriendCount" FontFamily="Arial" FontSize="13" Padding="10,2.5,0,0" Background="#333333" Foreground="White" HorizontalAlignment="Left" Grid.Row="2" Text="Online - 0" VerticalAlignment="Top" Width="200" Height="20"/>
+				<TextBlock Name="TBOnlineFriendCount" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontFamily="Arial" FontSize="13" Padding="10,2.5,0,0" Background="#333333" Foreground="White" HorizontalAlignment="Left" Grid.Row="2" Text="Online - 0" VerticalAlignment="Top" Width="200" Height="20"/>
 				<ItemsControl Name="ICOnlineFriends" VirtualizingPanel.IsVirtualizing="True" Padding="5,0,0,0" BorderBrush="#191919" Background="#191919" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="200"/>
-				<TextBlock Name="TBOfflineFriendCount" FontFamily="Arial" FontSize="13" Padding="10,2.5,0,0" Background="#333333" Foreground="White" HorizontalAlignment="Left" Grid.Row="2" Text="Offline - 0" VerticalAlignment="Top" Width="200" Height="20"/>
+				<TextBlock Name="TBOfflineFriendCount" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontFamily="Arial" FontSize="13" Padding="10,2.5,0,0" Background="#333333" Foreground="White" HorizontalAlignment="Left" Grid.Row="2" Text="Offline - 0" VerticalAlignment="Top" Width="200" Height="20"/>
 				<ItemsControl Name="ICOfflineFriends" VirtualizingPanel.IsVirtualizing="True" Padding="5,0,0,0" BorderBrush="#191919" Background="#191919" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="200"/>
 			</StackPanel>
 		</ScrollViewer>
 		<ScrollViewer Name="SVCurrentMessages" FlowDirection="RightToLeft" Grid.Row="2" Grid.Column="1" Style="{DynamicResource FavsScrollViewer}" Margin="0,0,0,40">
 			<ItemsControl FlowDirection="LeftToRight" Name="ICCurrentMessages" Padding="5" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="1"></ItemsControl>
 		</ScrollViewer>
+		<Rectangle Name="RCTyping" Visibility="Hidden" Fill="#191919" Stroke="#191919" Grid.Column="1" HorizontalAlignment="Stretch" Height="20" Grid.Row="2" VerticalAlignment="Bottom" Margin="0,0,0,40"/>
+		<TextBlock Name="TBTyping" Visibility="Hidden" Grid.Column="1" Grid.Row="2" Text="? is typing..." Foreground="Gray" VerticalAlignment="Bottom" Margin="6,0,0,41" FontFamily="Arial"></TextBlock>
 	</Grid>
 </Window>

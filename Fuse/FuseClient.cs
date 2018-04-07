@@ -19,6 +19,7 @@ namespace Fuse
         private CallbackManager        _Manager;
         private SteamUser              _UserHandler;
         private SteamFriends           _FriendsHandler;
+        private SteamApps              _AppsHandler;
         private SteamUser.LogOnDetails _Details;
         private Thread                 _CallbackThread;
 
@@ -43,6 +44,7 @@ namespace Fuse
             this._Manager = new CallbackManager(this._ClientHandler);
             this._UserHandler = this._ClientHandler.GetHandler<SteamUser>();
             this._FriendsHandler = this._ClientHandler.GetHandler<SteamFriends>();
+            this._AppsHandler = this._ClientHandler.GetHandler<SteamApps>();
             this._User = new FuseUser(this._FriendsHandler);
             this._UI = new FuseUI(this);
 
@@ -58,7 +60,7 @@ namespace Fuse
             this._Manager.Subscribe<SteamFriends.PersonaStateCallback>(this.OnFriendPersonaStateChange);
             this._Manager.Subscribe<SteamFriends.FriendMsgCallback>(this.OnFriendMessage);
             this._Manager.Subscribe<SteamFriends.FriendMsgEchoCallback>(this.OnFriendMessageEcho);
-            //SteamFriends.FriendMsgHistoryCallback a;
+            this._Manager.Subscribe<SteamFriends.FriendMsgHistoryCallback>(this.OnFriendMessageHistory);
         }
 
         internal SteamClient     ClientHandler    { get => this._ClientHandler;  }
@@ -66,8 +68,8 @@ namespace Fuse
         internal SteamFriends    FriendsHandler   { get => this._FriendsHandler; }
         internal CallbackManager Manager          { get => this._Manager;        }
         internal bool            HasInitialized   { get => this._HasInitialized; }
-        internal FuseUI          UI               { get => this._UI; }
-        internal FuseUser        User             { get => this._User; }
+        internal FuseUI          UI               { get => this._UI;             }
+        internal FuseUser        User             { get => this._User;           }
 
         internal void Connect(string user,string pass,string code=null,string authcode=null)
         {
@@ -170,67 +172,160 @@ namespace Fuse
         {
             this.RunOnSTA(() =>
             {
-                if (cb.FriendID == this._ClientHandler.SteamID)
+                if (cb.FriendID.AccountID == this._ClientHandler.SteamID.AccountID)
                     this._User.UpdateLocalUser(cb.FriendID);
+                else
+                {
+                    uint gid = cb.GameAppID;
+                    this._User.UpdateFriend(cb.FriendID);
+                }
 
                 ClientWindow win = this._UI.ClientWindow;
-                this._User.UpdateFriend(cb.FriendID);
                 win.UpdateFriendList();
-            });
-        }
-
-        private void OnFriendMessage(SteamFriends.FriendMsgCallback cb)
-        {
-            RunOnSTA(() =>
-            {
-                this._User.UpdateFriend(cb.Sender);
-                if (cb.EntryType != EChatEntryType.ChatMsg) return;
-
-                int index = this._User.GetFriendIndex(cb.Sender.AccountID);
-                if (index != -1)
+                Discussion cur = this._User.CurrentDiscussion;
+                if (cur != null)
                 {
-                    User friend = this._User.Friends[index];
-                    Message msg = new Message(friend, cb.Message);
-                    this._User.Friends[index].Messages.Add(msg);
-
-                    Discussion cur = this._User.CurrentDiscussion;
-                    if (cur != null && !cur.IsGroup)
+                    if (!cur.IsGroup)
                     {
-                        ClientWindow win = this._UI.ClientWindow;
-                        if (cur.Recipient.AccountID == cb.Sender.AccountID)
+                        User friend = this._User.GetFriend(cb.FriendID.AccountID);
+                        if (cur.Recipient.AccountID == friend.AccountID)
                         {
-                            win.AddCurrentMessage(msg);
-                        }
-                        else
-                        {
-                            friend.NewMessages++;
-                            win.UpdateFriendList();
+                            string state = cb.State.ToString().ToLower();
+                            if (cb.State == EPersonaState.LookingToPlay 
+                                || cb.State == EPersonaState.LookingToTrade 
+                                || cb.State == EPersonaState.Max)
+                            {
+                                if (cb.State == EPersonaState.LookingToPlay)
+                                    state = "looking to play";
+                                else if (cb.State == EPersonaState.Max)
+                                    state = "online";
+                                else
+                                    state = "looking to trade";
+                            }
+
+                            string content = $"{friend.Name} is now {state}";
+                            Message msg = new Message(friend,content,null,true);
+                            friend.Messages.Add(msg);
+                            win.AppendChatNotification(msg);
                         }
                     }
                 }
             });
         }
 
-        private void OnFriendMessageEcho(SteamFriends.FriendMsgEchoCallback cb)
+        private void HandleFriendMessage(SteamID friendid,string msgcontent,bool islocaluser=false)
+        {
+            this._User.UpdateFriend(friendid);
+
+            User friend = this._User.GetFriend(friendid.AccountID);
+            if (friend != null)
+            {
+                Message msg = islocaluser ? new Message(this._User.LocalUser) : new Message(friend, msgcontent);
+                friend.Messages.Add(msg);
+
+                Discussion cur = this._User.CurrentDiscussion;
+                ClientWindow win = this._UI.ClientWindow;
+                if (cur != null && !cur.IsGroup)
+                {
+                    if (cur.Recipient.AccountID == friendid.AccountID)
+                    {
+                        win.HideTyping();
+                        win.AppendChatMessage(msg);
+                        return;
+                    }
+                }
+
+                if (!islocaluser)
+                {
+                    friend.NewMessages++;
+                    win.UpdateFriendList();
+                }
+            }
+        }
+
+        private void HandleFriendTyping(SteamID friendid)
+        {
+            this._User.UpdateFriend(friendid);
+
+            User friend = this._User.GetFriend(friendid.AccountID);
+            if (friend != null)
+            {
+                Discussion cur = this._User.CurrentDiscussion;
+                ClientWindow win = this._UI.ClientWindow;
+                if (cur != null && !cur.IsGroup)
+                    if (cur.Recipient.AccountID == friendid.AccountID)
+                        win.ShowTyping(friend);
+            }
+        }
+
+        private void HandleFriendGameInvite(SteamID friendid)
+        {
+            this._User.UpdateFriend(friendid);
+
+            User friend = this._User.GetFriend(friendid.AccountID);
+            if (friend != null)
+            {
+                Discussion cur = this._User.CurrentDiscussion;
+                ClientWindow win = this._UI.ClientWindow;
+                if (cur != null && !cur.IsGroup)
+                    if (cur.Recipient.AccountID == friendid.AccountID)
+                    {
+                        Message msg = new Message(friend, $"{friend.Name} invited you to play a game", null, true);
+                        win.AppendChatNotification(msg);
+                    }
+            }
+        }
+
+        private void OnFriendMessage(SteamFriends.FriendMsgCallback cb)
         {
             RunOnSTA(() =>
             {
-                this._User.UpdateFriend(cb.Recipient);
-                if (cb.EntryType != EChatEntryType.ChatMsg) return;
-
-                int index = this._User.GetFriendIndex(cb.Recipient.AccountID);
-                if (index != -1)
+                switch (cb.EntryType)
                 {
-                    User friend = this._User.Friends[index];
-                    Message msg = new Message(this._User.LocalUser, cb.Message);
-                    this._User.Friends[index].Messages.Add(msg);
+                    case EChatEntryType.Typing:
+                        this.HandleFriendTyping(cb.Sender);
+                        break;
+                    case EChatEntryType.InviteGame:
+                        this.HandleFriendGameInvite(cb.Sender);
+                        break;
+                    default:
+                        break;
+                }
 
-                    Discussion cur = this._User.CurrentDiscussion;
-                    if (cur != null && !cur.IsGroup)
+                if (cb.EntryType != EChatEntryType.ChatMsg) return;
+                this.HandleFriendMessage(cb.Sender, cb.Message);
+            });
+        }
+
+        private void OnFriendMessageEcho(SteamFriends.FriendMsgEchoCallback cb)
+        {
+            if (cb.EntryType != EChatEntryType.ChatMsg) return;
+            this.RunOnSTA(() => this.HandleFriendMessage(cb.Recipient, cb.Message, true));
+        }
+
+        private void OnFriendMessageHistory(SteamFriends.FriendMsgHistoryCallback cb)
+        {
+            this.RunOnSTA(() =>
+            {
+                if (cb.Result == EResult.OK)
+                {
+                    foreach (SteamFriends.FriendMsgHistoryCallback.FriendMessage msg in cb.Messages)
                     {
-                        ClientWindow win = this._UI.ClientWindow;
-                        if (cur.Recipient.AccountID == cb.Recipient.AccountID)
-                            win.AddCurrentMessage(msg);
+                        uint aid = msg.SteamID.AccountID;
+                        uint luaid = this._User.LocalUser.AccountID;
+                        bool islocaluser = luaid == aid;
+                        if (!islocaluser) this._User.UpdateFriend(msg.SteamID);
+
+                        this.HandleFriendMessage(msg.SteamID, msg.Message, islocaluser);
+                        if (msg.Unread)
+                        {
+                            User friend = this._User.GetFriend(aid);
+                            if (friend != null)
+                            {
+                                friend.NewMessages++;
+                                this._UI.ClientWindow.UpdateFriendList();
+                            }
+                        }
                     }
                 }
             });

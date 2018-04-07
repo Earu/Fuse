@@ -7,13 +7,13 @@
 		<SolidColorBrush Opacity="0" Color="#191919"/>
 	</Window.Background>
 	<Window.Resources>
-		<SolidColorBrush x:Key="Button.Static.Background" Color="#396fcc"/>
-		<SolidColorBrush x:Key="Button.Static.Border" Color="#396fcc"/>
 		<SolidColorBrush x:Key="Button.Static.Foreground" Color="WhiteSmoke"/>
-		<SolidColorBrush x:Key="Button.MouseOver.Background" Color="#4183f4"/>
-		<SolidColorBrush x:Key="Button.MouseOver.Border" Color="#4183f4"/>
-		<SolidColorBrush x:Key="Button.Pressed.Background" Color="#4183f4"/>
-		<SolidColorBrush x:Key="Button.Pressed.Border" Color="#4183f4"/>
+		<SolidColorBrush x:Key="Button.Static.Background" Color="#6483ba"/>
+		<SolidColorBrush x:Key="Button.Static.Border" Color="#6689a5"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Background" Color="#4e6793"/>
+		<SolidColorBrush x:Key="Button.MouseOver.Border" Color="#445a6b"/>
+		<SolidColorBrush x:Key="Button.Pressed.Background" Color="#4e6793"/>
+		<SolidColorBrush x:Key="Button.Pressed.Border" Color="#445a6b"/>
 
 		<SolidColorBrush x:Key="Button.Static.Background2" Color="#191919"/>
 		<SolidColorBrush x:Key="Button.Static.Border2" Color="#191919"/>
@@ -136,13 +136,13 @@
 		<Grid.Effect>
 			<DropShadowEffect BlurRadius="10" RenderingBias="Performance" ShadowDepth="0"/>
 		</Grid.Effect>
-		<TextBox TextChanged="OnUsernameChanged" Padding="0,2,0,0" FontSize="16" FontFamily="Arial" Name="TBUserName" BorderBrush="#333333" Background="#333333" Foreground="#ffffff" HorizontalAlignment="Left" Height="25" Margin="10,67,0,0" 
+		<TextBox TextChanged="OnUsernameChanged" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Padding="0,2,0,0" FontSize="16" FontFamily="Arial" Name="TBUserName" BorderBrush="#333333" Background="#333333" Foreground="#ffffff" HorizontalAlignment="Left" Height="25" Margin="10,67,0,0" 
 			TextWrapping="Wrap" VerticalAlignment="Top" Width="320" KeyDown="OnKeyDownHandler">
 			<TextBox.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</TextBox.Effect>
 		</TextBox>
-		<PasswordBox PasswordChanged="OnPasswordChanged" Padding="0,2,0,0" FontSize="16" Name="PBPassword" BorderBrush="#333333" Background="#333333" Foreground="#ffffff" HorizontalAlignment="Left" 
+		<PasswordBox PasswordChanged="OnPasswordChanged" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Padding="0,2,0,0" FontSize="16" Name="PBPassword" BorderBrush="#333333" Background="#333333" Foreground="#ffffff" HorizontalAlignment="Left" 
 					 Margin="10,97,0,45" Height="25" Width="320" KeyDown="OnKeyDownHandler">
 			<PasswordBox.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
@@ -151,24 +151,24 @@
 		<Button Name="BTNSignIn" HorizontalAlignment="Left" 
 				Margin="171,127,0,0" VerticalAlignment="Top" Width="159" Click="OnSignIn" 
 				Height="30" Style="{DynamicResource BTNSignIn}" FontFamily="Arial" FontSize="20">
-			<TextBlock Margin="0,-1,0,0" TextWrapping="Wrap" Text="Sign in"/>
+			<TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Margin="0,-1,0,0" TextWrapping="Wrap" Text="Sign in"/>
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>
 		</Button>
-		<TextBlock Foreground="White" FontFamily="Century Gothic" FontSize="30" TextAlignment="Center" HorizontalAlignment="Left" Margin="52,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" Height="39" Text="Login"/>
+		<TextBlock Foreground="White" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontFamily="Century Gothic" FontSize="30" TextAlignment="Center" HorizontalAlignment="Left" Margin="52,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" Height="39" Text="Login"/>
 		<Button Foreground="White" FontWeight="Bold" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Width="40" Height="20" Click="OnClose" Style="{DynamicResource BTNClose}"/>
 		<Rectangle MouseDown="OnMouseDown" Fill="#191919" HorizontalAlignment="Left" Height="20" Stroke="#191919" VerticalAlignment="Top" Width="300"/>
 		<TextBlock FontWeight="Bold" FontSize="15" FontFamily="Agency FB" Text="Fuse" Foreground="White" HorizontalAlignment="Left" Margin="10,1,0,0" TextWrapping="Wrap" VerticalAlignment="Top"></TextBlock>
-		<TextBlock Padding="0,2,0,0" IsHitTestVisible="False" FontSize="16" FontFamily="Arial" Name="PLUserName" Foreground="Gray" HorizontalAlignment="Left" Margin="13,69,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Height="23"/>
-		<TextBlock Padding="0,2,0,0" IsHitTestVisible="False" FontSize="16" FontFamily="Arial" Name="PLPassword" Foreground="Gray" HorizontalAlignment="Left" Margin="13,99,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Height="23"/>
+		<TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="16" FontFamily="Arial" Name="PLUserName" Foreground="Gray" HorizontalAlignment="Left" Margin="13,69,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Height="23"/>
+		<TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="16" FontFamily="Arial" Name="PLPassword" Foreground="Gray" HorizontalAlignment="Left" Margin="13,99,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Height="23"/>
 		<Button Name="BTNSignUp" Click="OnSignUp" HorizontalAlignment="Left" 
 	  Margin="10,127,0,0" VerticalAlignment="Top" Width="156" 
 	  Height="30" Style="{DynamicResource BTNSignUp}" FontFamily="Arial" FontSize="20">
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>
-			<TextBlock Margin="0,-1,0,0" TextWrapping="Wrap" Text="Sign up"/>
+			<TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Margin="0,-1,0,0" TextWrapping="Wrap" Text="Sign up"/>
 		</Button>
 	</Grid>
 </Window>

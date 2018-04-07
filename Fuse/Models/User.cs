@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 using System.Windows.Media.Imaging;
 using SteamKit2;
 
@@ -34,8 +35,10 @@ namespace Fuse.Models
 
             this._Avatar = new BitmapImage
             {
+                DecodePixelHeight = 32,
+                DecodePixelWidth = 32,
+                SourceRect = new Int32Rect(0, 0, 32, 32),
                 CreateOptions = new BitmapCreateOptions(),
-                DecodePixelWidth = 30,
                 CacheOption = BitmapCacheOption.OnLoad,
             };
             this._Avatar.DecodeFailed += this.OnAvatarFail;
@@ -48,7 +51,7 @@ namespace Fuse.Models
             else
             {
                 string hash = this.BytesToHash(bhash);
-                string link = $"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/dd/{hash}_full.jpg?width=200&height=200";
+                string link = $"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/dd/{hash}_full.jpg?width=32&height=32";
                 this._Avatar.UriSource = new Uri(link, UriKind.Absolute);
             }
             this._Avatar.EndInit();
@@ -79,9 +82,9 @@ namespace Fuse.Models
         internal uint          AccountID   { get => this._AccountID; }
         internal ulong         SteamID64   { get => this._SteamID64; }
         internal EPersonaState State       { get => this._State;     }
-        internal string        Game        { get => this._Game;      }
-        internal List<Message> Messages    { get => this._Messages; set => this._Messages = value; }
         internal BitmapImage   Avatar      { get => this._Avatar;    }
+        internal string        Game        { get => this._Game;        set => this._Game        = value; }
+        internal List<Message> Messages    { get => this._Messages;    set => this._Messages    = value; }
         internal int           NewMessages { get => this._NewMessages; set => this._NewMessages = value; }
     }
 }

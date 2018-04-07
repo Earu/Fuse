@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Fuse.Controls"
              mc:Ignorable="d"
-			 HorizontalAlignment="Stretch">
+			 HorizontalAlignment="Stretch"
+			 Margin="0,3,0,3">
     <Grid Background="#191919">
-		<TextBlock FontWeight="Bold" FontFamily="Arial" Margin="5" Text="-" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+		<TextBlock Name="TBContent" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontWeight="Bold" FontFamily="Arial" Margin="5" Text="-" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
     </Grid>
 </UserControl>
