@@ -6,31 +6,31 @@ namespace Fuse
 {
     internal class FuseUser
     {
-        private User             _Localuser;
-        private SteamFriends     _FriendsHandler;
-        private List<User>       _Friends;
-        private List<User>       _OnlineFriends;
-        private List<User>       _OfflineFriends;
-        private List<Discussion> _Discussions;
-        private Discussion       _CurrentDiscussion;
+        private User                   _Localuser;
+        private SteamFriends           _FriendsHandler;
+        private Dictionary<uint,User>  _Friends;
+        private Dictionary<uint, User> _OnlineFriends;
+        private Dictionary<uint, User> _OfflineFriends;
+        private List<Discussion>       _Discussions;
+        private Discussion             _CurrentDiscussion;
 
         internal FuseUser(SteamFriends handler)
         {
-            this._Friends = new List<User>();
-            this._OnlineFriends = new List<User>();
-            this._OfflineFriends = new List<User>();
+            this._Friends = new Dictionary<uint, User>();
+            this._OnlineFriends = new Dictionary<uint, User>();
+            this._OfflineFriends = new Dictionary<uint, User>();
             this._Discussions = new List<Discussion>();
             this._CurrentDiscussion = null;
             this._FriendsHandler = handler;
             this._Localuser = null;
         }
     
-        internal User       LocalUser         { get => this._Localuser; }
-        internal List<User> Friends           { get => this._Friends;        }
-        internal List<User> OnlineFriends     { get => this._OnlineFriends;  }
-        internal List<User> OfflineFriends    { get => this._OfflineFriends; }
-        internal List<Discussion> Discussions { get => this._Discussions;    }
-        internal Discussion CurrentDiscussion { get => this._CurrentDiscussion; set => this._CurrentDiscussion = value; }
+        internal User                   LocalUser         { get => this._Localuser;      }
+        internal Dictionary<uint, User> Friends           { get => this._Friends;        }
+        internal Dictionary<uint, User> OnlineFriends     { get => this._OnlineFriends;  }
+        internal Dictionary<uint, User> OfflineFriends    { get => this._OfflineFriends; }
+        internal List<Discussion>       Discussions       { get => this._Discussions;    }
+        internal Discussion             CurrentDiscussion { get => this._CurrentDiscussion; set => this._CurrentDiscussion = value; }
 
         internal void UpdateFriends()
         {
@@ -42,7 +42,7 @@ namespace Fuse
             }
         }
 
-        internal void UpdateFriend(SteamID id)
+        internal void UpdateFriend(SteamID id, string game=null)
         {
             if (this._FriendsHandler.GetFriendRelationship(id) != EFriendRelationship.Friend) return;
 
@@ -51,51 +51,52 @@ namespace Fuse
             EPersonaState state = this._FriendsHandler.GetFriendPersonaState(id);
             byte[] bhash = _FriendsHandler.GetFriendAvatar(id);
 
-            int findex = this.GetFriendIndex(accountid);
-            if (findex == -1)
+            User old = this.GetFriend(accountid);
+            if (old == null)
             {
-                User _new = new User(name, id, state, bhash);
-                this._Friends.Add(_new);
+                User _new = new User(name, id, state, bhash)
+                {
+                    Game = game
+                };
+                this._Friends[accountid] = _new;
                 if (state != EPersonaState.Offline)
-                {
-                    this._OnlineFriends.Add(_new);
-                }
+                    this._OnlineFriends[accountid] = _new;
                 else
-                {
-                    this._OfflineFriends.Add(_new);
-                }
+                    this._OfflineFriends[accountid] = _new;
             }
             else
             {
-                User old = this.Friends[findex];
-                User friend = new User(name, id, state, bhash, old.Messages, old.NewMessages);
-                this.Friends[findex] = friend;
+                User friend = new User(name, id, state, bhash, old.Messages, old.NewMessages)
+                {
+                    Game = game
+                };
+                this.Friends[accountid] = friend;
 
                 if (old.State == EPersonaState.Offline)
                 {
-                    int i = this.OfflineFriends.FindIndex(x => x.AccountID == old.AccountID);
-                    if(i != -1) this._OfflineFriends.RemoveAt(i);
+                    if (this._OfflineFriends.ContainsKey(old.AccountID))
+                        this._OfflineFriends.Remove(old.AccountID);
                 }
                 else
                 {
-                    int i = this.OnlineFriends.FindIndex(x => x.AccountID == old.AccountID);
-                    if (i != -1) this._OnlineFriends.RemoveAt(i);
+                    if (this._OnlineFriends.ContainsKey(old.AccountID))
+                        this._OnlineFriends.Remove(old.AccountID);
                 }
 
                 if (state != EPersonaState.Offline)
                 {
-                    this._OnlineFriends.Add(friend);
+                    this._OnlineFriends[old.AccountID] = friend;
                 }
                 else
                 {
-                    this._OnlineFriends.Add(friend);
+                    this._OnlineFriends[old.AccountID] = friend;
                 }
             }
         }
 
-        internal int GetFriendIndex(uint accountid)
+        internal User GetFriend(uint accountid)
         {
-            return this._Friends.FindIndex(x => x.AccountID == accountid);
+            return this._Friends.ContainsKey(accountid) ? this._Friends[accountid] : null;
         }
 
         internal void UpdateLocalUser(SteamID id)

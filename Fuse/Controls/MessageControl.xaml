@@ -8,14 +8,14 @@
 	<Grid Background="#222222">
 
 		<Border BorderBrush="#333333" Background="Black" BorderThickness="2" HorizontalAlignment="Left" Height="35" Margin="3,3,0,3" VerticalAlignment="Top" Width="35">
-			<Image Name="IMAvatar" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+			<Image Name="IMAvatar" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 			<Border.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Border.Effect>
 		</Border>
-		<TextBlock Name="TBName" IsHitTestVisible="True" FontWeight="Bold" FontSize="13" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Margin="43,3,0,0" TextWrapping="NoWrap" Text="???" VerticalAlignment="Top" Width="114"/>
-		<TextBlock Name="TBContent" IsHitTestVisible="True" FontSize="12" FontFamily="Arial" Foreground="LightGray" HorizontalAlignment="Left" Padding="2,0,0,0" Margin="43,23,0,0" TextWrapping="Wrap" Text="???" VerticalAlignment="Top"/>
-		<TextBlock Name="TBTimeStamp" IsHitTestVisible="True" FontWeight="Thin" FontSize="10" Padding="0,5,10,0" FontStyle="Italic" FontFamily="Arial" Foreground="Gray" TextAlignment="Right" HorizontalAlignment="Right" Margin="172,3,0,0" TextWrapping="NoWrap" Text="00:00 00/00/0000" VerticalAlignment="Top" Width="118" Height="21"/>
+		<TextBlock Name="TBName" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="True" FontWeight="Bold" FontSize="13" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Margin="43,3,0,0" TextWrapping="NoWrap" Text="???" VerticalAlignment="Top" Width="114"/>
+		<TextBlock Name="TBContent" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="True" FontSize="12" FontFamily="Arial" Foreground="LightGray" HorizontalAlignment="Left" Padding="2,0,0,0" Margin="43,23,0,0" TextWrapping="Wrap" Text="???" VerticalAlignment="Top"/>
+		<TextBlock Name="TBTimeStamp" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="True" FontWeight="Thin" FontSize="10" Padding="0,5,10,0" FontStyle="Italic" FontFamily="Arial" Foreground="Gray" TextAlignment="Right" HorizontalAlignment="Right" Margin="172,3,0,0" TextWrapping="NoWrap" Text="00:00 00/00/0000" VerticalAlignment="Top" Width="118" Height="21"/>
 
 	</Grid>
 </UserControl>

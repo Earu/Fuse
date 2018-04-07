@@ -15,8 +15,9 @@ namespace Fuse.Models
         private int           _NewMessages;
         private DateTime      _LastOpened;
         private bool          _IsRecent;
+        private bool          _RequestedHistory;
 
-        internal Discussion(FuseClient client, User recipient)
+        internal Discussion(FuseClient client, User recipient,bool requestedhistory=false)
         {
             this._Client = client;
             this._IsGroup = false;
@@ -24,9 +25,10 @@ namespace Fuse.Models
             this._NewMessages = 0;
             this._LastOpened = DateTime.Now;
             this._IsRecent = true;
+            this._RequestedHistory = requestedhistory;
         }
 
-        internal Discussion(FuseClient client, List<User> recipients)
+        internal Discussion(FuseClient client, List<User> recipients,bool requestedhistory = false)
         {
             this._Client = client;
             this._IsGroup = true;
@@ -35,14 +37,27 @@ namespace Fuse.Models
             this._NewMessages = 0;
             this._LastOpened = DateTime.Now;
             this._IsRecent = true;
+            this._RequestedHistory = requestedhistory;
         }
 
         internal List<Message> Open()
         {
+            SteamFriends handler = this._Client.FriendsHandler;
             this._LastOpened = DateTime.Now;
             this._NewMessages = 0;
-            if (this._IsGroup) return this._Messages;
-            else return this._Recipient.Messages;
+            if (this._IsGroup)
+            {
+                return this._Messages;
+            }
+            else
+            {
+                if (!this._RequestedHistory)
+                {
+                    this._RequestedHistory = true;
+                    handler.RequestMessageHistory(this._Recipient.SteamID);
+                }
+                return this._Recipient.Messages;
+            }
         }
 
         internal void SendMessage(Message msg)
@@ -61,10 +76,11 @@ namespace Fuse.Models
             return msg.Author;
         }
 
-        internal User     Recipient   { get => this._Recipient;   }
-        internal int      NewMessages { get => this._NewMessages; }
-        internal bool     IsGroup     { get => this._IsGroup;     }
-        internal DateTime LastOpened  { get => this._LastOpened;  }
-        internal bool     IsRecent    { get => this._IsRecent; set => this._IsRecent = value; }
+        internal User       Recipient   { get => this._Recipient;   }
+        internal List<User> Recipients  { get => this._Recipients;  }
+        internal int        NewMessages { get => this._NewMessages; }
+        internal bool       IsGroup     { get => this._IsGroup;     }
+        internal DateTime   LastOpened  { get => this._LastOpened;  }
+        internal bool       IsRecent    { get => this._IsRecent; set => this._IsRecent = value; }
     }
 }

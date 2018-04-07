@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using Fuse.Models;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Fuse.Controls
 {
@@ -20,9 +8,22 @@ namespace Fuse.Controls
     /// </summary>
     public partial class NotificationMessageControl : UserControl
     {
-        public NotificationMessageControl()
+        private Message _Message;
+
+        internal NotificationMessageControl(Message msg)
         {
-            InitializeComponent();
+            this._Message = msg;
+            this.InitializeComponent();
+        }
+
+        internal Message Message { get => this._Message; }
+
+        internal void Update(Message msg=null)
+        {
+            if (msg != null) this._Message = msg;
+            msg = this._Message;
+
+            this.TBContent.Text = msg.Content;
         }
     }
 }
