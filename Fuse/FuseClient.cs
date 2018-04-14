@@ -110,7 +110,7 @@ namespace Fuse
 
             this.RunOnSTA(() =>
             {
-                //Because STA is the main thread
+                //Because STA is the main threadre
                 if (this._IsExit)
                 {
                     this._CallbackThread.Abort();
@@ -251,6 +251,9 @@ namespace Fuse
                     {
                         win.HideTyping();
                         win.AppendChatMessage(msg);
+                        System.Media.SoundPlayer myPlayer = new System.Media.SoundPlayer();
+                        myPlayer.Stream = Properties.Resources.message;
+                        myPlayer.Play();
                     }
                 }
             }

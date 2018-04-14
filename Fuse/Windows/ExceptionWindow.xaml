@@ -68,12 +68,12 @@
 			<DropShadowEffect BlurRadius="10" RenderingBias="Performance" ShadowDepth="0"/>
 		</Grid.Effect>
 		<Rectangle MouseDown="OnMouseDownDrag" Fill="#191919" VerticalAlignment="Top" Height="20"></Rectangle>
-		<TextBlock FontWeight="DemiBold" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="18" FontFamily="Tahoma" HorizontalAlignment="Center" Foreground="IndianRed" TextWrapping="Wrap" Text="FUSE MACHINE BORK" VerticalAlignment="Top" Margin="0,25,0,0"/>
+		<TextBlock FontWeight="DemiBold" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="18" FontFamily="/Fuse;component/Resources/Open_Sans/#Open Sans ExtraBold" HorizontalAlignment="Center" Foreground="IndianRed" TextWrapping="Wrap" Text="FUSE machine BROKE" VerticalAlignment="Top" Margin="0,25,0,0"/>
 		<TextBlock FontWeight="Bold" FontSize="15" FontFamily="Agency FB" Text="Fuse" Foreground="White" HorizontalAlignment="Left" Margin="10,1,0,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
 		<Button Foreground="White" FontWeight="Bold" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Width="40" Height="20" Click="OnClose" Style="{DynamicResource BTNClose}"/>
 		<StackPanel>
-			<TextBlock Name="TBException" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Foreground="IndianRed" FontSize="17" FontFamily="Tahoma" TextAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Text="???" VerticalAlignment="Top" Width="280" Margin="4,51,0,10"/>
-			<Button Foreground="White" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Margin="0,0,0,10" BorderBrush="Gray" FontWeight="Bold" Content="Ok" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="25" Click="OnClose" Style="{DynamicResource BTNClose}">
+			<TextBlock Name="TBException" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Foreground="IndianRed" FontSize="14" FontFamily="/Fuse;component/Resources/Roboto/#Roboto" TextAlignment="Center" HorizontalAlignment="Left" TextWrapping="Wrap" Text="???" VerticalAlignment="Top" Width="280" Margin="4,51,0,10"/>
+			<Button Foreground="White" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Margin="0,0,0,10" BorderBrush="Gray" FontWeight="Bold" Content="Okay" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="25" Click="OnClose" Style="{DynamicResource BTNClose}" FontFamily="/Fuse;component/Resources/Open_Sans/#Open Sans">
 				<Button.Effect>
 					<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 				</Button.Effect>
