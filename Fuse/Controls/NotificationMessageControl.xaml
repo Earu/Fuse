@@ -8,6 +8,6 @@
 			 HorizontalAlignment="Stretch"
 			 Margin="0,3,0,3">
     <Grid Background="#191919">
-		<TextBlock Name="TBContent" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontWeight="Bold" FontFamily="Arial" Margin="5" Text="-" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+		<TextBlock Name="TBContent" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontWeight="Bold" FontFamily="Tahoma" Margin="5" Text="-" Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
     </Grid>
 </UserControl>

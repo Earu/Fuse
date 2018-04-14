@@ -1,6 +1,9 @@
 ﻿using Fuse.Controls;
+using Fuse.Drawing;
 using Fuse.Models;
+using SharpGL;
 using SteamKit2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
@@ -66,14 +69,6 @@ namespace Fuse.Windows
             this.TBMessage.Focus();
         }
 
-        private void OnClickMore(object sender, RoutedEventArgs e)
-        {
-            MoreWindow form = new MoreWindow();
-            form.Show();
-            form.Left = (this.Left + this.Width) - (this.BTNMore.Margin.Right + this.BTNMore.Width);
-            form.Top = (this.Top + 20 + this.BTNMore.Margin.Top + this.BTNMore.Height);
-        }
-
         private void OnSearchFriendChanged(object sender, TextChangedEventArgs e)
         {
             string search = this.TBSearchFriends.Text;
@@ -124,6 +119,7 @@ namespace Fuse.Windows
             if (search == null && this.IsSearchingFriends)
                 search = this.TBSearchFriends.Text;
 
+            this.UpdateRecentDiscussions();
             FuseUser fuseuser = this._Client.User;
             this.ClearOnlineFriends();
             this.ClearOfflineFriends();
@@ -195,8 +191,8 @@ namespace Fuse.Windows
 
         internal void AppendChatMessage(Message msg)
         {
-            if (this.PLMessageBackground.Visibility == Visibility.Visible)
-                this.PLMessageBackground.Visibility = Visibility.Hidden;
+            if (this.GLPlaceholder.Visibility == Visibility.Visible)
+                this.GLPlaceholder.Visibility = Visibility.Hidden;
 
             User lastauthor = this._LastMessageAuthor;
             if (lastauthor != null && lastauthor.AccountID == msg.Author.AccountID)
@@ -217,8 +213,8 @@ namespace Fuse.Windows
 
         internal void AppendChatNotification(Message msg)
         {
-            if (this.PLMessageBackground.Visibility == Visibility.Visible)
-                this.PLMessageBackground.Visibility = Visibility.Hidden;
+            if (this.GLPlaceholder.Visibility == Visibility.Visible)
+                this.GLPlaceholder.Visibility = Visibility.Hidden;
             NotificationMessageControl ctrl = new NotificationMessageControl(msg);
             ctrl.Update();
             this.ICCurrentMessages.Items.Add(ctrl);
@@ -230,14 +226,15 @@ namespace Fuse.Windows
         {
             this.ICCurrentMessages.Items.Clear();
             this._LastMessageAuthor = null;
+            this.HideTyping();
         }
 
         internal bool IsRecentChat(Discussion disc)
         {
-            List<Discussion> discs = this._Client.User.Discussions;
+            Dictionary<uint,Discussion> discs = this._Client.User.Discussions;
             if (!disc.IsGroup)
             {
-                return discs.Any(x => !x.IsGroup && x.Recipient.AccountID == disc.Recipient.AccountID);
+                return discs.Any(x => !x.Value.IsGroup && x.Value.Recipient.AccountID == disc.Recipient.AccountID);
             }
             else
             {
@@ -253,7 +250,7 @@ namespace Fuse.Windows
             {
                 FriendControl ctrl = new FriendControl(this._Client, disc.Recipient);
                 ctrl.Update();
-                this.LVRecentDiscussions.Items.Add(ctrl);
+                this.ICRecentDiscussions.Items.Add(ctrl);
             }
             else
             {
@@ -261,22 +258,23 @@ namespace Fuse.Windows
             }
         }
 
-        internal void UpdateRecentChats()
+        internal void UpdateRecentDiscussions()
         {
-            this._Client.User.Discussions.ForEach(x => this.AddRecentDiscussion(x));
+            this.ICRecentDiscussions.Items.Clear();
+            foreach (KeyValuePair<uint, Discussion> disc in this._Client.User.Discussions)
+                if (disc.Value.IsRecent)
+                    this.AddRecentDiscussion(disc.Value);
         }
 
         internal void LoadDiscussion(Discussion disc)
         {
             if (!disc.IsGroup)
-            {
                 this.TBCurrentDiscussionName.Text = $"@{disc.Recipient.Name}";
-            }
             else
             {
                 string title = string.Empty;
                 disc.Recipients.ForEach(x => title = $"{title},{x.Name}");
-                title = title.Length >= 50 ? title.Substring(0, 50) : title;
+                title = title.Length >= 50 ? $"{title.Substring(0, 50)}..." : title;
                 this.TBCurrentDiscussionName.Text = title;
             }
 
@@ -295,7 +293,7 @@ namespace Fuse.Windows
             this.RCTyping.Visibility = Visibility.Visible;
             this.TBTyping.Visibility = Visibility.Visible;
             this.TBTyping.Text = $"{user.Name} is typing...";
-            this.SVCurrentMessages.Margin = new Thickness(0,0,0,60);
+            this.SVCurrentMessages.Margin = new Thickness(0,0,0,62);
             this._TypingTimer.Start();
         }
 
@@ -307,7 +305,7 @@ namespace Fuse.Windows
             users.ForEach(x => display = $"{display},{x.Name}");
             display = $"{display} are typing...";
             this.TBTyping.Text = display;
-            this.SVCurrentMessages.Margin = new Thickness(0, 0, 0, 60);
+            this.SVCurrentMessages.Margin = new Thickness(0, 0, 0, 62);
             this._TypingTimer.Start();
         }
 
@@ -315,8 +313,69 @@ namespace Fuse.Windows
         {
             this.RCTyping.Visibility = Visibility.Hidden;
             this.TBTyping.Visibility = Visibility.Hidden;
-            this.SVCurrentMessages.Margin = new Thickness(0, 0, 0, 40);
+            this.SVCurrentMessages.Margin = new Thickness(0, 0, 0, 41);
             this._TypingTimer.Stop();
+        }
+
+        internal void MessageBoxFocus()
+        {
+            this.TBMessage.Focus();
+        }
+
+        internal void UpdateLocalUser()
+        {
+            User localuser = this._Client.User.LocalUser;
+            this.IMLocalUserAvatar.Source = localuser.Avatar;
+            this.RCLocalUserState.Fill = FriendControl.StateToColor(localuser.State);
+            this.TBLocalUserName.Text = localuser.Name;
+            this.TBLocalUserState.Text = localuser.State.ToString(); 
+        }
+        
+        float QuadRotation = 0;
+        Vertex[] QuadCoordinates = {
+            new Vertex(-1,-1,-1),
+            new Vertex(1,1,1),
+            new Vertex(1,-1,-1),
+            new Vertex(1,1,-1),
+            new Vertex(-1,1,-1),
+            new Vertex(-1,1,1),
+            new Vertex(-1,-1,1),
+            new Vertex(1,-1,1),
+        };
+        private Random Random = new Random();
+
+        private void OnGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
+        {
+            if (this.GLPlaceholder.Visibility != Visibility.Visible) return;
+
+            OpenGL gl = args.OpenGL;
+            gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
+            gl.ClearColor(0.15f,0.15f,0.15f,1f);
+
+            gl.LoadIdentity();
+            gl.Translate(0.0f, 0.0f, -3f);
+            gl.Rotate(QuadRotation, 0.5f, 0.5f, 0.5f);
+            gl.Rotate(QuadRotation, 1f, 0f, 0f);
+            gl.Rotate(QuadRotation, 0f, 1f, 0f);
+            gl.Rotate(QuadRotation, 0f, 0f, 1f);
+            gl.Color(1f, 1f, 1f);
+            gl.LineWidth(1.25f);
+            gl.Begin(OpenGL.GL_LINES);
+
+            foreach (Vertex v1 in this.QuadCoordinates)
+                foreach (Vertex v2 in this.QuadCoordinates)
+                {
+                    if (v2 != v1)
+                    {
+                        gl.Vertex(v1.X, v1.Y, v1.Z);
+                        gl.Vertex(v2.X, v2.Y, v2.Z);
+                    }
+                }
+
+            gl.End();
+            gl.Flush();
+
+            QuadRotation -= 2.0f;
         }
     }
 }

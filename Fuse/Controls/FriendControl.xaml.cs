@@ -49,11 +49,9 @@ namespace Fuse.Controls
 
             this.IMAvatar.Source = source;
 
-            name = name.Length >= 15 ? name.Substring(0, 15) + "..." : name;
             this.TBName.Text = name;
             if (game != null)
             {
-                game = game.Length >= 20 ? game.Substring(0, 20) + "..." : game;
                 this.TBState.Text = $"Playing {game}";
                 this.RCState.Fill = Brushes.Green;
             }
@@ -64,9 +62,7 @@ namespace Fuse.Controls
             }
 
             if (friend.NewMessages > 0)
-            {
                 this.TBNewMessages.Text = friend.NewMessages.ToString();
-            }
         }
 
         internal static SolidColorBrush StateToColor(EPersonaState state)
@@ -82,13 +78,14 @@ namespace Fuse.Controls
                 win.ClearDiscussion();
                 this._Friend.NewMessages = 0;
                 this.Update();
-                Discussion disc = new Discussion(this._Client, this._Friend)
-                {
-                    IsRecent = true
-                };
-                this._Client.User.Discussions.Add(disc);
+                Discussion disc = this._Client.User.GetDiscussion(this._Friend.AccountID);
+                if (disc == null)
+                    disc = new Discussion(this._Client.FriendsHandler, this._Friend);
+                this._Client.User.UpdateDiscussion(this._Friend.AccountID,disc);
                 this._Client.User.CurrentDiscussion = disc;
                 win.LoadDiscussion(disc);
+                win.UpdateRecentDiscussions();
+                win.MessageBoxFocus();
             }
         }
     }

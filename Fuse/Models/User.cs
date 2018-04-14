@@ -57,6 +57,19 @@ namespace Fuse.Models
             this._Avatar.EndInit();
         }
 
+        internal User(User user)
+        {
+            this._Name = user._Name;
+            this._SteamID = user._SteamID;
+            this._Avatar = user._Avatar;
+            this._SteamID64 = user._SteamID64;
+            this._AccountID = user._AccountID;
+            this._State = user._State;
+            this._Game = user._Game;
+            this._Messages = user._Messages;
+            this._NewMessages = user._NewMessages;
+        }
+
         private void OnAvatarFail(object sender,EventArgs e)
         {
             this._Avatar.UriSource = new Uri("Resources/default_avatar.png", UriKind.Relative);
