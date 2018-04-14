@@ -377,5 +377,10 @@ namespace Fuse.Windows
 
             QuadRotation -= 2.0f;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
