@@ -23,6 +23,9 @@ namespace Fuse
 
         internal void ShowException(string msg)
         {
+            System.Media.SoundPlayer myPlayer = new System.Media.SoundPlayer();
+            myPlayer.Stream = Properties.Resources.error;
+            myPlayer.Play();
             ExceptionWindow ewin = new ExceptionWindow(msg);
             ewin.ShowDialog();
         }
