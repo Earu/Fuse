@@ -36,7 +36,7 @@ namespace Fuse
             };
             this._Config = SteamConfiguration.Create(builder =>
             {
-                builder.WithConnectionTimeout(TimeSpan.FromSeconds(5));
+                builder.WithConnectionTimeout(TimeSpan.FromMinutes(1));
                 builder.WithProtocolTypes(ProtocolTypes.WebSocket);
             });
 
@@ -60,7 +60,6 @@ namespace Fuse
             this._Manager.Subscribe<SteamFriends.PersonaStateCallback>(this.OnFriendPersonaStateChange);
             this._Manager.Subscribe<SteamFriends.FriendMsgCallback>(this.OnFriendMessage);
             this._Manager.Subscribe<SteamFriends.FriendMsgEchoCallback>(this.OnFriendMessageEcho);
-            this._Manager.Subscribe<SteamFriends.FriendMsgHistoryCallback>(this.OnFriendMessageHistory);
         }
 
         internal SteamClient     ClientHandler    { get => this._ClientHandler;  }
@@ -135,6 +134,7 @@ namespace Fuse
                 if (cb.Result == EResult.OK)
                 {
                     this._UI.ClientWindow.Show();
+                    this._UI.ClientWindow.UpdateLocalUser();
                 }
                 else
                 {
@@ -172,42 +172,51 @@ namespace Fuse
         {
             this.RunOnSTA(() =>
             {
+                EPersonaState? oldtsate;
                 if (cb.FriendID.AccountID == this._ClientHandler.SteamID.AccountID)
-                    this._User.UpdateLocalUser(cb.FriendID);
+                {
+                    oldtsate = this._User.LocalUser.State;
+                    this._User.UpdateLocalUser(cb.FriendID, cb.Name, cb.State, cb.AvatarHash);
+                    this._UI.ClientWindow.UpdateLocalUser();
+                }
                 else
                 {
+                    oldtsate = this._User.GetFriend(cb.FriendID.AccountID)?.State;
                     uint gid = cb.GameAppID;
-                    this._User.UpdateFriend(cb.FriendID);
+                    this._User.UpdateFriend(cb.FriendID, cb.Name, cb.State, cb.AvatarHash);
                 }
 
                 ClientWindow win = this._UI.ClientWindow;
                 win.UpdateFriendList();
-                Discussion cur = this._User.CurrentDiscussion;
-                if (cur != null)
-                {
-                    if (!cur.IsGroup)
-                    {
-                        User friend = this._User.GetFriend(cb.FriendID.AccountID);
-                        if (cur.Recipient.AccountID == friend.AccountID)
-                        {
-                            string state = cb.State.ToString().ToLower();
-                            if (cb.State == EPersonaState.LookingToPlay 
-                                || cb.State == EPersonaState.LookingToTrade 
-                                || cb.State == EPersonaState.Max)
-                            {
-                                if (cb.State == EPersonaState.LookingToPlay)
-                                    state = "looking to play";
-                                else if (cb.State == EPersonaState.Max)
-                                    state = "online";
-                                else
-                                    state = "looking to trade";
-                            }
 
-                            string content = $"{friend.Name} is now {state}";
-                            Message msg = new Message(friend,content,null,true);
-                            friend.Messages.Add(msg);
-                            win.AppendChatNotification(msg);
+                //We dont want to have notification if the state doesnt change
+                if (oldtsate.HasValue && oldtsate == cb.State) return;
+
+                Discussion cur = this._User.CurrentDiscussion;
+                if (cur == null) return;
+
+                if (!cur.IsGroup)
+                {
+                    User friend = this._User.GetFriend(cb.FriendID.AccountID);
+                    if (cur.Recipient.AccountID == friend.AccountID)
+                    {
+                        string state = cb.State.ToString().ToLower();
+                        if (cb.State == EPersonaState.LookingToPlay 
+                            || cb.State == EPersonaState.LookingToTrade 
+                            || cb.State == EPersonaState.Max)
+                        {
+                            if (cb.State == EPersonaState.LookingToPlay)
+                                state = "looking to play";
+                            else if (cb.State == EPersonaState.Max)
+                                state = "online";
+                            else
+                                state = "looking to trade";
                         }
+
+                        string content = $"{friend.Name} is now {state}";
+                        Message msg = new Message(friend,content,null,true);
+                        friend.Messages.Add(msg);
+                        win.AppendChatNotification(msg);
                     }
                 }
             });
@@ -216,29 +225,33 @@ namespace Fuse
         private void HandleFriendMessage(SteamID friendid,string msgcontent,bool islocaluser=false)
         {
             this._User.UpdateFriend(friendid);
-
             User friend = this._User.GetFriend(friendid.AccountID);
             if (friend != null)
             {
-                Message msg = islocaluser ? new Message(this._User.LocalUser) : new Message(friend, msgcontent);
+                Message msg = islocaluser ? new Message(this._User.LocalUser, msgcontent) : new Message(friend, msgcontent);
                 friend.Messages.Add(msg);
 
                 Discussion cur = this._User.CurrentDiscussion;
                 ClientWindow win = this._UI.ClientWindow;
+                Discussion disc = this._User.GetDiscussion(friendid.AccountID);
+                if (disc == null)
+                    disc = new Discussion(this._FriendsHandler, friend);
+                disc.IsRecent = true;
+                this._User.UpdateDiscussion(friendid.AccountID, disc);
+
+                if (!islocaluser)
+                {
+                    friend.NewMessages++;
+                    win.UpdateFriendList();
+                }
+
                 if (cur != null && !cur.IsGroup)
                 {
                     if (cur.Recipient.AccountID == friendid.AccountID)
                     {
                         win.HideTyping();
                         win.AppendChatMessage(msg);
-                        return;
                     }
-                }
-
-                if (!islocaluser)
-                {
-                    friend.NewMessages++;
-                    win.UpdateFriendList();
                 }
             }
         }
@@ -278,7 +291,7 @@ namespace Fuse
 
         private void OnFriendMessage(SteamFriends.FriendMsgCallback cb)
         {
-            RunOnSTA(() =>
+            this.RunOnSTA(() =>
             {
                 switch (cb.EntryType)
                 {
@@ -303,38 +316,10 @@ namespace Fuse
             this.RunOnSTA(() => this.HandleFriendMessage(cb.Recipient, cb.Message, true));
         }
 
-        private void OnFriendMessageHistory(SteamFriends.FriendMsgHistoryCallback cb)
-        {
-            this.RunOnSTA(() =>
-            {
-                if (cb.Result == EResult.OK)
-                {
-                    foreach (SteamFriends.FriendMsgHistoryCallback.FriendMessage msg in cb.Messages)
-                    {
-                        uint aid = msg.SteamID.AccountID;
-                        uint luaid = this._User.LocalUser.AccountID;
-                        bool islocaluser = luaid == aid;
-                        if (!islocaluser) this._User.UpdateFriend(msg.SteamID);
-
-                        this.HandleFriendMessage(msg.SteamID, msg.Message, islocaluser);
-                        if (msg.Unread)
-                        {
-                            User friend = this._User.GetFriend(aid);
-                            if (friend != null)
-                            {
-                                friend.NewMessages++;
-                                this._UI.ClientWindow.UpdateFriendList();
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
         private void AwaitCallbackResults()
         {
             while (this._IsRunning)
-                this._Manager.RunWaitCallbacks(TimeSpan.FromMilliseconds(100));
+                this._Manager.RunWaitCallbacks(TimeSpan.FromSeconds(1));
         }
 
         internal void Start()

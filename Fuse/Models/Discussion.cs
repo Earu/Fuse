@@ -7,7 +7,7 @@ namespace Fuse.Models
 {
     internal class Discussion
     {
-        private FuseClient    _Client;
+        private SteamFriends  _FriendsHandler;
         private bool          _IsGroup;
         private User          _Recipient;
         private List<User>    _Recipients;
@@ -15,34 +15,43 @@ namespace Fuse.Models
         private int           _NewMessages;
         private DateTime      _LastOpened;
         private bool          _IsRecent;
-        private bool          _RequestedHistory;
 
-        internal Discussion(FuseClient client, User recipient,bool requestedhistory=false)
+        internal Discussion(SteamFriends handler, User recipient,bool requestedhistory=false)
         {
-            this._Client = client;
-            this._IsGroup = false;
-            this._Recipient = recipient;
-            this._NewMessages = 0;
-            this._LastOpened = DateTime.Now;
-            this._IsRecent = true;
-            this._RequestedHistory = requestedhistory;
+            this._FriendsHandler   = handler;
+            this._IsGroup          = false;
+            this._Recipient        = recipient;
+            this._NewMessages      = 0;
+            this._LastOpened       = DateTime.Now;
+            this._IsRecent         = true;
         }
 
-        internal Discussion(FuseClient client, List<User> recipients,bool requestedhistory = false)
+        internal Discussion(SteamFriends handler, List<User> recipients,bool requestedhistory=false)
         {
-            this._Client = client;
-            this._IsGroup = true;
-            this._Recipients = recipients;
-            this._Messages = new List<Message>();
-            this._NewMessages = 0;
-            this._LastOpened = DateTime.Now;
-            this._IsRecent = true;
-            this._RequestedHistory = requestedhistory;
+            this._FriendsHandler   = handler;
+            this._IsGroup          = true;
+            this._Recipients       = recipients;
+            this._Messages         = new List<Message>();
+            this._NewMessages      = 0;
+            this._LastOpened       = DateTime.Now;
+            this._IsRecent         = true;
+        }
+
+        internal Discussion(Discussion disc)
+        {
+            this._FriendsHandler   = disc._FriendsHandler;
+            this._IsGroup          = disc._IsGroup;
+            this._Recipients       = disc._Recipients;
+            this._Recipient        = disc._Recipient;
+            this._Messages         = disc._Messages;
+            this._NewMessages      = disc._NewMessages;
+            this._LastOpened       = disc._LastOpened;
+            this._IsRecent         = disc._IsRecent;
         }
 
         internal List<Message> Open()
         {
-            SteamFriends handler = this._Client.FriendsHandler;
+            SteamFriends handler = this._FriendsHandler;
             this._LastOpened = DateTime.Now;
             this._NewMessages = 0;
             if (this._IsGroup)
@@ -51,18 +60,13 @@ namespace Fuse.Models
             }
             else
             {
-                if (!this._RequestedHistory)
-                {
-                    this._RequestedHistory = true;
-                    handler.RequestMessageHistory(this._Recipient.SteamID);
-                }
                 return this._Recipient.Messages;
             }
         }
 
         internal void SendMessage(Message msg)
         {
-            SteamFriends handler = this._Client.FriendsHandler;
+            SteamFriends handler = this._FriendsHandler;
             if (!this._IsGroup)
             {
                 this._Recipient.Messages.Add(msg);

@@ -20,8 +20,8 @@
 			</Rectangle.Style>
 		</Rectangle>
 
-		<TextBlock Name="TBName" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontFamily="Arial" Foreground="White" HorizontalAlignment="Left" Margin="46,3,0,0" TextWrapping="NoWrap" Text="???" VerticalAlignment="Top" Width="90"/>
-		<TextBlock Name="TBState" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="9" FontFamily="Arial" Foreground="Gray" HorizontalAlignment="Left" Padding="1,0,0,0" Margin="46,22,0,0" TextWrapping="NoWrap"  Text="???" VerticalAlignment="Top" Width="90"/>
+		<TextBlock Name="TBName" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontFamily="Tahoma" Foreground="White" HorizontalAlignment="Left" Margin="46,3,0,0" TextWrapping="NoWrap" Text="???" VerticalAlignment="Top" Width="90"/>
+		<TextBlock Name="TBState" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="9" FontFamily="Tahoma" Foreground="Gray" HorizontalAlignment="Left" Padding="1,0,0,0" Margin="46,22,0,0" TextWrapping="NoWrap"  Text="???" VerticalAlignment="Top" Width="90"/>
 		<Border BorderBrush="#222222" Opacity="1" Background="Black" IsHitTestVisible="False" BorderThickness="2" HorizontalAlignment="Left" Height="34" Margin="3,3,0,0" VerticalAlignment="Top" Width="35">
 			<Image Name="IMAvatar" RenderOptions.BitmapScalingMode="HighQuality" IsHitTestVisible="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 			<Border.Effect>
@@ -29,6 +29,6 @@
 			</Border.Effect>
 		</Border>
 		<Rectangle Name="RCState" IsHitTestVisible="False" Fill="IndianRed" HorizontalAlignment="Left" Height="9" Margin="31,30,0,0" Stroke="#222222" VerticalAlignment="Top" Width="9"/>
-		<TextBlock Name="TBNewMessages" Padding="0,2,0,0" TextAlignment="Center" FontSize="12" HorizontalAlignment="Right" FontWeight="ExtraBold" FontFamily="Arial" Foreground="IndianRed" Margin="0,10,14,0" TextWrapping="NoWrap" VerticalAlignment="Top" Height="18" Width="30"/>
+		<TextBlock Name="TBNewMessages" Padding="0,2,0,0" TextAlignment="Center" FontSize="12" HorizontalAlignment="Right" FontWeight="ExtraBold" FontFamily="Tahoma" Foreground="IndianRed" Margin="0,10,14,0" TextWrapping="NoWrap" VerticalAlignment="Top" Height="18" Width="30"/>
 	</Grid>
 </UserControl>

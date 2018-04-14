@@ -136,7 +136,7 @@
 		<Grid.Effect>
 			<DropShadowEffect BlurRadius="10" RenderingBias="Performance" ShadowDepth="0"/>
 		</Grid.Effect>
-		<TextBox TextChanged="OnUsernameChanged" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Padding="0,2,0,0" FontSize="16" FontFamily="Arial" Name="TBUserName" BorderBrush="#333333" Background="#333333" Foreground="#ffffff" HorizontalAlignment="Left" Height="25" Margin="10,67,0,0" 
+		<TextBox TextChanged="OnUsernameChanged" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Padding="0,2,0,0" FontSize="16" FontFamily="Tahoma" Name="TBUserName" BorderBrush="#333333" Background="#333333" Foreground="#ffffff" HorizontalAlignment="Left" Height="25" Margin="10,67,0,0" 
 			TextWrapping="Wrap" VerticalAlignment="Top" Width="320" KeyDown="OnKeyDownHandler">
 			<TextBox.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
@@ -150,7 +150,7 @@
 		</PasswordBox>
 		<Button Name="BTNSignIn" HorizontalAlignment="Left" 
 				Margin="171,127,0,0" VerticalAlignment="Top" Width="159" Click="OnSignIn" 
-				Height="30" Style="{DynamicResource BTNSignIn}" FontFamily="Arial" FontSize="20">
+				Height="30" Style="{DynamicResource BTNSignIn}" FontFamily="Tahoma" FontSize="20">
 			<TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Margin="0,-1,0,0" TextWrapping="Wrap" Text="Sign in"/>
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
@@ -160,11 +160,11 @@
 		<Button Foreground="White" FontWeight="Bold" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Width="40" Height="20" Click="OnClose" Style="{DynamicResource BTNClose}"/>
 		<Rectangle MouseDown="OnMouseDown" Fill="#191919" HorizontalAlignment="Left" Height="20" Stroke="#191919" VerticalAlignment="Top" Width="300"/>
 		<TextBlock FontWeight="Bold" FontSize="15" FontFamily="Agency FB" Text="Fuse" Foreground="White" HorizontalAlignment="Left" Margin="10,1,0,0" TextWrapping="Wrap" VerticalAlignment="Top"></TextBlock>
-		<TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="16" FontFamily="Arial" Name="PLUserName" Foreground="Gray" HorizontalAlignment="Left" Margin="13,69,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Height="23"/>
-		<TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="16" FontFamily="Arial" Name="PLPassword" Foreground="Gray" HorizontalAlignment="Left" Margin="13,99,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Height="23"/>
+		<TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="16" FontFamily="Tahoma" Name="PLUserName" Foreground="Gray" HorizontalAlignment="Left" Margin="13,69,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Height="23"/>
+		<TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="16" FontFamily="Tahoma" Name="PLPassword" Foreground="Gray" HorizontalAlignment="Left" Margin="13,99,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Height="23"/>
 		<Button Name="BTNSignUp" Click="OnSignUp" HorizontalAlignment="Left" 
 	  Margin="10,127,0,0" VerticalAlignment="Top" Width="156" 
-	  Height="30" Style="{DynamicResource BTNSignUp}" FontFamily="Arial" FontSize="20">
+	  Height="30" Style="{DynamicResource BTNSignUp}" FontFamily="Tahoma" FontSize="20">
 			<Button.Effect>
 				<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 			</Button.Effect>

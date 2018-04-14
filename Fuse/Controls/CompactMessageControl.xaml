@@ -6,6 +6,6 @@
              xmlns:local="clr-namespace:Fuse.Controls"
              mc:Ignorable="d">
 	<Grid Background="#222222">
-		<TextBlock Name="TBContent" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="True" FontSize="12" FontFamily="Arial" Foreground="LightGray" HorizontalAlignment="Left" Padding="2,3,0,0" Margin="43,0,0,5" TextWrapping="Wrap" Text="???" VerticalAlignment="Top" />
+		<TextBlock Name="TBContent" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="True" FontSize="12" FontFamily="Tahoma" Foreground="LightGray" HorizontalAlignment="Left" Padding="2,3,0,0" Margin="43,0,0,5" TextWrapping="Wrap" Text="???" VerticalAlignment="Top" />
 	</Grid>
 </UserControl>
