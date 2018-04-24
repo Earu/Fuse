@@ -55,15 +55,6 @@
     <Reference Include="protobuf-net, Version=2.3.7.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>..\packages\protobuf-net.2.3.7\lib\net40\protobuf-net.dll</HintPath>
     </Reference>
-    <Reference Include="SharpGL, Version=2.4.0.0, Culture=neutral, PublicKeyToken=27fc851303210b27, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpGL.2.4.0.0\lib\net40\SharpGL.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpGL.SceneGraph, Version=2.4.0.0, Culture=neutral, PublicKeyToken=27fc851303210b27, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpGL.2.4.0.0\lib\net40\SharpGL.SceneGraph.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpGL.WPF, Version=2.4.0.0, Culture=neutral, PublicKeyToken=27fc851303210b27, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpGL.WPF.2.4.0.0\lib\net40\SharpGL.WPF.dll</HintPath>
-    </Reference>
     <Reference Include="SteamKit2, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SteamKit2.2.0.0\lib\netstandard2.0\SteamKit2.dll</HintPath>
     </Reference>
@@ -112,6 +103,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controls\DropDownButtonControl.cs" />
+    <Compile Include="Controls\FriendRequestControl.xaml.cs">
+      <DependentUpon>FriendRequestControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NotificationMessageControl.xaml.cs">
       <DependentUpon>NotificationMessageControl.xaml</DependentUpon>
     </Compile>
@@ -125,6 +119,9 @@
     <Compile Include="FuseUser.cs" />
     <Compile Include="Windows\2FACWindow.xaml.cs">
       <DependentUpon>2FACWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FriendRequestWindow.xaml.cs">
+      <DependentUpon>FriendRequestWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ClientWindow.xaml.cs">
       <DependentUpon>ClientWindow.xaml</DependentUpon>
@@ -208,6 +205,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\FriendRequestControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MessageControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -219,6 +220,10 @@
     <Page Include="Windows\2FACWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\FriendRequestWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ClientWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -240,9 +245,6 @@
     <Resource Include="Resources\fuse.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\error.mp3" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\error.wav" />
   </ItemGroup>
   <ItemGroup>
@@ -250,6 +252,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\loader.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\fuse_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Open_Sans\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.108.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net46\System.Data.SQLite.Core.targets')" />

@@ -1,9 +1,5 @@
 ﻿using Fuse.Controls;
-using Fuse.Drawing;
 using Fuse.Models;
-using SharpGL;
-using SteamKit2;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
@@ -119,7 +115,7 @@ namespace Fuse.Windows
             if (search == null && this.IsSearchingFriends)
                 search = this.TBSearchFriends.Text;
 
-            this.UpdateRecentDiscussions();
+            this.UpdateRecentDiscussions(search);
             FuseUser fuseuser = this._Client.User;
             this.ClearOnlineFriends();
             this.ClearOfflineFriends();
@@ -191,8 +187,8 @@ namespace Fuse.Windows
 
         internal void AppendChatMessage(Message msg)
         {
-            if (this.GLPlaceholder.Visibility == Visibility.Visible)
-                this.GLPlaceholder.Visibility = Visibility.Hidden;
+            //if (this.GLPlaceholder.Visibility == Visibility.Visible)
+            //    this.GLPlaceholder.Visibility = Visibility.Hidden;
 
             User lastauthor = this._LastMessageAuthor;
             if (lastauthor != null && lastauthor.AccountID == msg.Author.AccountID)
@@ -213,8 +209,8 @@ namespace Fuse.Windows
 
         internal void AppendChatNotification(Message msg)
         {
-            if (this.GLPlaceholder.Visibility == Visibility.Visible)
-                this.GLPlaceholder.Visibility = Visibility.Hidden;
+            //if (this.GLPlaceholder.Visibility == Visibility.Visible)
+            //    this.GLPlaceholder.Visibility = Visibility.Hidden;
             NotificationMessageControl ctrl = new NotificationMessageControl(msg);
             ctrl.Update();
             this.ICCurrentMessages.Items.Add(ctrl);
@@ -258,12 +254,41 @@ namespace Fuse.Windows
             }
         }
 
-        internal void UpdateRecentDiscussions()
+        private void UpdateRecentDiscussions(string search=null)
         {
             this.ICRecentDiscussions.Items.Clear();
-            foreach (KeyValuePair<uint, Discussion> disc in this._Client.User.Discussions)
-                if (disc.Value.IsRecent)
-                    this.AddRecentDiscussion(disc.Value);
+            if (search == null)
+            {
+                foreach (KeyValuePair<uint, Discussion> disc in this._Client.User.Discussions)
+                    if (disc.Value.IsRecent)
+                        this.AddRecentDiscussion(disc.Value);
+            }
+            else
+            {
+                foreach (KeyValuePair<uint, Discussion> disc in this._Client.User.Discussions)
+                {
+                    if (disc.Value.IsRecent)
+                    {
+                        if (disc.Value.IsGroup)
+                        {
+                            string title = string.Empty;
+                            disc.Value.Recipients.ForEach(x => title = $"{title},{x.Name}");
+                            title = title.Length >= 50 ? $"{title.Substring(0, 50)}..." : title;
+                            if (title.ToLower().Contains(search.ToLower()))
+                            {
+                                this.AddRecentDiscussion(disc.Value);
+                            }
+                        }
+                        else
+                        {
+                            if (disc.Value.Recipient.Name.ToLower().Contains(search.ToLower()))
+                            {
+                                this.AddRecentDiscussion(disc.Value);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         internal void LoadDiscussion(Discussion disc)
@@ -320,6 +345,7 @@ namespace Fuse.Windows
         internal void MessageBoxFocus()
         {
             this.TBMessage.Focus();
+            Keyboard.Focus(this.TBMessage);
         }
 
         internal void UpdateLocalUser()
@@ -330,57 +356,20 @@ namespace Fuse.Windows
             this.TBLocalUserName.Text = localuser.Name;
             this.TBLocalUserState.Text = localuser.State.ToString(); 
         }
-        
-        float QuadRotation = 0;
-        Vertex[] QuadCoordinates = {
-            new Vertex(-1,-1,-1),
-            new Vertex(1,1,1),
-            new Vertex(1,-1,-1),
-            new Vertex(1,1,-1),
-            new Vertex(-1,1,-1),
-            new Vertex(-1,1,1),
-            new Vertex(-1,-1,1),
-            new Vertex(1,-1,1),
-        };
-        private Random Random = new Random();
 
-        private void OnGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
+        private void AddFriends(object sender, RoutedEventArgs e)
         {
-            if (this.GLPlaceholder.Visibility != Visibility.Visible) return;
-
-            OpenGL gl = args.OpenGL;
-            gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
-            gl.ClearColor(0.15f,0.15f,0.15f,1f);
-
-            gl.LoadIdentity();
-            gl.Translate(0.0f, 0.0f, -3f);
-            gl.Rotate(QuadRotation, 0.5f, 0.5f, 0.5f);
-            gl.Rotate(QuadRotation, 1f, 0f, 0f);
-            gl.Rotate(QuadRotation, 0f, 1f, 0f);
-            gl.Rotate(QuadRotation, 0f, 0f, 1f);
-            gl.Color(1f, 1f, 1f);
-            gl.LineWidth(1.25f);
-            gl.Begin(OpenGL.GL_LINES);
-
-            foreach (Vertex v1 in this.QuadCoordinates)
-                foreach (Vertex v2 in this.QuadCoordinates)
-                {
-                    if (v2 != v1)
-                    {
-                        gl.Vertex(v1.X, v1.Y, v1.Z);
-                        gl.Vertex(v2.X, v2.Y, v2.Z);
-                    }
-                }
-
-            gl.End();
-            gl.Flush();
-
-            QuadRotation -= 2.0f;
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
+            FriendRequestWindow win;
+            if (FriendRequestWindow.Opened)
+            {
+                win = FriendRequestWindow.CurrentWindow;
+                win.Activate();
+            }
+            else
+            {
+                win = new FriendRequestWindow(this._Client.User);
+                win.Show();
+            }
         }
     }
 }
