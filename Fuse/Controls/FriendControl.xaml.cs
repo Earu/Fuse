@@ -84,7 +84,7 @@ namespace Fuse.Controls
                 this._Client.User.UpdateDiscussion(this._Friend.AccountID,disc);
                 this._Client.User.CurrentDiscussion = disc;
                 win.LoadDiscussion(disc);
-                win.UpdateRecentDiscussions();
+                win.UpdateFriendList();
                 win.MessageBoxFocus();
             }
         }

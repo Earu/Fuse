@@ -11,6 +11,7 @@ namespace Fuse
         private Dictionary<uint,User>        _Friends;
         private Dictionary<uint, User>       _OnlineFriends;
         private Dictionary<uint, User>       _OfflineFriends;
+        private Dictionary<uint, User>       _Requesteds;
         private Dictionary<uint, Discussion> _Discussions;
         private Discussion                   _CurrentDiscussion;
 
@@ -19,6 +20,7 @@ namespace Fuse
             this._Friends = new Dictionary<uint, User>();
             this._OnlineFriends = new Dictionary<uint, User>();
             this._OfflineFriends = new Dictionary<uint, User>();
+            this._Requesteds = new Dictionary<uint, User>();
             this._Discussions = new Dictionary<uint, Discussion>();
             this._CurrentDiscussion = null;
             this._FriendsHandler = handler;
@@ -29,6 +31,7 @@ namespace Fuse
         internal Dictionary<uint, User>       Friends           { get => this._Friends;        }
         internal Dictionary<uint, User>       OnlineFriends     { get => this._OnlineFriends;  }
         internal Dictionary<uint, User>       OfflineFriends    { get => this._OfflineFriends; }
+        internal Dictionary<uint, User>       Requesteds        { get => this._Requesteds;     }
         internal Dictionary<uint, Discussion> Discussions       { get => this._Discussions;    }
         internal Discussion                   CurrentDiscussion { get => this._CurrentDiscussion; set => this._CurrentDiscussion = value; }
 
@@ -42,55 +45,91 @@ namespace Fuse
             }
         }
 
+        private void HandleOthers(User other, EFriendRelationship relation)
+        {
+            switch (relation)
+            {
+                case EFriendRelationship.RequestRecipient:
+                    this._Requesteds[other.AccountID] = other;
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        internal void AcceptUser(User user)
+        {
+            this._FriendsHandler.AddFriend(user.SteamID);
+            this.Requesteds.Remove(user.AccountID);
+        }
+
+        internal void RefuseUser(User user)
+        {
+            this._FriendsHandler.IgnoreFriend(user.SteamID);
+            this.Requesteds.Remove(user.AccountID);
+        }
+
         internal void UpdateFriend(SteamID id,string name=null,EPersonaState state=EPersonaState.Offline,byte[] bhash=null,string game=null)
         {
-            if (this._FriendsHandler.GetFriendRelationship(id) != EFriendRelationship.Friend) return;
-
+            EFriendRelationship relation = this._FriendsHandler.GetFriendRelationship(id);
             name = name ?? this._FriendsHandler.GetFriendPersonaName(id);
             uint accountid = id.AccountID;
             state = state == EPersonaState.Offline ? this._FriendsHandler.GetFriendPersonaState(id) : state;
             bhash = bhash ?? _FriendsHandler.GetFriendAvatar(id);
 
             User old = this.GetFriend(accountid);
+            User friend;
             if (old == null)
             {
-                User _new = new User(name, id, state, bhash)
+                friend = new User(name, id, state, bhash)
                 {
                     Game = game
                 };
-                this._Friends[accountid] = _new;
-                if (state != EPersonaState.Offline)
-                    this._OnlineFriends[accountid] = _new;
-                else
-                    this._OfflineFriends[accountid] = _new;
+                this._Friends[accountid] = friend;
+                if (relation == EFriendRelationship.Friend)
+                {
+                    if (state != EPersonaState.Offline)
+                        this._OnlineFriends[accountid] = friend;
+                    else
+                        this._OfflineFriends[accountid] = friend;
+                }
             }
             else
             {
-                User friend = new User(name, id, state, bhash, old.Messages, old.NewMessages)
+                friend = new User(name, id, state, bhash, old.Messages, old.NewMessages)
                 {
                     Game = game
                 };
                 this.Friends[accountid] = friend;
 
-                if (old.State == EPersonaState.Offline)
+                if (relation == EFriendRelationship.Friend)
                 {
-                    if (this._OfflineFriends.ContainsKey(old.AccountID))
-                        this._OfflineFriends.Remove(old.AccountID);
-                }
-                else
-                {
-                    if (this._OnlineFriends.ContainsKey(old.AccountID))
-                        this._OnlineFriends.Remove(old.AccountID);
-                }
+                    if (old.State == EPersonaState.Offline)
+                    {
+                        if (this._OfflineFriends.ContainsKey(old.AccountID))
+                            this._OfflineFriends.Remove(old.AccountID);
+                    }
+                    else
+                    {
+                        if (this._OnlineFriends.ContainsKey(old.AccountID))
+                            this._OnlineFriends.Remove(old.AccountID);
+                    }
 
-                if (state != EPersonaState.Offline)
-                {
-                    this._OnlineFriends[old.AccountID] = friend;
+                    if (state != EPersonaState.Offline)
+                    {
+                        this._OnlineFriends[old.AccountID] = friend;
+                    }
+                    else
+                    {
+                        this._OfflineFriends[old.AccountID] = friend;
+                    }
                 }
-                else
-                {
-                    this._OfflineFriends[old.AccountID] = friend;
-                }
+            }
+
+            if (relation != EFriendRelationship.Friend)
+            {
+                this.HandleOthers(friend, relation);
             }
         }
 

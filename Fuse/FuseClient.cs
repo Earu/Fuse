@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Threading;
 using Fuse.Models;
 using Fuse.Windows;
+using Fuse.Properties;
 using SteamKit2;
 
 namespace Fuse
@@ -110,7 +111,7 @@ namespace Fuse
 
             this.RunOnSTA(() =>
             {
-                //Because STA is the main threadre
+                //Because STA is the main thread
                 if (this._IsExit)
                 {
                     this._CallbackThread.Abort();
@@ -172,51 +173,49 @@ namespace Fuse
         {
             this.RunOnSTA(() =>
             {
-                EPersonaState? oldtsate;
                 if (cb.FriendID.AccountID == this._ClientHandler.SteamID.AccountID)
                 {
-                    oldtsate = this._User.LocalUser.State;
                     this._User.UpdateLocalUser(cb.FriendID, cb.Name, cb.State, cb.AvatarHash);
                     this._UI.ClientWindow.UpdateLocalUser();
                 }
                 else
                 {
-                    oldtsate = this._User.GetFriend(cb.FriendID.AccountID)?.State;
+                    EPersonaState? oldstate = this._User.GetFriend(cb.FriendID.AccountID)?.State;
                     uint gid = cb.GameAppID;
                     this._User.UpdateFriend(cb.FriendID, cb.Name, cb.State, cb.AvatarHash);
-                }
 
-                ClientWindow win = this._UI.ClientWindow;
-                win.UpdateFriendList();
+                    ClientWindow win = this._UI.ClientWindow;
+                    win.UpdateFriendList();
 
-                //We dont want to have notification if the state doesnt change
-                if (oldtsate.HasValue && oldtsate == cb.State) return;
+                    //We dont want to have notification if the state doesnt change
+                    if (oldstate.HasValue && oldstate == cb.State) return;
 
-                Discussion cur = this._User.CurrentDiscussion;
-                if (cur == null) return;
+                    Discussion cur = this._User.CurrentDiscussion;
+                    if (cur == null) return;
 
-                if (!cur.IsGroup)
-                {
-                    User friend = this._User.GetFriend(cb.FriendID.AccountID);
-                    if (cur.Recipient.AccountID == friend.AccountID)
+                    if (!cur.IsGroup)
                     {
-                        string state = cb.State.ToString().ToLower();
-                        if (cb.State == EPersonaState.LookingToPlay 
-                            || cb.State == EPersonaState.LookingToTrade 
-                            || cb.State == EPersonaState.Max)
+                        User friend = this._User.GetFriend(cb.FriendID.AccountID);
+                        if (cur.Recipient.AccountID == friend.AccountID)
                         {
-                            if (cb.State == EPersonaState.LookingToPlay)
-                                state = "looking to play";
-                            else if (cb.State == EPersonaState.Max)
-                                state = "online";
-                            else
-                                state = "looking to trade";
-                        }
+                            string state = cb.State.ToString().ToLower();
+                            if (cb.State == EPersonaState.LookingToPlay
+                                || cb.State == EPersonaState.LookingToTrade
+                                || cb.State == EPersonaState.Max)
+                            {
+                                if (cb.State == EPersonaState.LookingToPlay)
+                                    state = "looking to play";
+                                else if (cb.State == EPersonaState.Max)
+                                    state = "online";
+                                else
+                                    state = "looking to trade";
+                            }
 
-                        string content = $"{friend.Name} is now {state}";
-                        Message msg = new Message(friend,content,null,true);
-                        friend.Messages.Add(msg);
-                        win.AppendChatNotification(msg);
+                            string content = $"{friend.Name} is now {state}";
+                            Message msg = new Message(friend, content, null, true);
+                            friend.Messages.Add(msg);
+                            win.AppendChatNotification(msg);
+                        }
                     }
                 }
             });
@@ -242,6 +241,7 @@ namespace Fuse
                 if (!islocaluser)
                 {
                     friend.NewMessages++;
+                    this._UI.PlayStream(Resources.Message);
                     win.UpdateFriendList();
                 }
 
@@ -251,9 +251,6 @@ namespace Fuse
                     {
                         win.HideTyping();
                         win.AppendChatMessage(msg);
-                        System.Media.SoundPlayer myPlayer = new System.Media.SoundPlayer();
-                        myPlayer.Stream = Properties.Resources.message;
-                        myPlayer.Play();
                     }
                 }
             }

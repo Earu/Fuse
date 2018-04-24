@@ -63,18 +63,28 @@ namespace Fuse.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream error {
+        internal static System.IO.UnmanagedMemoryStream Error {
             get {
-                return ResourceManager.GetStream("error", resourceCulture);
+                return ResourceManager.GetStream("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon fuse {
+            get {
+                object obj = ResourceManager.GetObject("fuse", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap loader {
+        internal static System.Drawing.Bitmap Loader {
             get {
-                object obj = ResourceManager.GetObject("loader", resourceCulture);
+                object obj = ResourceManager.GetObject("Loader", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -82,9 +92,9 @@ namespace Fuse.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
-        internal static System.IO.UnmanagedMemoryStream message {
+        internal static System.IO.UnmanagedMemoryStream Message {
             get {
-                return ResourceManager.GetStream("message", resourceCulture);
+                return ResourceManager.GetStream("Message", resourceCulture);
             }
         }
         
