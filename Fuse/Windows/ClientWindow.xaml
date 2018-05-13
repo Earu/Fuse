@@ -355,10 +355,11 @@
                 <DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
             </controls:DropDownButtonControl.Effect>
             <controls:DropDownButtonControl.Menu>
-                <ContextMenu Background="#191919" Foreground="White" BorderBrush="#191919">
-                    <MenuItem Header="Add note"/>
-                    <MenuItem Header="Block"/>
-                    <MenuItem Header="Remove"/>
+                <ContextMenu Background="#191919" Foreground="White" BorderThickness="0" Padding="0">
+                    <MenuItem Padding="-27,0,0,0" Background="#191919" BorderThickness="0" Header="Add note"/>
+					<Separator Padding="-27,0,0,0" BorderThickness="0" BorderBrush="#191919" Background="#222222" Foreground="#191919"/>
+					<MenuItem Padding="-27,0,0,0" Background="#191919" BorderThickness="0" Header="Block"/>
+					<MenuItem Padding="-27,0,0,0" Background="#191919" BorderThickness="0" Header="Remove"/>
                 </ContextMenu>
             </controls:DropDownButtonControl.Menu>
         </controls:DropDownButtonControl>
@@ -389,7 +390,7 @@
                 <DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
             </TextBox.Effect>
         </TextBox>
-        <TextBlock Name="PLMessage" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="15" Padding="3,6,0,0" Foreground="Gray" FontFamily="/Fuse;component/Resources/Open_Sans/#Open Sans Light" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" TextWrapping="Wrap" Text="Type here" VerticalAlignment="Bottom" Height="25" Width="175" Margin="10,0,0,11"/>
+        <TextBlock Name="PLMessage" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="15" Padding="0,8,0,0" Foreground="Gray" FontFamily="/Fuse;component/Resources/Open_Sans/#Open Sans Light" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" TextWrapping="Wrap" Text="Type here" VerticalAlignment="Bottom" Height="25" Width="175" Margin="10,0,0,11"/>
         <ScrollViewer FlowDirection="RightToLeft" Grid.Row="2" Margin="0,0,0,42" Style="{DynamicResource FavsScrollViewer}">
             <StackPanel FlowDirection="LeftToRight" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="182">
                 <TextBlock Name="TBRecentDiscussions" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontFamily="/Fuse;component/Resources/Roboto/#Roboto" FontSize="13" Padding="10,2.5,0,0" Background="#333333" Foreground="White" HorizontalAlignment="Left" Grid.Row="2" Text="Recent chats" VerticalAlignment="Top" Width="200" Height="20"/>
@@ -421,7 +422,7 @@
         </Rectangle>
         <TextBlock Name="TBLocalUserName" Text="???" TextWrapping="Wrap" Margin="62,0,0,21" FontFamily="/Fuse;component/Resources/Roboto/#Roboto" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Foreground="White" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Width="88"/>
         <TextBlock Name="TBLocalUserState" Text="???" TextWrapping="Wrap" Padding="2,0,0,0" FontSize="10" Margin="61,0,0,7" FontFamily="/Fuse;component/Resources/Open_Sans/#Open Sans" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Foreground="Gray" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Width="89"/>
-        <Button  FontFamily="Tahoma" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="10" Foreground="White" BorderBrush="Gray" Content="⚙" Height="30" Click="OnMessageSend" Style="{DynamicResource BTNMinMax}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Width="40" Margin="155,0,0,5">
+        <Button FontFamily="Tahoma" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="10" Foreground="White" BorderBrush="Gray" Content="⚙" Height="30" Click="OnMessageSend" Style="{DynamicResource BTNMinMax}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Bottom" Width="40" Margin="155,0,0,5">
             <Button.Effect>
                 <DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
             </Button.Effect>

@@ -24,7 +24,7 @@ namespace Fuse.Windows
             this.InitializeComponent();
             this._Client = client;
             this._TypingTimer.AutoReset = false;
-            this._TypingTimer.Elapsed += (s,e) => this.HideTyping();
+            this._TypingTimer.Elapsed += (s,e) => this._Client.RunOnSTA(() => this.HideTyping());
         }
 
         internal bool IsSearchingFriends { get => this._IsSearchingFriends; }
@@ -367,7 +367,7 @@ namespace Fuse.Windows
             }
             else
             {
-                win = new FriendRequestWindow(this._Client.User);
+                win = new FriendRequestWindow(this._Client);
                 win.Show();
             }
         }

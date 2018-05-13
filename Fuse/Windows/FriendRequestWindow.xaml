@@ -286,8 +286,8 @@
 					<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 				</TextBox.Effect>
 			</TextBox>
-			<TextBlock Name="PLSearchPeople" IsHitTestVisible="False" FontSize="13" Text="Search people..." VerticalAlignment="Top" UseLayoutRounding="True" TextOptions.TextRenderingMode="Auto" TextOptions.TextFormattingMode="Display" Foreground="Gray" Margin="8,-25,0,0" Height="20"></TextBlock>
-			<Button FontFamily="/Fuse;component/Resources/Roboto/#Roboto Light" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="15" Foreground="White" Content="Search" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60" Height="20" Style="{DynamicResource BTNMenu}" Margin="0,-25,4,0">
+			<TextBlock Name="PLSearchPeople" IsHitTestVisible="False" FontSize="13" Text="Search people..." VerticalAlignment="Top" UseLayoutRounding="True" TextOptions.TextRenderingMode="Auto" TextOptions.TextFormattingMode="Display" Foreground="Gray" Margin="8,-25,0,0" Height="20" KeyDown="OnSearchKeyDown"></TextBlock>
+			<Button FontFamily="/Fuse;component/Resources/Roboto/#Roboto Light" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="15" Foreground="White" Content="Search" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60" Height="20" Style="{DynamicResource BTNMenu}" Margin="0,-25,4,0" Click="OnSearch">
 				<Button.Effect>
 					<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 				</Button.Effect>
