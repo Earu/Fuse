@@ -7,6 +7,7 @@ using Fuse.Models;
 using Fuse.Windows;
 using Fuse.Properties;
 using SteamKit2;
+using Fuse.Utils;
 
 namespace Fuse
 {
@@ -63,13 +64,13 @@ namespace Fuse
             this._Manager.Subscribe<SteamFriends.FriendMsgEchoCallback>(this.OnFriendMessageEcho);
         }
 
-        internal SteamClient     ClientHandler    { get => this._ClientHandler;  }
-        internal SteamUser       UserHandler      { get => this._UserHandler;    }
-        internal SteamFriends    FriendsHandler   { get => this._FriendsHandler; }
-        internal CallbackManager Manager          { get => this._Manager;        }
-        internal bool            HasInitialized   { get => this._HasInitialized; }
-        internal FuseUI          UI               { get => this._UI;             }
-        internal FuseUser        User             { get => this._User;           }
+        internal SteamClient            ClientHandler    { get => this._ClientHandler;  }
+        internal SteamUser              UserHandler      { get => this._UserHandler;    }
+        internal SteamFriends           FriendsHandler   { get => this._FriendsHandler; }
+        internal CallbackManager        Manager          { get => this._Manager;        }
+        internal bool                   HasInitialized   { get => this._HasInitialized; }
+        internal FuseUI                 UI               { get => this._UI;             }
+        internal FuseUser               User             { get => this._User;           }
 
         internal void Connect(string user,string pass,string code=null,string authcode=null)
         {
@@ -88,7 +89,7 @@ namespace Fuse
             this._ClientHandler.Connect();
         }
 
-        private void RunOnSTA(Action cb)
+        internal void RunOnSTA(Action cb)
         {
             Application app = Application.Current;
             if(app != null)
@@ -128,7 +129,6 @@ namespace Fuse
 
         private void OnLoggedOn(SteamUser.LoggedOnCallback cb)
         {
-            this._IgnoreNextDisconnect = false;
             this.RunOnSTA(() =>
             {
                 this._User.UpdateLocalUser(cb.ClientSteamID);
@@ -199,16 +199,19 @@ namespace Fuse
                         if (cur.Recipient.AccountID == friend.AccountID)
                         {
                             string state = cb.State.ToString().ToLower();
-                            if (cb.State == EPersonaState.LookingToPlay
-                                || cb.State == EPersonaState.LookingToTrade
-                                || cb.State == EPersonaState.Max)
+                            switch(cb.State)
                             {
-                                if (cb.State == EPersonaState.LookingToPlay)
+                                case EPersonaState.LookingToPlay:
                                     state = "looking to play";
-                                else if (cb.State == EPersonaState.Max)
+                                    break;
+                                case EPersonaState.Max:
                                     state = "online";
-                                else
+                                    break;
+                                case EPersonaState.LookingToTrade:
                                     state = "looking to trade";
+                                    break;
+                                default:
+                                    break;
                             }
 
                             string content = $"{friend.Name} is now {state}";
@@ -238,21 +241,46 @@ namespace Fuse
                 disc.IsRecent = true;
                 this._User.UpdateDiscussion(friendid.AccountID, disc);
 
-                if (!islocaluser)
+                if (cur != null)
                 {
-                    friend.NewMessages++;
-                    this._UI.PlayStream(Resources.Message);
-                    win.UpdateFriendList();
-                }
-
-                if (cur != null && !cur.IsGroup)
-                {
-                    if (cur.Recipient.AccountID == friendid.AccountID)
+                    if (!cur.IsGroup)
                     {
-                        win.HideTyping();
-                        win.AppendChatMessage(msg);
+                        if (cur.Recipient.AccountID == friendid.AccountID)
+                        {
+                            if (!islocaluser)
+                                win.HideTyping();
+                            win.AppendChatMessage(msg);
+                        }
+                        else
+                        {
+                            if (!islocaluser)
+                            {
+                                friend.NewMessages++;
+                                
+                                win.UpdateFriendList();
+                                if (!win.IsFocused)
+                                {
+                                    this._UI.PlayStream(Resources.Message);
+                                    User32Flash.FlashWindow(win);
+                                }
+                            }
+                        }
                     }
                 }
+                else
+                {
+                    if (!islocaluser)
+                    {
+                        friend.NewMessages++;
+                        win.UpdateFriendList();
+                        if (!win.IsFocused)
+                        {
+                            this._UI.PlayStream(Resources.Message);
+                            User32Flash.FlashWindow(win);
+                        }
+                    }
+                }
+
             }
         }
 

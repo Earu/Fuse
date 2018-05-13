@@ -46,6 +46,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.8.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.8.2\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Win32.Registry, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Registry.4.4.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
     </Reference>
@@ -111,12 +114,14 @@
     </Compile>
     <Compile Include="Datas\DiscussionData.cs" />
     <Compile Include="Datas\SettingsData.cs" />
-    <Compile Include="Drawing\Vertex.cs" />
     <Compile Include="FuseClient.cs" />
     <Compile Include="FuseCredentials.cs" />
     <Compile Include="FuseDataContext.cs" />
     <Compile Include="FuseUI.cs" />
     <Compile Include="FuseUser.cs" />
+    <Compile Include="Models\UsersSearchResult.cs" />
+    <Compile Include="Utils\HTTP.cs" />
+    <Compile Include="Utils\User32Flash.cs" />
     <Compile Include="Windows\2FACWindow.xaml.cs">
       <DependentUpon>2FACWindow.xaml</DependentUpon>
     </Compile>

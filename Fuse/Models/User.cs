@@ -32,29 +32,7 @@ namespace Fuse.Models
             this._SteamID = id;
             this._SteamID64 = id64;
             this._State = state;
-
-            this._Avatar = new BitmapImage
-            {
-                DecodePixelHeight = 32,
-                DecodePixelWidth = 32,
-                SourceRect = new Int32Rect(0, 0, 32, 32),
-                CreateOptions = new BitmapCreateOptions(),
-                CacheOption = BitmapCacheOption.OnLoad,
-            };
-            this._Avatar.DecodeFailed += this.OnAvatarFail;
-            this._Avatar.DownloadFailed += this.OnAvatarFail;
-            this._Avatar.BeginInit();
-            if (bhash == null)
-            {
-                this._Avatar.UriSource = new Uri("Resources/default_avatar.png", UriKind.Relative);
-            }
-            else
-            {
-                string hash = this.BytesToHash(bhash);
-                string link = $"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/dd/{hash}_full.jpg?width=32&height=32";
-                this._Avatar.UriSource = new Uri(link, UriKind.Absolute);
-            }
-            this._Avatar.EndInit();
+            this._Avatar = this.CreateAvatar(bhash);
         }
 
         internal User(User user)
@@ -70,9 +48,67 @@ namespace Fuse.Models
             this._NewMessages = user._NewMessages;
         }
 
+        internal string        Name        { get => this._Name;      }
+        internal SteamID       SteamID     { get => this._SteamID;   }
+        internal uint          AccountID   { get => this._AccountID; }
+        internal ulong         SteamID64   { get => this._SteamID64; }
+        internal EPersonaState State       { get => this._State;     }
+        internal BitmapImage   Avatar      { get => this._Avatar;    }
+        internal string        Game        { get => this._Game;        set => this._Game        = value; }
+        internal List<Message> Messages    { get => this._Messages;    set => this._Messages    = value; }
+        internal int           NewMessages { get => this._NewMessages; set => this._NewMessages = value; }
+
+        private BitmapImage CreateAvatar(byte[] bhash)
+        {
+            BitmapImage img = new BitmapImage
+            {
+                DecodePixelHeight = 32,
+                DecodePixelWidth = 32,
+                SourceRect = new Int32Rect(0, 0, 32, 32),
+                CreateOptions = new BitmapCreateOptions(),
+                CacheOption = BitmapCacheOption.OnLoad,
+            };
+            img.DecodeFailed += this.OnAvatarFail;
+            img.DownloadFailed += this.OnAvatarFail;
+            img.BeginInit();
+            if (bhash == null)
+                img.UriSource = new Uri("Resources/default_avatar.png", UriKind.Relative);
+            else
+            {
+                string hash = this.BytesToHash(bhash);
+                string link = $"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/dd/{hash}_full.jpg?width=32&height=32";
+                img.UriSource = new Uri(link, UriKind.Absolute);
+            }
+            img.EndInit();
+
+            return img;
+        }
+
+        private BitmapImage CreateAvatar(string link)
+        {
+            BitmapImage img = new BitmapImage
+            {
+                DecodePixelHeight = 32,
+                DecodePixelWidth = 32,
+                SourceRect = new Int32Rect(0, 0, 32, 32),
+                CreateOptions = new BitmapCreateOptions(),
+                CacheOption = BitmapCacheOption.OnLoad,
+            };
+            img.DecodeFailed += this.OnAvatarFail;
+            img.DownloadFailed += this.OnAvatarFail;
+            img.BeginInit();
+            if (link == null)
+                img.UriSource = new Uri("Resources/default_avatar.png", UriKind.Relative);
+            else
+                img.UriSource = new Uri(link, UriKind.Absolute);
+            img.EndInit();
+
+            return img;
+        }
+
         private void OnAvatarFail(object sender,EventArgs e)
         {
-            this._Avatar.UriSource = new Uri("Resources/default_avatar.png", UriKind.Relative);
+            this._Avatar = this.CreateAvatar(bhash: null);
         }
 
         private string BytesToHash(byte[] ba)
@@ -85,19 +121,14 @@ namespace Fuse.Models
 
         internal void SetAvatarHash(byte[] bhash)
         {
-            string hash = this.BytesToHash(bhash);
-            string link = $"https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/dd/{hash}_full.jpg";
-            this._Avatar.UriSource = new Uri(link, UriKind.Absolute);
+            this._Avatar = this.CreateAvatar(bhash);
         }
 
-        internal string        Name        { get => this._Name;      }
-        internal SteamID       SteamID     { get => this._SteamID;   }
-        internal uint          AccountID   { get => this._AccountID; }
-        internal ulong         SteamID64   { get => this._SteamID64; }
-        internal EPersonaState State       { get => this._State;     }
-        internal BitmapImage   Avatar      { get => this._Avatar;    }
-        internal string        Game        { get => this._Game;        set => this._Game        = value; }
-        internal List<Message> Messages    { get => this._Messages;    set => this._Messages    = value; }
-        internal int           NewMessages { get => this._NewMessages; set => this._NewMessages = value; }
+        internal void SetAvatarLink(string link)
+        {
+            this._Avatar = this.CreateAvatar(link);
+        }
+
+
     }
 }
