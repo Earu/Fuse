@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fuse.Models;
 using SteamKit2;
 
@@ -38,11 +39,11 @@ namespace Fuse
         internal void UpdateFriends()
         {
             int total = this._FriendsHandler.GetFriendCount();
-            for (int i = 0; i < total; i++)
+            Parallel.For(0, total, i =>
             {
                 SteamID id = this._FriendsHandler.GetFriendByIndex(i);
                 this.UpdateFriend(id);
-            }
+            });
         }
 
         private void HandleOthers(User other, EFriendRelationship relation)
@@ -82,10 +83,8 @@ namespace Fuse
             User friend;
             if (old == null)
             {
-                friend = new User(name, id, state, bhash)
-                {
-                    Game = game
-                };
+                friend = new User(name, id, state, bhash);
+                friend.Game = game;
                 this._Friends[accountid] = friend;
                 if (relation == EFriendRelationship.Friend)
                 {
@@ -97,40 +96,28 @@ namespace Fuse
             }
             else
             {
-                friend = new User(name, id, state, bhash, old.Messages, old.NewMessages)
-                {
-                    Game = game
-                };
+                friend = new User(name, id, state, bhash, old.Messages, old.NewMessages);
+                friend.Game = game;
                 this.Friends[accountid] = friend;
 
                 if (relation == EFriendRelationship.Friend)
                 {
                     if (old.State == EPersonaState.Offline)
-                    {
                         if (this._OfflineFriends.ContainsKey(old.AccountID))
                             this._OfflineFriends.Remove(old.AccountID);
-                    }
                     else
-                    {
                         if (this._OnlineFriends.ContainsKey(old.AccountID))
                             this._OnlineFriends.Remove(old.AccountID);
-                    }
 
                     if (state != EPersonaState.Offline)
-                    {
                         this._OnlineFriends[old.AccountID] = friend;
-                    }
                     else
-                    {
                         this._OfflineFriends[old.AccountID] = friend;
-                    }
                 }
             }
 
             if (relation != EFriendRelationship.Friend)
-            {
                 this.HandleOthers(friend, relation);
-            }
         }
 
         internal void UpdateDiscussion(uint accountid,Discussion disc)

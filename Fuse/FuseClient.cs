@@ -8,6 +8,7 @@ using Fuse.Windows;
 using Fuse.Properties;
 using SteamKit2;
 using Fuse.Utils;
+using System.Threading.Tasks;
 
 namespace Fuse
 {
@@ -93,7 +94,7 @@ namespace Fuse
         {
             Application app = Application.Current;
             if(app != null)
-                app.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(cb));
+                app.Dispatcher.InvokeAsync(cb);
         }
 
         private void OnConnected(SteamClient.ConnectedCallback cb)

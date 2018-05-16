@@ -24,27 +24,27 @@ namespace Fuse.Models
             this._Game = null;
             if (msgs == null) this._Messages = new List<Message>();
             else this._Messages = msgs;
-            this._NewMessages = newmsg;
-            string steamid = id.Render();
-            this._AccountID = id.AccountID;
-            ulong id64 = id.ConvertToUInt64();
-            this._Name = name ?? steamid;
-            this._SteamID = id;
-            this._SteamID64 = id64;
-            this._State = state;
-            this._Avatar = this.CreateAvatar(bhash);
+            this._NewMessages   = newmsg;
+            string steamid      = id.Render();
+            this._AccountID     = id.AccountID;
+            ulong id64          = id.ConvertToUInt64();
+            this._Name          = name ?? steamid;
+            this._SteamID       = id;
+            this._SteamID64     = id64;
+            this._State         = state;
+            this._Avatar        = this.CreateAvatar(bhash);
         }
 
         internal User(User user)
         {
-            this._Name = user._Name;
-            this._SteamID = user._SteamID;
-            this._Avatar = user._Avatar;
-            this._SteamID64 = user._SteamID64;
-            this._AccountID = user._AccountID;
-            this._State = user._State;
-            this._Game = user._Game;
-            this._Messages = user._Messages;
+            this._Name        = user._Name;
+            this._SteamID     = user._SteamID;
+            this._Avatar      = user._Avatar;
+            this._SteamID64   = user._SteamID64;
+            this._AccountID   = user._AccountID;
+            this._State       = user._State;
+            this._Game        = user._Game;
+            this._Messages    = user._Messages;
             this._NewMessages = user._NewMessages;
         }
 
@@ -63,10 +63,10 @@ namespace Fuse.Models
             BitmapImage img = new BitmapImage
             {
                 DecodePixelHeight = 32,
-                DecodePixelWidth = 32,
-                SourceRect = new Int32Rect(0, 0, 32, 32),
-                CreateOptions = new BitmapCreateOptions(),
-                CacheOption = BitmapCacheOption.OnLoad,
+                DecodePixelWidth  = 32,
+                SourceRect        = new Int32Rect(0, 0, 32, 32),
+                CreateOptions     = new BitmapCreateOptions(),
+                CacheOption       = BitmapCacheOption.OnLoad,
             };
             img.DecodeFailed += this.OnAvatarFail;
             img.DownloadFailed += this.OnAvatarFail;
@@ -89,10 +89,10 @@ namespace Fuse.Models
             BitmapImage img = new BitmapImage
             {
                 DecodePixelHeight = 32,
-                DecodePixelWidth = 32,
-                SourceRect = new Int32Rect(0, 0, 32, 32),
-                CreateOptions = new BitmapCreateOptions(),
-                CacheOption = BitmapCacheOption.OnLoad,
+                DecodePixelWidth  = 32,
+                SourceRect        = new Int32Rect(0, 0, 32, 32),
+                CreateOptions     = new BitmapCreateOptions(),
+                CacheOption       = BitmapCacheOption.OnLoad,
             };
             img.DecodeFailed += this.OnAvatarFail;
             img.DownloadFailed += this.OnAvatarFail;
@@ -128,7 +128,5 @@ namespace Fuse.Models
         {
             this._Avatar = this.CreateAvatar(link);
         }
-
-
     }
 }
