@@ -95,14 +95,19 @@ namespace Fuse.Windows
                     req.CookieContainer = container;
                 });
 
-                UsersSearchResult uresults = JsonConvert.DeserializeObject<UsersSearchResult>(res);
-                List<User> results = uresults.GetResults();
-                foreach (User u in results)
+                if (UsersSearchResult.TryDeserialize(res, out UsersSearchResult uresults))
                 {
-                    FriendControl ctrl = new FriendControl(this._Client, u);
-                    ctrl.Update();
-                    this.ICPeople.Items.Add(ctrl);
+                    List<User> results = uresults.GetResults();
+                    Parallel.ForEach(results, u =>
+                    {
+                        FriendControl ctrl = new FriendControl(this._Client, u);
+                        ctrl.Update();
+                        this.ICPeople.Items.Add(ctrl);
+                    });
                 }
+                else
+                    this._UI.ShowException("There was an issue with the results of your search");
+
             }
         }
 

@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using Newtonsoft.Json;
 using SteamKit2;
 
 namespace Fuse.Models
@@ -25,6 +26,20 @@ namespace Fuse.Models
         internal int search_page;
         [DataMember]
         internal string html;
+
+        internal static bool TryDeserialize(string json,out UsersSearchResult result)
+        {
+            try
+            {
+                result = JsonConvert.DeserializeObject<UsersSearchResult>(json);
+                return true;
+            }
+            catch
+            {
+                result = null;
+                return false;
+            }
+        }
 
         private string GetProperHtml()
         {

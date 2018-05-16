@@ -6,132 +6,6 @@
     <Window.Background>
         <SolidColorBrush Opacity="0" Color="#191919"/>
     </Window.Background>
-    <Window.Resources>
-        <SolidColorBrush x:Key="Button.Static.Foreground" Color="WhiteSmoke"/>
-        <SolidColorBrush x:Key="Button.Static.Background" Color="#6483ba"/>
-        <SolidColorBrush x:Key="Button.Static.Border" Color="#6689a5"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#4e6793"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#445a6b"/>
-        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#4e6793"/>
-        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#445a6b"/>
-
-        <SolidColorBrush x:Key="Button.Static.Background2" Color="#191919"/>
-        <SolidColorBrush x:Key="Button.Static.Border2" Color="#191919"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Background2" Color="#f44141"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Border2" Color="#f44141"/>
-        <SolidColorBrush x:Key="Button.Pressed.Background2" Color="#f44141"/>
-        <SolidColorBrush x:Key="Button.Pressed.Border2" Color="#f44141"/>
-
-        <SolidColorBrush x:Key="Button.Static.Background3" Color="#f49b42"/>
-        <SolidColorBrush x:Key="Button.Static.Border3" Color="#f49b42"/>
-        <SolidColorBrush x:Key="Button.Static.Foreground3" Color="WhiteSmoke"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Background3" Color="#db8a39"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Border3" Color="#db8a39"/>
-        <SolidColorBrush x:Key="Button.Pressed.Background3" Color="#db8a39"/>
-        <SolidColorBrush x:Key="Button.Pressed.Border3" Color="#db8a39"/>
-
-        <Style x:Key="BTNSignIn" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-            <Setter Property="Foreground" Value="{StaticResource Button.Static.Foreground}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="FocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="BTNClose" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Background" Value="{StaticResource Button.Static.Background2}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border2}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background2}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border2}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background2}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border2}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="BTNSignUp" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="{StaticResource Button.Static.Background3}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border3}"/>
-            <Setter Property="Foreground" Value="{StaticResource Button.Static.Foreground3}"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background3}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border3}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background3}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border3}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
     <Grid Background="#222222" Margin="5">
         <Grid.Effect>
             <DropShadowEffect BlurRadius="10" RenderingBias="Performance" ShadowDepth="0"/>
@@ -148,9 +22,9 @@
                 <DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
             </PasswordBox.Effect>
         </PasswordBox>
-        <Button Name="BTNSignIn" HorizontalAlignment="Left" 
+        <Button Name="BTNSignIn" Foreground="White" HorizontalAlignment="Left" 
 				Margin="171,127,0,0" VerticalAlignment="Top" Width="159" Click="OnSignIn" 
-				Height="30" Style="{DynamicResource BTNSignIn}" FontFamily="Tahoma" FontSize="20">
+				Height="30" Style="{DynamicResource BTNMenu}" FontFamily="Tahoma" FontSize="20">
             <TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" Margin="0,-1,0,0" TextWrapping="Wrap" Text="Sign in" FontFamily="/Fuse;component/Resources/Roboto/#Roboto Medium"/>
             <Button.Effect>
                 <DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
@@ -162,7 +36,7 @@
         <TextBlock FontWeight="Bold" FontSize="15" FontFamily="Agency FB" Text="Fuse" Foreground="White" HorizontalAlignment="Left" Margin="10,1,0,0" TextWrapping="Wrap" VerticalAlignment="Top"></TextBlock>
         <TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="16" FontFamily="/Fuse;component/Resources/Roboto/#Roboto" Name="PLUserName" Foreground="Gray" HorizontalAlignment="Left" Margin="13,71,0,0" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top" Height="17"/>
         <TextBlock UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" IsHitTestVisible="False" FontSize="16" FontFamily="/Fuse;component/Resources/Roboto/#Roboto" Name="PLPassword" Foreground="Gray" HorizontalAlignment="Left" Margin="13,101,0,0" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top" Height="17"/>
-        <Button Name="BTNSignUp" Click="OnSignUp" HorizontalAlignment="Left" 
+        <Button Name="BTNSignUp" Foreground="White" Click="OnSignUp" HorizontalAlignment="Left" 
 	  Margin="10,127,0,0" VerticalAlignment="Top" Width="156" 
 	  Height="30" Style="{DynamicResource BTNSignUp}" FontFamily="Tahoma" FontSize="20">
             <Button.Effect>
