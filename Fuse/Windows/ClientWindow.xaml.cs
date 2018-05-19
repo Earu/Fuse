@@ -32,6 +32,8 @@ namespace Fuse.Windows
         private void OnClose(object sender, RoutedEventArgs e)
         {
             this.Close();
+            if (FriendRequestWindow.Opened)
+                FriendRequestWindow.CurrentWindow.Close();
             this._Client.Stop();
         }
 

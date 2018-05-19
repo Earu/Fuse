@@ -50,10 +50,10 @@ namespace Fuse.Controls
             this.IMAvatar.Source = source;
 
             this.TBName.Text = name;
-            if (game != null)
+            if (state != EPersonaState.Offline && game != null)
             {
                 this.TBState.Text = $"Playing {game}";
-                this.RCState.Fill = Brushes.Green;
+                this.RCState.Fill = Brushes.BlueViolet;
             }
             else
             {

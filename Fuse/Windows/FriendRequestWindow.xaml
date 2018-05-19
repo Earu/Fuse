@@ -23,12 +23,12 @@
 		<StackPanel Margin="0,20,0,0">
 			<ItemsControl Name="ICRequests"></ItemsControl>
 			<Rectangle Fill="#6483ba" Stroke="#6689a5" VerticalAlignment="Top" Height="30"/>
-			<TextBox Name="TBSearchPeople" TextChanged="OnPeopleTextChanged" FontSize="13" UseLayoutRounding="True" TextOptions.TextRenderingMode="Auto" TextOptions.TextFormattingMode="Display" VerticalAlignment="Top" Height="20" Margin="4,-25,70,0">
+            <TextBox Name="TBSearchPeople" KeyDown="OnSearchKeyDown" TextChanged="OnPeopleTextChanged" FontSize="13" UseLayoutRounding="True" TextOptions.TextRenderingMode="Auto" TextOptions.TextFormattingMode="Display" VerticalAlignment="Top" Height="20" Margin="4,-25,70,0">
 				<TextBox.Effect>
 					<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />
 				</TextBox.Effect>
 			</TextBox>
-			<TextBlock Name="PLSearchPeople" IsHitTestVisible="False" FontSize="13" Text="Search people..." VerticalAlignment="Top" UseLayoutRounding="True" TextOptions.TextRenderingMode="Auto" TextOptions.TextFormattingMode="Display" Foreground="Gray" Margin="8,-25,0,0" Height="20" KeyDown="OnSearchKeyDown"></TextBlock>
+			<TextBlock Name="PLSearchPeople" IsHitTestVisible="False" FontSize="13" Text="Search people..." VerticalAlignment="Top" UseLayoutRounding="True" TextOptions.TextRenderingMode="Auto" TextOptions.TextFormattingMode="Display" Foreground="Gray" Margin="8,-25,0,0" Height="20"></TextBlock>
 			<Button FontFamily="/Fuse;component/Resources/Roboto/#Roboto Light" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" FontSize="15" Foreground="White" Content="Search" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60" Height="20" Style="{DynamicResource BTNMenu}" Margin="0,-25,4,0" Click="OnSearch">
 				<Button.Effect>
 					<DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />

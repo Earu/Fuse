@@ -9,6 +9,8 @@ using Fuse.Properties;
 using SteamKit2;
 using Fuse.Utils;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace Fuse
 {
@@ -25,6 +27,7 @@ namespace Fuse
         private SteamApps              _AppsHandler;
         private SteamUser.LogOnDetails _Details;
         private Thread                 _CallbackThread;
+        private StoredApps             _StoredApps;
 
         private bool _HasInitialized       = false;
         private bool _IsRunning            = true;
@@ -33,23 +36,23 @@ namespace Fuse
 
         internal FuseClient()
         {
-            this._Details = new SteamUser.LogOnDetails
-            {
-                ShouldRememberPassword = true
-            };
+            this._Details = new SteamUser.LogOnDetails();
+            this._Details.ShouldRememberPassword = true;
+
             this._Config = SteamConfiguration.Create(builder =>
             {
                 builder.WithConnectionTimeout(TimeSpan.FromMinutes(1));
                 builder.WithProtocolTypes(ProtocolTypes.WebSocket);
             });
 
-            this._ClientHandler = new SteamClient(this._Config);
-            this._Manager = new CallbackManager(this._ClientHandler);
-            this._UserHandler = this._ClientHandler.GetHandler<SteamUser>();
+            this._ClientHandler  = new SteamClient(this._Config);
+            this._Manager        = new CallbackManager(this._ClientHandler);
+            this._UserHandler    = this._ClientHandler.GetHandler<SteamUser>();
             this._FriendsHandler = this._ClientHandler.GetHandler<SteamFriends>();
-            this._AppsHandler = this._ClientHandler.GetHandler<SteamApps>();
-            this._User = new FuseUser(this._FriendsHandler);
-            this._UI = new FuseUI(this);
+            this._AppsHandler    = this._ClientHandler.GetHandler<SteamKit2.SteamApps>();
+            this._User           = new FuseUser(this._FriendsHandler);
+            this._UI             = new FuseUI(this);
+            this._StoredApps     = null;
 
             this._CallbackThread = new Thread(AwaitCallbackResults);
             this._CallbackThread.Start();
@@ -141,7 +144,7 @@ namespace Fuse
                 else
                 {
                     this._IgnoreNextDisconnect = true;
-                    if (cb.Result == EResult.AccountLoginDeniedNeedTwoFactor || cb.Result == EResult.AccountLogonDeniedVerifiedEmailRequired)
+                    if (cb.Result == EResult.AccountLoginDeniedNeedTwoFactor|| cb.Result == EResult.AccountLogonDeniedVerifiedEmailRequired)
                     {
                         bool isphone = cb.Result == EResult.AccountLoginDeniedNeedTwoFactor;
                         _2FACWindow win = new _2FACWindow(this, this._Details.Username, this._Details.Password, isphone);
@@ -149,8 +152,7 @@ namespace Fuse
                     }
                     else
                     {
-                        this._UI.ShowException("There was an issue with your credentials: " +
-                            $"{cb.Result} -> {cb.ExtendedResult}");
+                        this._UI.ShowException($"There was an issue with your credentials: {cb.ExtendedResult}");
                         this._UI.ShowLogin();
                     }
                 }
@@ -165,9 +167,55 @@ namespace Fuse
             this._UserHandler.AcceptNewLoginKey(cb);
         }
 
-        private void OnAccountInfo(SteamUser.AccountInfoCallback cb)
+        private async void OnAccountInfo(SteamUser.AccountInfoCallback cb)
         {
+            string json = await HTTP.Fetch(this._UI, "https://api.steampowered.com/ISteamApps/GetAppList/v2/");
+            if(json != string.Empty)
+            {
+                try
+                {
+                    StoredApps apps = JsonConvert.DeserializeObject<StoredApps>(json);
+                    this._StoredApps = apps;
+                }
+                catch
+                {
+                    this._StoredApps = null;
+                    this._UI.ShowException("There was an issue while getting data from the steam network!");
+                }
+            }
+            else
+            {
+                this._StoredApps = null;
+                this._UI.ShowException("There was an issue while getting data from the steam network!");
+            }
+
+            #pragma warning disable CS4014
             this._FriendsHandler.SetPersonaState(EPersonaState.Online);
+            #pragma warning restore CS4014 
+        }
+
+        private bool TryGetAppName(GameID id,out string name)
+        {
+            try
+            {
+                SteamApp app = this._StoredApps.GetApp(id.AppID);
+                if (app != null)
+                {
+                    name = app.name;
+                    return true;
+                }
+                else
+                {
+                    name = null;
+                    return false;
+                }
+                    
+            }
+            catch
+            {
+                name = null;
+                return false;
+            }
         }
 
         private void OnFriendPersonaStateChange(SteamFriends.PersonaStateCallback cb)
@@ -176,14 +224,17 @@ namespace Fuse
             {
                 if (cb.FriendID.AccountID == this._ClientHandler.SteamID.AccountID)
                 {
-                    this._User.UpdateLocalUser(cb.FriendID, cb.Name, cb.State, cb.AvatarHash);
+                    GameID gid = this._FriendsHandler.GetFriendGamePlayed(cb.FriendID);
+                    string game = this.TryGetAppName(gid, out string gn) ? gn : null;
+                    this._User.UpdateLocalUser(cb.FriendID, cb.Name, cb.State, cb.AvatarHash, game);
                     this._UI.ClientWindow.UpdateLocalUser();
                 }
                 else
                 {
                     EPersonaState? oldstate = this._User.GetFriend(cb.FriendID.AccountID)?.State;
-                    uint gid = cb.GameAppID;
-                    this._User.UpdateFriend(cb.FriendID, cb.Name, cb.State, cb.AvatarHash);
+                    GameID gid = this._FriendsHandler.GetFriendGamePlayed(cb.FriendID);
+                    string game = this.TryGetAppName(gid, out string gn) ? gn : null;
+                    this._User.UpdateFriend(cb.FriendID, cb.Name, cb.State, cb.AvatarHash, game);
 
                     ClientWindow win = this._UI.ClientWindow;
                     win.UpdateFriendList();
