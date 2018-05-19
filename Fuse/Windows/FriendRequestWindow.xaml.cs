@@ -25,20 +25,20 @@ namespace Fuse.Windows
         private static FriendRequestWindow _CurrentWindow = null;
 
         private FuseClient _Client;
-        private FuseUser _User;
-        private FuseUI _UI;
-        private SteamUser.LogOnDetails _Details;
+        private FuseUser   _User;
+        private FuseUI     _UI;
 
         internal FriendRequestWindow(FuseClient client)
         {
             this._Client = client;
-            this._User = client.User;
-            this._UI = client.UI;
+            this._User   = client.User;
+            this._UI     = client.UI;
+
             this.InitializeComponent();
-            this.Topmost = true;
-            _Opened = true;
+
+            _Opened        = true;
             _CurrentWindow = this;
-            this.Closing += this.OnClose;
+            this.Closing  += this.OnClose;
 
             foreach (KeyValuePair<uint,User> u in this._User.Requesteds)
             {
@@ -75,35 +75,54 @@ namespace Fuse.Windows
                 this.PLSearchPeople.Visibility = Visibility.Hidden;
         }
 
-        private async Task Search()
+        private void ShowSearching()
         {
             this.ICPeople.Items.Clear();
+            TextBlock tb = new TextBlock
+            {
+                Margin              = new Thickness(0, 30, 0, 0),
+                Height              = this.Height - 50,
+                Foreground          = Brushes.Gray,
+                Text                = "Searching...",
+                VerticalAlignment   = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                FontSize            = 20,
+                FontWeight          = FontWeights.Bold,
+                FontFamily          = new FontFamily("Tahoma"),
+            };
+            this.ICPeople.Items.Add(tb);
+        }
+
+        private async Task Search()
+        {
+            this.ShowSearching();
             string search = this.TBSearchPeople.Text;
             using (RandomNumberGenerator rng = new RNGCryptoServiceProvider())
             {
                 byte[] bytes = new byte[12];
                 rng.GetBytes(bytes);
 
-                string token = BitConverter.ToString(bytes).Replace("-", "").ToLower();
-                ulong id64 = this._User.LocalUser.SteamID64;
+                string token  = BitConverter.ToString(bytes).Replace("-", "").ToLower();
+                ulong id64    = this._User.LocalUser.SteamID64;
                 string domain = "https://steamcommunity.com";
-                string url = $"{domain}/search/SearchCommunityAjax?&text={search}&search_filter=users&sessionid={token}&steamid_user={id64}";
-                string res = await HTTP.Fetch(this._UI, url, null, req => {
+                string url    = $"{domain}/search/SearchCommunityAjax?&text={search}&search_filter=users&sessionid={token}&steamid_user={id64}";
+                string res    = await HTTP.Fetch(this._UI, url, null, req => {
                     CookieContainer container = new CookieContainer();
                     Uri uri = new Uri(domain);
                     container.Add(uri, new Cookie("sessionid", token));
                     req.CookieContainer = container;
                 });
 
+                this.ICPeople.Items.Clear();
                 if (UsersSearchResult.TryDeserialize(res, out UsersSearchResult uresults))
                 {
                     List<User> results = uresults.GetResults();
-                    Parallel.ForEach(results, u =>
+                    foreach(User u in results)
                     {
-                        FriendControl ctrl = new FriendControl(this._Client, u);
+                        SearchedFriendControl ctrl = new SearchedFriendControl(this._Client.FriendsHandler, u);
                         ctrl.Update();
                         this.ICPeople.Items.Add(ctrl);
-                    });
+                    }
                 }
                 else
                     this._UI.ShowException("There was an issue with the results of your search");
@@ -118,7 +137,7 @@ namespace Fuse.Windows
 
         private async void OnSearchKeyDown(object sender,KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            if (e.Key == Key.Return)
                 await this.Search();
         }
     }

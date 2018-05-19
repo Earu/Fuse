@@ -1,4 +1,5 @@
 ﻿using Fuse.Models;
+using Fuse.Utils;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
@@ -33,7 +34,7 @@ namespace Fuse.Controls
             this.TBName.Text = name;
 
             this.TBContent.Text = msg.Content;
-            this.TBTimeStamp.Text = msg.TimeStamp.ToString();
+            this.TBTimeStamp.Text = msg.TimeStamp.ToFriendlyFormat();
         }
     }
 }

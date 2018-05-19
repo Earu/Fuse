@@ -112,6 +112,9 @@
     <Compile Include="Controls\NotificationMessageControl.xaml.cs">
       <DependentUpon>NotificationMessageControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SearchedFriendControl.xaml.cs">
+      <DependentUpon>SearchedFriendControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Datas\DiscussionData.cs" />
     <Compile Include="Datas\SettingsData.cs" />
     <Compile Include="FuseClient.cs" />
@@ -119,7 +122,12 @@
     <Compile Include="FuseDataContext.cs" />
     <Compile Include="FuseUI.cs" />
     <Compile Include="FuseUser.cs" />
+    <Compile Include="Models\SteamApp.cs" />
+    <Compile Include="Models\SteamAppList.cs" />
+    <Compile Include="Models\StoredApps.cs" />
+    <Compile Include="Models\UserExtraInfo.cs" />
     <Compile Include="Models\UsersSearchResult.cs" />
+    <Compile Include="Utils\DateTimeExt.cs" />
     <Compile Include="Utils\HTTP.cs" />
     <Compile Include="Utils\User32Flash.cs" />
     <Compile Include="Windows\2FACWindow.xaml.cs">
@@ -222,6 +230,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\SearchedFriendControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Style\Button.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -271,6 +283,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Open_Sans\LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\SteamApps.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.108.0\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net46\System.Data.SQLite.Core.targets')" />

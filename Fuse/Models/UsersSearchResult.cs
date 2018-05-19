@@ -14,18 +14,20 @@ namespace Fuse.Models
     internal class UsersSearchResult
     {
         // JSON fields
+        #pragma warning disable 0649
         [DataMember]
-        internal int success;
+        internal int    success;
         [DataMember]
         internal string search_text;
         [DataMember]
         internal string search_result_count;
         [DataMember]
-        internal bool search_filter;
+        internal bool   search_filter;
         [DataMember]
-        internal int search_page;
+        internal int    search_page;
         [DataMember]
         internal string html;
+        #pragma warning restore 0649
 
         internal static bool TryDeserialize(string json,out UsersSearchResult result)
         {
@@ -58,14 +60,27 @@ namespace Fuse.Models
             doc.LoadHtml(html);
 
             HtmlNodeCollection collection = doc.DocumentNode.SelectNodes("//div[@class='search_row']");
+            if (collection == null) return results;
+
             foreach (HtmlNode node in collection)
             {
-                string name = node.SelectSingleNode("div[2]/a[@class='searchPersonaName']").InnerText;
+                string name = node.SelectSingleNode("div[2]/a[@class='searchPersonaName']").InnerText.Trim();
                 string link = node.SelectSingleNode("div/div/a/img").GetAttributeValue("src", null);
                 uint accid = uint.Parse(node.SelectSingleNode("div").GetAttributeValue("data-miniprofile","0"));
-                SteamID id = new SteamID(accid, EUniverse.Public, EAccountType.Chat);
+                SteamID id = new SteamID(accid, EUniverse.Public, EAccountType.Individual);
                 User u = new User(name, id, EPersonaState.Offline, null);
                 u.SetAvatarLink(link);
+
+                HtmlNodeCollection namenodes = node.SelectNodes("div[6]/div[2]/span");
+                List<string> names = new List<string>();
+                if(namenodes != null && namenodes.Count > 0)
+                    names = namenodes.Select(x => x.InnerText.Trim()).ToList();
+                u.ExtraInfo = new UserExtraInfo
+                {
+                    Country = string.Empty,  // This needs a
+                    RealName = string.Empty, // proper parsing solution
+                    PreviousNames = names,
+                };
 
                 results.Add(u);
             }

@@ -109,7 +109,7 @@
         <TextBlock Name="TBTyping" Visibility="Hidden" Grid.Column="1" Grid.Row="2" Text="? is typing..." Foreground="Gray" VerticalAlignment="Bottom" Margin="6,0,0,45" FontFamily="Tahoma"></TextBlock>
         <Rectangle Fill="#333333" Margin="0,0,0,40" HorizontalAlignment="Stretch" Height="3" Grid.ColumnSpan="2" Grid.Row="2" Stroke="#191919" VerticalAlignment="Bottom" />
         <Rectangle Fill="#191919" HorizontalAlignment="Left" Height="40" Grid.Row="2" Stroke="#191919" VerticalAlignment="Bottom" Width="200"/>
-        <Border Background="Black" BorderBrush="#333333" BorderThickness="2" HorizontalAlignment="Left" Margin="8,0,0,5" Height="45" Grid.Row="2" VerticalAlignment="Bottom" Width="45">
+        <Border Background="Black" BorderBrush="#333333" BorderThickness="3" HorizontalAlignment="Left" Margin="8,0,0,5" Height="45" Grid.Row="2" VerticalAlignment="Bottom" Width="45">
             <Image Name="IMLocalUserAvatar" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="0" Color="Black" Opacity="1" RenderingBias="Performance" />

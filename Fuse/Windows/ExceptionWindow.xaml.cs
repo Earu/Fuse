@@ -13,6 +13,7 @@ namespace Fuse.Windows
         {
             this.InitializeComponent();
             this.TBException.Text = msg;
+            this.Topmost = true;
         }
 
         private void OnClose(object sender,EventArgs e)

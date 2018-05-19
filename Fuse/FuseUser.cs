@@ -18,14 +18,14 @@ namespace Fuse
 
         internal FuseUser(SteamFriends handler)
         {
-            this._Friends = new Dictionary<uint, User>();
-            this._OnlineFriends = new Dictionary<uint, User>();
-            this._OfflineFriends = new Dictionary<uint, User>();
-            this._Requesteds = new Dictionary<uint, User>();
-            this._Discussions = new Dictionary<uint, Discussion>();
+            this._Friends           = new Dictionary<uint, User>();
+            this._OnlineFriends     = new Dictionary<uint, User>();
+            this._OfflineFriends    = new Dictionary<uint, User>();
+            this._Requesteds        = new Dictionary<uint, User>();
+            this._Discussions       = new Dictionary<uint, Discussion>();
             this._CurrentDiscussion = null;
-            this._FriendsHandler = handler;
-            this._Localuser = null;
+            this._FriendsHandler    = handler;
+            this._Localuser         = null;
         }
     
         internal User                         LocalUser         { get => this._Localuser;      }
@@ -39,11 +39,11 @@ namespace Fuse
         internal void UpdateFriends()
         {
             int total = this._FriendsHandler.GetFriendCount();
-            Parallel.For(0, total, i =>
-            {
+            for(int i = 0; i < total; i++)
+            { 
                 SteamID id = this._FriendsHandler.GetFriendByIndex(i);
                 this.UpdateFriend(id);
-            });
+            }
         }
 
         private void HandleOthers(User other, EFriendRelationship relation)

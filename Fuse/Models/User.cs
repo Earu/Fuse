@@ -9,15 +9,16 @@ namespace Fuse.Models
 {
     internal class User
     {
-        private string        _Name;
-        private SteamID       _SteamID;
-        private BitmapImage   _Avatar;
-        private ulong         _SteamID64;
-        private uint          _AccountID;
-        private EPersonaState _State;
-        private string        _Game;
-        private List<Message> _Messages;
-        private int           _NewMessages;
+        private string          _Name;
+        private SteamID         _SteamID;
+        private BitmapImage     _Avatar;
+        private ulong           _SteamID64;
+        private uint            _AccountID;
+        private EPersonaState   _State;
+        private string          _Game;
+        private List<Message>   _Messages;
+        private int             _NewMessages;
+        private UserExtraInfo?  _Extra;
 
         internal User(string name,SteamID id, EPersonaState state,byte[] bhash,List<Message> msgs=null,int newmsg=0)
         {
@@ -33,6 +34,7 @@ namespace Fuse.Models
             this._SteamID64     = id64;
             this._State         = state;
             this._Avatar        = this.CreateAvatar(bhash);
+            this._Extra         = null;
         }
 
         internal User(User user)
@@ -46,17 +48,19 @@ namespace Fuse.Models
             this._Game        = user._Game;
             this._Messages    = user._Messages;
             this._NewMessages = user._NewMessages;
+            this._Extra       = null;
         }
 
-        internal string        Name        { get => this._Name;      }
-        internal SteamID       SteamID     { get => this._SteamID;   }
-        internal uint          AccountID   { get => this._AccountID; }
-        internal ulong         SteamID64   { get => this._SteamID64; }
-        internal EPersonaState State       { get => this._State;     }
-        internal BitmapImage   Avatar      { get => this._Avatar;    }
-        internal string        Game        { get => this._Game;        set => this._Game        = value; }
-        internal List<Message> Messages    { get => this._Messages;    set => this._Messages    = value; }
-        internal int           NewMessages { get => this._NewMessages; set => this._NewMessages = value; }
+        internal string         Name        { get => this._Name;      }
+        internal SteamID        SteamID     { get => this._SteamID;   }
+        internal uint           AccountID   { get => this._AccountID; }
+        internal ulong          SteamID64   { get => this._SteamID64; }
+        internal EPersonaState  State       { get => this._State;     }
+        internal BitmapImage    Avatar      { get => this._Avatar;    }
+        internal string         Game        { get => this._Game;        set => this._Game        = value; }
+        internal List<Message>  Messages    { get => this._Messages;    set => this._Messages    = value; }
+        internal int            NewMessages { get => this._NewMessages; set => this._NewMessages = value; }
+        internal UserExtraInfo? ExtraInfo   { get => this._Extra;       set => this._Extra       = value; }
 
         private BitmapImage CreateAvatar(byte[] bhash)
         {
