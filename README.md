@@ -1,3 +1,6 @@
+ABANDONNED DUE TO CHANGES RELATIVE TO STEAM
+https://steamcommunity.com/updates/chatupdate
+
 # Fuse
 A Steam chat client with a discord based interface and features
 
